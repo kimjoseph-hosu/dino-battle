@@ -79,7 +79,8 @@ export function segChain(pts, wk, paint, tip) {
   let inner = tip;
   for (let i = pts.length - 2; i >= 0; i--) {
     const [x0, y0, z0, r0] = pts[i], [x1, y1, z1] = pts[i + 1];
-    inner = J(x0, y0, box((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2, Math.abs(x0 - x1) + 0.3, r0, r0 * wk + Math.abs(z0 - z1) * 0.5, paint), inner);
+    const pa = paint.ring && i % 2 ? paint.ring : paint; // 꼬리 고리 무늬: 마디를 하나 걸러 고리 색
+    inner = J(x0, y0, box((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2, Math.abs(x0 - x1) + 0.3, r0, r0 * wk + Math.abs(z0 - z1) * 0.5, pa), inner);
     segs.unshift(inner);
   }
   return segs;
@@ -99,6 +100,7 @@ export function eyes(x, y, z, s, K) {
       box(s * 0.04, 0, sd * 0.17, pw, s * (K.meat ? 0.92 : 0.55), 0.04, EYE),
       box(s * 0.24, s * 0.24, sd * 0.2, s * 0.24, s * 0.24, 0.04, SPARK))),
     box(x - s * 0.08, y - s * 0.56, sd * (z - 0.02), s * 1.2, s * 0.14, 0.36, K.ridge), // 아래 눈꺼풀
+    K.mask ? [box(x - s * 1.0, y - s * 0.05, sd * (z - 0.03), s * 2.0, s * 0.8, 0.32, K.mask), box(x + s * 0.85, y - s * 0.12, sd * (z - 0.03), s * 0.9, s * 0.5, 0.32, K.mask)] : null, // 눈을 지나는 줄(가면)
     K.F.includes('bigeye') ? box(x, y, sd * (z - 0.05), s * 1.35, s * 1.35, 0.2, K.ridge) // 큰 눈 테두리(눈뼈 고리)
       : K.meat ? box(x - s * 0.1, y + s * 0.62, sd * (z - 0.04), s * 1.8, s * 0.42, 0.42, K.ridge, -0.32)
         : box(x, y + s * 0.72, sd * (z - 0.08), s * 1.2, s * 0.28, 0.34, K.ridge)));
@@ -124,13 +126,13 @@ export function head(type, hx, hy, hl, hd, hw, K, p = {}) {
   // 앞으로 길쭉한 머리들: 뒤통수 비율 back, 주둥이 깊이 sn, 주둥이 너비 sw
   const shape = { thero: [0.62, 0.62, 0.78], rex: [0.6, 0.72, 0.8], croc: [0.28, 0.42, 0.55], mosa: [0.4, 0.5, 0.6], lizard: [0.5, 0.6, 0.7], sauro: [0.6, 0.72, 0.85], small: [0.55, 0.7, 0.75], beak: [0.45, 0.6, 0.6], beakHook: [0.45, 0.6, 0.6], beakTooth: [0.45, 0.55, 0.55], ptero: [0.18, 0.42, 0.5] }[type] ?? [0.6, 0.62, 0.78];
   const [back, sn, sw] = shape, bx = hx + hl * back;
-  out.push(box(hx + (hl * back) / 2, hy + hd * 0.08, 0, hl * back, hd * 0.86, hw, K.body)); // 뒤통수(눈 있는 곳)
-  const snout = beak ? K.beak : K.body;
+  out.push(box(hx + (hl * back) / 2, hy + hd * 0.08, 0, hl * back, hd * 0.86, hw, K.head)); // 뒤통수(눈 있는 곳)
+  const snout = beak ? K.beak : K.head;
   out.push(box(bx + (hl * (1 - back)) / 2, my + (hd * sn) / 2, 0, hl * (1 - back), hd * sn, hw * sw, snout)); // 주둥이(위턱)
   if (type === 'beakHook') out.push(box(hx + hl * 0.97, my - 0.35, 0, Math.max(0.5, hl * 0.08), 0.8, hw * sw * 0.7, K.beak)); // 갈고리 부리 끝
   if (type === 'ptero') out.push(box(hx + hl * 0.92, my + hd * sn * 0.25, 0, hl * 0.16, hd * sn * 0.5, hw * sw * 0.6, K.beak)); // 뾰족한 부리 끝
-  if (type === 'sauro' && p.snout) out.push(box(hx + hl * 0.45, hy + hd * 0.55, 0, hl * 0.35, hd * 0.35, hw * 0.6, K.body)); // 브라키오사우루스 높은 콧등
-  if (type === 'croc' || type === 'mosa') out.push(box(hx + hl * 0.18, hy + hd * 0.52, 0, hl * 0.2, hd * 0.25, hw * 0.75, K.body)); // 위로 솟은 눈두덩
+  if (type === 'sauro' && p.snout) out.push(box(hx + hl * 0.45, hy + hd * 0.55, 0, hl * 0.35, hd * 0.35, hw * 0.6, K.head)); // 브라키오사우루스 높은 콧등
+  if (type === 'croc' || type === 'mosa') out.push(box(hx + hl * 0.18, hy + hd * 0.52, 0, hl * 0.2, hd * 0.25, hw * 0.75, K.head)); // 위로 솟은 눈두덩
   out.push(box(hx + hl * 0.55, my + 0.12, 0, hl * 0.85, 0.3, hw * sw * 0.8, MOUTH)); // 입 안(벌리면 보인다)
   out.push(box(hx + hl * (back * 0.6 + (1 - back * 0.6) / 2), my + 0.05, 0, hl * (1 - back * 0.6), 0.14, hw * sw + 0.06, LIP)); // 입선(다문 입에도 보이는 어두운 줄)
   const ts = Math.min(0.48, hd * 0.17);
@@ -155,8 +157,8 @@ function ceratoHead(hx, hy, hl, hd, hw, K, p) {
   const frill = piv(hx + hl * 0.15, hy + hd * 0.3, 0, [0, 0, 0.75], box(0, F / 2, 0, 0.6, F, fw, K.frill), box(0.32, F * 0.52, 0, 0.1, F * 0.72, fw * 0.74, K.frillIn),
     knobs.map(([y, z]) => box(0, y, z, 0.6, 0.6, 0.6, K.ridge, 0, Math.PI / 4)), spikes);
   const parts = [
-    box(hx + hl * 0.35, hy + hd * 0.05, 0, hl * 0.5, hd, hw, K.body),
-    box(hx + hl * 0.72, hy - hd * 0.1, 0, hl * 0.28, hd * 0.7, hw * 0.62, K.body),
+    box(hx + hl * 0.35, hy + hd * 0.05, 0, hl * 0.5, hd, hw, K.head),
+    box(hx + hl * 0.72, hy - hd * 0.1, 0, hl * 0.28, hd * 0.7, hw * 0.62, K.head),
     box(hx + hl * 0.92, hy - hd * 0.2, 0, hl * 0.14, hd * 0.5, hw * 0.4, K.beak),
     box(hx + hl * 0.99, hy - hd * 0.42, 0, hl * 0.06, hd * 0.25, hw * 0.3, K.beak), // 아래로 굽은 부리 끝
     box(hx + hl * 0.55, my + 0.12, 0, hl * 0.6, 0.3, hw * 0.5, MOUTH),
@@ -176,9 +178,9 @@ function ceratoHead(hx, hy, hl, hd, hw, K, p) {
 function mammalHead(hx, hy, hl, hd, hw, K, p) {
   const F = K.F, my = hy - hd * 0.45, ele = p.skull === 'elephant' || F.includes('trunk');
   const parts = [
-    box(hx + hl * 0.35, hy + hd * 0.05, 0, hl * 0.7, hd, hw, K.body),
-    ele ? [box(hx + hl * 0.3, hy + hd * 0.62, 0, hl * 0.45, hd * 0.4, hw * 0.8, K.body), box(hx + hl * 0.76, hy - hd * 0.08, 0, hl * 0.2, hd * 0.7, hw * 0.7, K.body)]
-      : [box(hx + hl * 0.82, hy - hd * 0.18, 0, hl * 0.36, hd * 0.55, hw * 0.6, K.body), box(hx + hl * 0.99, hy - hd * 0.05, 0, 0.3, hd * 0.25, hw * 0.4, K.ridge), nostrils(hx + hl * 0.98, hy + hd * 0.06, hw * 0.15, K),
+    box(hx + hl * 0.35, hy + hd * 0.05, 0, hl * 0.7, hd, hw, K.head),
+    ele ? [box(hx + hl * 0.3, hy + hd * 0.62, 0, hl * 0.45, hd * 0.4, hw * 0.8, K.head), box(hx + hl * 0.76, hy - hd * 0.08, 0, hl * 0.2, hd * 0.7, hw * 0.7, K.head)]
+      : [box(hx + hl * 0.82, hy - hd * 0.18, 0, hl * 0.36, hd * 0.55, hw * 0.6, K.head), box(hx + hl * 0.99, hy - hd * 0.05, 0, 0.3, hd * 0.25, hw * 0.4, K.ridge), nostrils(hx + hl * 0.98, hy + hd * 0.06, hw * 0.15, K),
         box(hx + hl * 0.8, my + hd * 0.02, 0, hl * 0.32, hd * 0.1, hw * 0.62, K.under)], // 주둥이 아래 밝은 털
     box(hx + hl * 0.6, my + 0.12, 0, hl * 0.5, 0.3, hw * 0.45, MOUTH),
     K.meat && !F.includes('sabre') ? teeth(hx + hl * 0.62, hx + hl * 0.95, my, hw * 0.3 - 0.12, true) : null,
@@ -237,6 +239,8 @@ export function bodyDeco(K, top, R, W, sail = 0) {
     const t = 0.04 + i * 0.1 + (k % 2 ? 0.05 : 0), [x, y] = top(Math.min(0.98, t)), s = Math.max(0.55, R * 0.32);
     out.push(box(x, y + s * 0.25 - Math.abs(k) * R * 0.12, k * W * 0.2, s, s * (0.7 + (i % 2) * 0.35), s, K.osteo));
   }
+  // 등 줄: 등뼈를 따라 진한 띠
+  if (K.dorsal) for (let i = 0; i < 10; i++) { const [x, y] = top((i + 0.5) / 10), [x1] = top(0.1), [x0] = top(0); out.push(box(x, y + 0.04, 0, x1 - x0 + 0.1, 0.2, W * 0.34, K.dorsal)); }
   // 등 비늘 돌기: 비늘 피부인데 다른 등 장식이 없으면, 등뼈를 따라 작은 마름모 한 줄(악어 등처럼)
   if (K.kind === 'scale' && !sail && !['plates', 'bumps', 'spikes', 'shell', 'mane', 'fur', 'feathers'].some(f => F.includes(f))) {
     const s = Math.max(0.35, Math.min(0.75, R * 0.22)), n = 9;

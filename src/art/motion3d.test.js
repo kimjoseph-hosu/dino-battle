@@ -33,4 +33,16 @@ assert(Array.from({ length: 80 }, (_, i) => targetPose('idle', i * 0.05, rig).bl
 assert(targetPose('idle', 1, rig).blink === 0 || targetPose('idle', 2, rig).blink === 0, '늘 감고 있지는 않다');
 assert(targetPose('hit', 0, rig).blink > 0.5, '맞으면 눈을 질끈 감는다');
 assert(Math.max(...[0, 0.2, 0.4].map(t => Math.abs(targetPose('idle', t, rig, { moving: true, step: t * 9 }).roll))) > 0.02, '걸으면 몸이 좌우로 출렁인다');
+// 공격 종류마다 다른 부위 동작
+const icl = (...c) => Object.assign(c, { contains: x => c.includes(x) }); // 배열이라 [...cl] 가 된다
+assert.deepEqual(stateOf(icl('winding', 'm-toss')), { state: 'wind', o: { moving: false, whip: false, flying: false, motion: 'toss' } });
+assert.equal(stateOf(icl('charging', 'biting', 'm-roll')).state, 'charge', '굴리기는 몸을 비튼다');
+assert.equal(stateOf(icl('charging', 'biting', 'm-bite')).state, 'bite');
+assert.equal(stateOf(icl('tired', 'ko')).state, 'ko');
+assert.equal(stateOf(icl('biting', 'roar')).state, 'roar');
+assert(targetPose('wind', 0, rig, { motion: 'ram' }).hp < -0.2, '들이받기 전에 머리를 숙인다');
+assert(targetPose('wind', 0, rig, { motion: 'stomp' }).ls[0] > 0.5, '짓밟기 전에 앞다리를 든다');
+assert(Math.abs(targetPose('charge', 0, rig, { motion: 'kick' }).ls[2]) > 0.8, '발차기는 뒷다리를 크게 뻗는다');
+assert(targetPose('roar', 0, rig).jaw > 0.6 && targetPose('roar', 0, rig).hp > 0.25, '포효는 고개를 들고 입을 크게');
+assert.equal(targetPose('ko', 0, rig).blink, 1, 'K.O. 되면 눈을 감는다');
 console.log('motion3d ok');

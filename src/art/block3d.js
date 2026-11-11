@@ -325,6 +325,12 @@ export function build(a) {
     dark: col(back, 0.68), ridge: col(back, 0.55), osteo: col(back, 1.25, belly, 0.25), nail: col(belly, 0.8), beak: col(back, 0.5, '#3a3128', 0.5),
     rnd: () => (s = (Math.imul(s, 1664525) + 1013904223) >>> 0) / 4294967296,
   };
+  // 부위별 표식(blockLook 6번째 칸): head 머리 색, mask 눈을 지나는 줄, dorsal 등 줄, tail 꼬리 고리
+  const M = L?.[5] ?? {};
+  K.head = M.head ? { tex: skinTex(M.head, { pattern: p.pattern, mark: p.mark, markOp: p.markOp, kind, seed }), side: '#ffffff', top: '#d6d6d6', bot: belly } : K.body;
+  K.mask = M.mask;
+  K.dorsal = M.dorsal;
+  if (M.tail) K.body = { ...K.body, ring: { top: col(M.tail, 0.85), side: M.tail, bot: col(M.tail, 0.75) } };
   const rig = make(p, K);
   shade(rig.root, K, back, belly);
   rig.eyes = [];
@@ -350,7 +356,7 @@ function shade(root, K, back, belly) {
     for (let k = 0; k < 24; k++) {
       const t = pos.getY(k) + 0.5, side = Math.abs(nor.getY(k)) < 0.5;
       let c = [1, 1, 1];
-      if (side && paint === K.body) c = ratio.map(r => r + (0.82 - r) * t);
+      if (side && (paint === K.body || paint === K.head)) c = ratio.map(r => r + (0.82 - r) * t);
       else if (side && paint === K.limb) c = [1, 1, 1].map(() => 0.72 + 0.28 * t);
       const ao = paint === SPARK ? 0 : inside(v.fromBufferAttribute(pos, k).applyMatrix4(b.matrixWorld), i);
       c.forEach((x, j) => (col[k * 3 + j] = x * (ao ? 0.55 : 1)));

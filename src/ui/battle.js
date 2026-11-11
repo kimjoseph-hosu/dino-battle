@@ -300,11 +300,12 @@ export async function playBattle(root, A, B, res, stage, script, modes) {
     if (leap) Att.pos.classList.add('crouch');
     if (!hit && Def.mode === 'ground') Def.pos.classList.add('crouch');
     // 예비 동작: 힘을 모은 뒤 한 번 더 웅크려 잠깐 버티고 튀어 나간다
+    Att.pos.classList.add('winding', 'm-' + act.motion); // 3D 부위 동작: 힘 모으기(공격 종류마다 다른 자세, motion3d)
     const w = M.wind(Att), coil = { ...w, dx: (w.dx ?? 0) * 1.1, r: (w.r ?? 0) * 1.1, sy: 1 - (1 - (w.sy ?? 1)) * 1.1 };
     await Promise.all([poseT(Att, [w, coil], ms * 0.32, 'ease-in-out'), Att.rise ? move(Att, Att.x - Att.dir * 0.05 * Att.L, Att.y + 0.1 * Att.h, ms * 0.32, 'ease-out') : null]);
     sfx.windup(act.motion, Att.a);
 
-    Att.pos.classList.add('charging');
+    Att.pos.classList.replace('winding', 'charging');
     if (leap) Att.pos.classList.replace('crouch', 'airborne');
     else if (Att.mode === 'ground') Att.pos.classList.add('running');
     if (M.jaw) Att.pos.classList.add('biting');
@@ -332,7 +333,7 @@ export async function playBattle(root, A, B, res, stage, script, modes) {
       // 헛손질: 별빛 없이 바람만
       pop($('.boom'), '휙!', 700);
       puff(hitX, hitY, 0.12 * minH, 5, '#ffffffaa');
-      Att.pos.classList.remove('biting', 'whip', 'charging');
+      Att.pos.classList.remove('biting', 'whip', 'charging', 'm-' + act.motion);
       const t = ms * 0.5;
       return Promise.all([poseT(Att, [{ dx: 0.06 * Att.L, r: -7 }, { dx: -0.01 * Att.L, r: 2 }, {}], t), poseT(Def, [{}], t)]);
     }
@@ -355,7 +356,7 @@ export async function playBattle(root, A, B, res, stage, script, modes) {
 
     const heavier = clamp(Math.log10(Att.a.mass_kg.avg / Def.a.mass_kg.avg) / 2, 0, 1);
     let t = ms * 0.5 - (power ? 90 : 50);
-    Att.pos.classList.remove('biting', 'whip', 'charging');
+    Att.pos.classList.remove('biting', 'whip', 'charging', 'm-' + act.motion);
 
     if (!power) return Promise.all([poseT(Att, [{ dx: 0.03 * Att.L, r: -3 }, { dx: -0.01 * Att.L, r: 1 }, {}], t), move(Def, Def.x - Def.dir * 0.08 * minL, Def.y, t, 'ease-out'), poseT(Def, [{ r: 7 }, { r: -2 }, {}], t)]);
 
@@ -464,10 +465,10 @@ export async function playBattle(root, A, B, res, stage, script, modes) {
     : F ? camTo(...frame([[F.x, F.y + F.h], [F.x - F.dir * 0.35 * F.L, F.y + 0.3 * F.h]], zCap), C) : camTo(0, 0, 1, C));
   for (const F of f) {
     if (!calm) await closeup(F);
-    F.pos.classList.add('biting');
+    F.pos.classList.add('biting', 'roar');
     const len = sfx.voice(F.a) * 1000;
     await pose(F, [{ r: 10 }, {}], Math.min(I * 0.3, len));
-    F.pos.classList.remove('biting');
+    F.pos.classList.remove('biting', 'roar');
     await wait(Math.max(0, len * 0.7 - I * 0.3));
   }
   if (!calm) await closeup(null);
@@ -506,7 +507,7 @@ export async function playBattle(root, A, B, res, stage, script, modes) {
     // ── K.O.: 쓰러져 납작, 머리 위로 별이 빙글빙글 ──
     const O = TIMING.KO_MS;
     caption(script.outro);
-    Lf.pos.classList.add('tired');
+    Lf.pos.classList.add('tired', 'ko');
     $('.boom').classList.add('ko');
     pop($('.boom'), 'K.O.!', O * 0.6);
     music.end('ko');
@@ -521,7 +522,7 @@ export async function playBattle(root, A, B, res, stage, script, modes) {
         return { transform: `translate(${sx + Math.cos(a) * s * 2.2}px,${-sy - s + Math.sin(a) * s * 0.7}px)` };
       }), { duration: 900, iterations: Infinity });
     }
-    Wf.pos.classList.add('biting');
+    Wf.pos.classList.add('biting', 'roar'); // 이긴 쪽은 고개 들고 포효
     const back = move(Wf, Wf.x - Wf.dir * (0.15 * Wf.L + 0.5 * Lf.bw), Wf.rise ? Wf.engage + 0.5 * Wf.h : 0, O * 0.3); // 쓰러진 상대에게서 물러나(자리는 바로 바뀐다)
     await Promise.all([
       // 멀리서 둘 다 보이게: 쓰러진 쪽(별)과 이긴 쪽을 함께 담는다. 크기 차가 아주 큰 판만 작은 쪽을 당겨 본다
@@ -529,7 +530,7 @@ export async function playBattle(root, A, B, res, stage, script, modes) {
       back,
       pose(Wf, [{ r: 14 }, { r: 2 }, { r: 14, sx: 1.04, sy: 1.04 }, { r: 4, sx: 1.04, sy: 1.04 }], O * 0.5),
     ]);
-    Wf.pos.classList.remove('biting');
+    Wf.pos.classList.remove('biting', 'roar');
     await cheer(Wf);
     return;
   }
@@ -549,6 +550,6 @@ export async function playBattle(root, A, B, res, stage, script, modes) {
     pose(Lf, [{ r: -6, sy: 0.95 }, { r: -3, sy: 0.96 }, { r: -8, sy: 0.93 }], O),
     pose(Wf, [{ r: 14 }, { r: 2 }, { r: 14, sx: 1.04, sy: 1.04 }, { r: 4, sx: 1.04, sy: 1.04 }], O),
   ]);
-  Wf.pos.classList.remove('biting');
+  Wf.pos.classList.remove('biting', 'roar');
   await cheer(Wf);
 }

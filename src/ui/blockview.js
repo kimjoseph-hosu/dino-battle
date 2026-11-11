@@ -8,7 +8,7 @@ import { REPS } from '../art/shape3d.js';
 import { applyPose, rigInfo } from '../art/draw3d.js';
 import { targetPose, blend, restPose, STATES } from '../art/motion3d.js';
 
-const KO = { idle: '대기', charge: '돌진', bite: '물기', hit: '맞음', tired: '지침' };
+const KO = { idle: '대기', wind: '힘 모으기', charge: '돌진', bite: '물기', hit: '맞음', tired: '지침', roar: '포효', ko: 'K.O.' };
 const STATE_S = 2.5; // 동작 하나를 보여 주는 초
 const CSS = `<style>
   .bv { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 16px; padding: 16px; }
@@ -80,7 +80,7 @@ export function showBlocks(root) {
       const { clientWidth: w, clientHeight: h } = v.r.domElement;
       if (v.r.domElement.width !== w) v.r.setSize(w, h, false);
       v.turn.rotation.y = /&face/.test(location.hash) ? 0 : yaw ?? t * 0.5;
-      applyPose(v.rig, blend(v.P, targetPose(state, t, v.info), dt));
+      applyPose(v.rig, blend(v.P, targetPose(state, t, v.info, { motion: location.hash.match(/&m=(\w+)/)?.[1] }), dt)); // &m=stomp: 공격 종류
       v.label.textContent = KO[state];
       v.r.render(v.scene, v.cam);
     }
