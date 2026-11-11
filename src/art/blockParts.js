@@ -196,7 +196,10 @@ function mammalHead(hx, hy, hl, hd, hw, K, p) {
 // 머리 장식(특징): 볏·뿔·코뿔·사슴뿔·귀·검치·코·엄니
 function headDeco(hx, hy, hl, hd, hw, K, p, ele = false) {
   const F = K.F, my = hy - hd * 0.4, top = hy + hd * 0.5, out = [];
-  if (F.includes('horns')) out.push(both(sd => horn(hx + hl * 0.3, top, sd * hw * 0.3, [sd * 0.2, 0, 0.1], hd * 0.7, 0.6))); // 눈 위 뿔(카르노타우루스)
+  if (F.includes('horns')) out.push(both(sd => horn(hx + hl * 0.3, top, sd * hw * 0.3, [sd * (p.hornK ? 0.75 : 0.2), 0, 0.1], hd * 0.7 * (p.hornK ?? 1), 0.6 * Math.sqrt(p.hornK ?? 1)))); // 눈 위 뿔(카르노타우루스·알로사우루스)
+  if (p.bossy) out.push(both(sd => box(hx + hl * 0.3, top - 0.05, sd * hw * 0.34, hl * 0.12, 0.5, 0.55, K.ridge)), [0.62, 0.72, 0.82].map(u => box(hx + hl * u, hy + hd * 0.42 - (u - 0.6) * hd * 0.5, 0, 0.45, 0.35, 0.5, K.ridge))); // 티라노: 눈 뒤 혹 + 콧등 울퉁불퉁
+  if (p.ridges) out.push(both(sd => box(hx + hl * 0.68, hy + hd * 0.32, sd * 0.32, hl * 0.42, 0.35, 0.22, K.ridge))); // 알로사우루스: 콧등 두 줄 능선
+  if (p.squamo) out.push(both(sd => piv(hx + hl * 0.08, hy + hd * 0.35, sd * hw * 0.48, [sd * 0.9, 0, 1.9], box(0, 0.55, 0, 0.6, 1.1, 0.6, HORN))), both(sd => piv(hx + hl * 0.3, hy - hd * 0.2, sd * hw * 0.5, [sd * 1.2, 0, 2.4], box(0, 0.4, 0, 0.5, 0.8, 0.5, HORN)))); // 안킬로: 머리 뒤 모서리 뿔 + 볼 뿔
   if (F.includes('nosehorn')) out.push(horn(hx + hl * 0.78, my + hd * 0.6, 0, [0, 0, -0.2], hd * 0.55, 0.55)); // 코뿔(케라토사우루스)
   if (F.includes('crest')) out.push(box(hx + hl * 0.5, top + hd * 0.18, 0, hl * 0.6, hd * 0.4, 0.3, K.accent)); // 머리 위 볏
   if (F.includes('crest2')) out.push(both(sd => box(hx + hl * 0.5, top + hd * 0.3, sd * 0.35, hl * 0.6, hd * 0.65, 0.2, K.accent, -0.12))); // 볏 두 장(딜로포사우루스)

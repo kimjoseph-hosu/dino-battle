@@ -285,11 +285,15 @@ function snake(p, K) {
 const TEMPLATES = { theropod: biped, bird: biped, sauropod: quad, ceratopsian: quad, armored: quad, large_mammal: quad, sprawler: quad, fish, marine_reptile: marine, pterosaur: ptero, arthropod, snake };
 // 인기 동물 손질(PLAN_BLOCK3D 4.5): 블록 전용 비율·특징을 덮어써서 더 그 동물답게. 데이터 파일의 art.block 이 있으면 그것이 우선
 const OVERRIDE = {
-  tyrannosaurus: { hl: 0.15, dp: 0.85, arm: 0.035 }, // 아주 큰 머리, 손가락 둘 달린 작은 앞발
+  tyrannosaurus: { hl: 0.16, dp: 0.95, arm: 0.035, leg: 1.4, bossy: true }, // 아주 크고 깊은 머리(눈 뒤 혹·콧등 돌기), 굵은 다리, 손가락 둘 달린 작은 앞발
+  allosaurus: { hl: 0.13, dp: 0.65, ridges: true }, // 길고 낮은 머리, 콧등 위 두 줄 능선
+  carnotaurus: { hl: 0.095, dp: 1.05, hornK: 1.7, arm: 0.015 }, // 짧고 깊은 황소 머리, 큰 눈 위 뿔, 아주 작은 팔
+  diplodocus: { bd: 0.07, legR: 0.022, nr: 0.026, tr: 0.04 }, // 가는 몸을 통통하게(몸통·다리·목이 실처럼 보이지 않게)
+  apatosaurus: { bd: 0.085, legR: 0.026, nr: 0.042 }, // 굵은 목·묵직한 몸
   triceratops: { brow: 1.35, nose: 0.6 }, // 긴 이마뿔 둘, 짧은 코뿔
   spinosaurus: { head: 'croc', hl: 0.17, dp: 0.5 }, // 악어처럼 길고 낮은 주둥이
-  brachiosaurus: { neck: [0.8, 0.85], snout: true, frontLeg: 1.15 }, // 하늘로 세운 목, 높은 콧등, 긴 앞다리
-  ankylosaurus: { addF: ['spikes'] }, // 옆구리 가시
+  brachiosaurus: { neck: [0.8, 0.85], snout: true, frontLeg: 1.2, bd: 0.1, legR: 0.026, nr: 0.034, b0: 0.33, b1: 0.62 }, // 하늘로 세운 목, 높은 콧등, 긴 앞다리, 큰 몸통
+  ankylosaurus: { addF: ['spikes'], squamo: true }, // 옆구리 가시, 머리 뒤 모서리 뿔
   velociraptor: { bd: 0.065, hl: 0.13, neck: 1.3 }, // 너무 가늘어 도마뱀 같던 몸을 통통하게, 고개를 들어 새처럼
   smilodon: { hip: 0.33, sh: 0.4, bd: 0.125, legR: 0.045, frontLeg: 1.2, hl: 0.2, dp: 0.95 }, // 등이 엉덩이 쪽으로 낮고, 굵은 앞다리·큰 머리(말처럼 보이지 않게)
   quetzalcoatlus: { bd: 0.09, wing: 0.6, dp: 0.4 }, // 몸을 키우고 날개 판은 줄이고, 부리는 굵게(실처럼 보이지 않게)
