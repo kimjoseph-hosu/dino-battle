@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import * as THREE from 'three';
 import { CLOSE } from '../config.js';
 globalThis.location ??= { search: '', hash: '' }; // 3D 모델 모듈이 주소(?art=)를 읽는다
-const { closeCam, footsteps } = await import('./arena3d.js');
+const { closeCam, footsteps, lookAt } = await import('./arena3d.js');
 
 test('closeCam', () => {
   const head = new THREE.Vector3(2, 3, 0);
@@ -31,4 +31,12 @@ test('footsteps: 걸으면 발을 디딜 때 흙먼지, 큰 동물은 발자국.
   assert.ok(d > 0 && p > 0, '흙먼지와 발자국');
   assert.ok(run(true, 1)[1] === 0, '작은 동물은 발자국 없음');
   assert.deepStrictEqual(run(false, 5), [0, 0], '서 있으면 없음');
+});
+
+test('lookAt: 상대 얼굴 쪽으로 고개(위·아래·카메라 쪽), 등 뒤면 그대로', () => {
+  const at = (x, y, z) => { const o = new THREE.Object3D(); o.position.set(x, y, z); o.updateMatrixWorld(); return { rig: { jaw: o } }; };
+  const v = { ...at(1, 0.5, 0), holder: new THREE.Object3D() };
+  const [, up] = lookAt(v, at(3, 2, 0)), [, down] = lookAt(v, at(3, 0, 0)), [side] = lookAt(v, at(3, 0.5, 1));
+  assert.ok(up > 0.3 && down < 0 && side > 0.3, '큰 상대는 올려다보고, 작은 상대는 내려다보고, 옆이면 돌아본다');
+  assert.deepStrictEqual(lookAt(v, at(-2, 0.5, 0)), [0, 0]);
 });

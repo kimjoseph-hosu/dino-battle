@@ -45,6 +45,7 @@ const MOTIONS = {
   wind(P, t, rig, o) {
     const m = o.motion;
     P.y = -0.004;
+    P.blink = 0.35; // 눈을 가늘게 뜨고 노려본다
     if (m === 'ram' || m === 'toss') { // 머리를 땅까지 숙이고 앞발로 땅을 긁는다
       P.pitch = -0.06; P.hp = -0.35; P.jaw = 0.05;
       legsBy(P, rig, (l, i) => [l.side > 0 ? 0.35 * S(t * 11) : 0.1, 0.35], [-0.1, 0.25]);

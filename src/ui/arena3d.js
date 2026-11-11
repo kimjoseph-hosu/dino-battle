@@ -255,6 +255,18 @@ function flat(a) {
   return { root: m };
 }
 
+// v 가 상대 u 의 얼굴을 보려면 고개를 얼마나 돌려야 하나: [도리(+ 몸 왼쪽=카메라 쪽), 끄덕(+ 위)] 라디안. 몸 좌표(코 +x, 위 +y)에서 잰다
+const lk = new THREE.Vector3(), lk2 = new THREE.Vector3(), lkM = new THREE.Matrix4();
+export function lookAt(v, u) {
+  lkM.copy(v.holder.matrix).invert();
+  const me = v.rig.jaw ? v.rig.jaw.getWorldPosition(lk).applyMatrix4(lkM) : lk.set(0.9, 0.4, 0);
+  const to = (u.rig?.jaw ? u.rig.jaw.getWorldPosition(lk2) : u.mover?.center ? lk2.copy(u.mover.center) : null)?.applyMatrix4(lkM);
+  if (!to) return [0, 0];
+  const d = to.sub(me), fwd = Math.max(1e-3, Math.hypot(d.x, d.z));
+  if (d.x < 0) return [0, 0]; // 상대가 등 뒤면(지나쳐 갔을 때) 억지로 돌리지 않는다
+  return [clamp(Math.atan2(d.z, d.x), -0.5, 0.5), clamp(Math.atan2(d.y, fwd), -0.35, 0.35)];
+}
+
 // 발자국·흙먼지: 걷거나 달릴 때 발을 디딜 때마다 발밑에 흙 블록이 튀고, 큰 동물은 발자국이 잠깐 남았다 사라진다
 // (물속은 없음. 헤엄·나는 동물도 없음). 다리 앞뒤 휘두름(ls)이 앞으로 가장 나갔다 돌아서는 순간을 "디딤"으로 본다
 export function footsteps(scene, look) {
@@ -439,7 +451,11 @@ export function arena3d(arena, f, stage) {
       if (!v.info) continue;
       const { state, o } = stateOf(v.F.pos.classList);
       o.step = v.step = (v.step ?? 0) + dt * (+v.F.pos.dataset.gait || 9);
-      applyPose(v.rig, blend(v.P, targetPose(state, t, v.info, o), dt));
+      blend(v.P, targetPose(state, t, v.info, o), dt);
+      // 상대 얼굴 쪽으로 고개를 돌린다(큰 상대는 올려다보고 작은 상대는 내려다본다). 포효·맞음·K.O.·물기 중에는 그 동작대로
+      const other = views.find(u => u !== v), want = ['idle', 'wind', 'charge', 'tired'].includes(state) && other ? lookAt(v, other) : [0, 0];
+      v.lk = (v.lk ?? [0, 0]).map((a, i) => a + (want[i] - a) * Math.min(1, dt * 4));
+      applyPose(v.rig, { ...v.P, hy: v.P.hy + v.lk[0], hp: v.P.hp + v.lk[1] });
       if (steps && !v.info.swim && !o.flying && !v.F.y) { v.holder.updateMatrixWorld(true); steps.step(v, o.moving || state === 'charge'); }
     }
     // 카메라: 평소엔 2D 카메라를 따른 넓은 화면. 클로즈업 중엔 그때 있던 자리에서 목표(얼굴 또는 넓은 화면)로 천천히 옮겨 간다
