@@ -1,0 +1,10 @@
+<!doctype html><meta charset="utf-8"><link rel="stylesheet" href="/src/style.css">
+<style>body{background:#1e2a22;margin:0} svg{display:block} *{animation-play-state:paused!important}</style><body><svg id="s" width="1600" height="1000"></svg>
+<script type="module">
+import { animals } from '/src/data.js'; import { drawAnimal } from '/src/art/draw.js';
+const ids = ['tyrannosaurus','velociraptor','triceratops','smilodon','iguanodon'], st = ['', 'crouch', 'airborne', 'walking running'];
+let s = '';
+ids.forEach((id, r) => st.forEach((c, k) => { s += `<g class="${c}" style="--step:.3s" transform="translate(${30 + k * 390} ${170 + r * 195}) scale(330)"><line x1="0" x2="1" y1="0" y2="0" stroke="#fff4" stroke-width="0.003"/>${drawAnimal(animals.find(a => a.id === id))}</g>`; }));
+s += st.map((c, k) => `<text x="${120 + k * 390}" y="30" fill="#fff" font-size="26">${c || '서 있기'}</text>`).join('');
+document.getElementById('s').innerHTML = s;
+</script>

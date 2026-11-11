@@ -1,0 +1,4 @@
+{
+  "rewrites": [{ "source": "/api/:p*", "destination": "/api/index?p=:p*" }],
+  "functions": { "api/index.js": { "includeFiles": "{data,src/art}/**", "maxDuration": 40 } }
+}

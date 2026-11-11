@@ -1,0 +1,377 @@
+[
+  {
+    "id": "ai-elephant",
+    "name_ko": "코끼리",
+    "name_en": "Elephant",
+    "queries": [
+      "코끼리"
+    ],
+    "era": "현재",
+    "place": "아프리카, 아시아",
+    "diet": "초식",
+    "name_meaning": "",
+    "size_raw": "약 5m~7.5m",
+    "mass_raw": "약 3톤~6톤",
+    "habitat": "land",
+    "length_m": {
+      "min": 5,
+      "avg": 6.5,
+      "max": 7.5
+    },
+    "mass_kg": {
+      "min": 3000,
+      "avg": 4000,
+      "max": 6000
+    },
+    "stats": {
+      "attack": 8,
+      "defense": 8,
+      "speed": 4,
+      "agility": 3,
+      "senses": 7,
+      "social": 8
+    },
+    "weapons": [
+      "상아",
+      "발"
+    ],
+    "armor": [],
+    "archetype": "large_mammal",
+    "art": {
+      "palette": [
+        "#8c8a86",
+        "#7a7874",
+        "#6a6864"
+      ],
+      "features": [
+        "trunk",
+        "tusks",
+        "ears"
+      ],
+      "params": {
+        "hip": 0.48,
+        "sh": 0.55,
+        "bd": 0.16,
+        "b0": 0.15,
+        "b1": 0.6,
+        "neck": [
+          0.72,
+          0.66
+        ],
+        "nr": 0.11,
+        "hl": 0.22,
+        "dp": 1.1,
+        "tail": [
+          0.08,
+          0.5
+        ],
+        "tr": 0.02,
+        "legR": 0.05,
+        "head": "mammal",
+        "foot": "pillar",
+        "skull": "elephant"
+      },
+      "like": "woolly_mammoth"
+    },
+    "fun_fact": "코끼리의 긴 코는 숨을 쉬거나 물을 마실 뿐만 아니라 무거운 물건을 번쩍 들 때도 쓰는 슈퍼 도구예요!",
+    "confidence": "high",
+    "source_note": "AI 추정(gemini-3.5-flash-lite, 2026-10-30). 선생님 확인 필요",
+    "origin": "ai_estimated"
+  },
+  {
+    "id": "ai-carnotaurus",
+    "name_ko": "카르노토사우루스",
+    "name_en": "Carnotaurus",
+    "queries": [
+      "카르노토사우루스"
+    ],
+    "era": "백악기 후기",
+    "place": "남아메리카",
+    "diet": "육식성",
+    "name_meaning": "",
+    "size_raw": "약 7.5m~9m",
+    "mass_raw": "약 1톤~2톤",
+    "habitat": "land",
+    "length_m": {
+      "min": 7.5,
+      "avg": 8,
+      "max": 9
+    },
+    "mass_kg": {
+      "min": 1000,
+      "avg": 1350,
+      "max": 2000
+    },
+    "stats": {
+      "attack": 7,
+      "defense": 5,
+      "speed": 8,
+      "agility": 7,
+      "senses": 6,
+      "social": 4
+    },
+    "weapons": [
+      "뿔",
+      "이빨"
+    ],
+    "armor": [],
+    "archetype": "theropod",
+    "art": {
+      "palette": [
+        "#8C6239",
+        "#D9C3A5",
+        "#4A3319"
+      ],
+      "features": [
+        "horns"
+      ],
+      "params": {
+        "h": 0.3,
+        "bd": 0.072,
+        "hl": 0.085,
+        "dp": 0.9,
+        "arm": 0.02,
+        "head": "thero",
+        "hand": "nub",
+        "skull": "abel",
+        "tl": 0.22,
+        "meta": 1.25,
+        "pattern": "stripes",
+        "mark": "#4A3319"
+      },
+      "like": "carnotaurus"
+    },
+    "fun_fact": "카르노토사우루스는 머리에 황소 같은 뿔이 난 멋진 공룡이에요.",
+    "confidence": "high",
+    "source_note": "AI 추정(gemini-3.5-flash-lite, 2026-10-30). 선생님 확인 필요",
+    "origin": "ai_estimated"
+  },
+  {
+    "id": "ai-giganotosaurus",
+    "name_ko": "기가노토사우루스",
+    "name_en": "Giganotosaurus",
+    "queries": [
+      "기가노토사우루스"
+    ],
+    "era": "백악기 후기",
+    "place": "남아메리카",
+    "diet": "육식",
+    "name_meaning": "",
+    "size_raw": "약 11m~13.5m",
+    "mass_raw": "약 6톤~10톤",
+    "habitat": "land",
+    "length_m": {
+      "min": 11,
+      "avg": 12.5,
+      "max": 13.5
+    },
+    "mass_kg": {
+      "min": 6000,
+      "avg": 8000,
+      "max": 10000
+    },
+    "stats": {
+      "attack": 9,
+      "defense": 7,
+      "speed": 6,
+      "agility": 5,
+      "senses": 6,
+      "social": 2
+    },
+    "weapons": [
+      "이빨",
+      "발톱"
+    ],
+    "armor": [
+      "단단한 피부"
+    ],
+    "archetype": "theropod",
+    "art": {
+      "palette": [
+        "#8b5a2b",
+        "#d2b48c",
+        "#a0522d"
+      ],
+      "features": [
+        "crest"
+      ],
+      "params": {
+        "h": 0.27,
+        "bd": 0.105,
+        "hl": 0.125,
+        "dp": 0.78,
+        "arm": 0.04,
+        "head": "thero",
+        "hand": "rex",
+        "skull": "rex",
+        "tl": 0.24,
+        "leg": 1.25,
+        "meta": 0.85,
+        "belly": 0.35,
+        "neck": 0.85,
+        "pattern": "stripes",
+        "mark": "#5c4033"
+      },
+      "like": "tyrannosaurus"
+    },
+    "fun_fact": "기가노토사우루스는 티라노사우루스보다 몸집이 조금 더 컸던 거대한 육식 공룡이에요.",
+    "confidence": "high",
+    "source_note": "AI 추정(gemini-3.5-flash-lite, 2026-10-30). 선생님 확인 필요",
+    "origin": "ai_estimated"
+  },
+  {
+    "id": "ai-giantpanda",
+    "name_ko": "자이언트 판다",
+    "name_en": "Giant Panda",
+    "queries": [
+      "자이언트판다",
+      "판다",
+      "동물원판다"
+    ],
+    "era": "현재",
+    "place": "중국",
+    "diet": "초식성(대나무 중심)",
+    "name_meaning": "",
+    "size_raw": "약 1.2m~1.8m",
+    "mass_raw": "약 70kg~150kg",
+    "habitat": "land",
+    "length_m": {
+      "min": 1.2,
+      "avg": 1.5,
+      "max": 1.8
+    },
+    "mass_kg": {
+      "min": 70,
+      "avg": 100,
+      "max": 150
+    },
+    "stats": {
+      "attack": 5,
+      "defense": 4,
+      "speed": 3,
+      "agility": 3,
+      "senses": 4,
+      "social": 2
+    },
+    "weapons": [
+      "이빨"
+    ],
+    "armor": [],
+    "archetype": "large_mammal",
+    "art": {
+      "palette": [
+        "#f2f0e8",
+        "#ece8dc",
+        "#1e1e1e"
+      ],
+      "features": [
+        "round_ears"
+      ],
+      "params": {
+        "hip": 0.32,
+        "sh": 0.36,
+        "bd": 0.16,
+        "b0": 0.12,
+        "b1": 0.68,
+        "neck": [
+          0.85,
+          0.45
+        ],
+        "nr": 0.09,
+        "hl": 0.17,
+        "dp": 0.8,
+        "tail": [
+          0.08,
+          0.36
+        ],
+        "tr": 0.03,
+        "legR": 0.05,
+        "head": "mammal",
+        "skull": "bear",
+        "limb": "#1e1e1e",
+        "face": "#1e1e1e",
+        "ear": "#1e1e1e",
+        "shoulder": true
+      },
+      "like": "cave_bear"
+    },
+    "fun_fact": "판다는 하루에 거의 반나절 동안 대나무를 먹으며 보낸대요.",
+    "confidence": "high",
+    "source_note": "AI 추정(gemini-3.5-flash-lite, 2026-10-30). 선생님 확인 필요",
+    "origin": "ai_estimated"
+  },
+  {
+    "id": "ai-zebra",
+    "name_ko": "얼룩말",
+    "name_en": "Zebra",
+    "queries": [
+      "얼룩말"
+    ],
+    "era": "현재",
+    "place": "아프리카",
+    "diet": "초식",
+    "name_meaning": "",
+    "size_raw": "약 2.1m~2.7m",
+    "mass_raw": "약 220kg~350kg",
+    "habitat": "land",
+    "length_m": {
+      "min": 2.1,
+      "avg": 2.5,
+      "max": 2.7
+    },
+    "mass_kg": {
+      "min": 220,
+      "avg": 300,
+      "max": 350
+    },
+    "stats": {
+      "attack": 2,
+      "defense": 3,
+      "speed": 8,
+      "agility": 7,
+      "senses": 6,
+      "social": 7
+    },
+    "weapons": [],
+    "armor": [],
+    "archetype": "large_mammal",
+    "art": {
+      "palette": [
+        "#f4f4f0",
+        "#ffffff",
+        "#1a1a1a"
+      ],
+      "features": [],
+      "params": {
+        "hip": 0.58,
+        "sh": 0.63,
+        "bd": 0.12,
+        "b0": 0.15,
+        "b1": 0.62,
+        "neck": [
+          0.8,
+          0.88
+        ],
+        "nr": 0.06,
+        "hl": 0.2,
+        "dp": 0.6,
+        "tail": [
+          0.12,
+          0.6
+        ],
+        "tr": 0.03,
+        "legR": 0.025,
+        "head": "mammal",
+        "foot": "hoof",
+        "skull": "deer",
+        "pattern": "bands",
+        "mark": "#1a1a1a"
+      },
+      "like": "megaloceros"
+    },
+    "fun_fact": "얼룩말의 독특한 검은색과 흰색 줄무늬는 포식자에게 혼란을 주고 해충을 쫓는 데 도움을 줘요.",
+    "confidence": "high",
+    "source_note": "AI 추정(gemini-3.5-flash-lite, 2026-10-30). 선생님 확인 필요",
+    "origin": "ai_estimated"
+  }
+]

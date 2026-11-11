@@ -1,0 +1,499 @@
+:root {
+  --bg: #17201a; --panel: #223027; --panel2: #2c3d31; --ink: #f6f1e1; --dim: #b9b49f;
+  --gold: #f6c945; --gold2: #e08a1e; --p1: #e2553a; --p2: #3a8be2; --line: #1a1d14;
+  --title: "Black Han Sans", "Malgun Gothic", sans-serif; --body: "Jua", "Malgun Gothic", sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: radial-gradient(ellipse at 50% 0%, #2b3d2f, var(--bg) 70%) fixed; color: var(--ink); font: 26px/1.4 var(--body); min-height: 100vh; }
+#app { padding: 20px 28px; }
+/* 화면이 바뀔 때(app.innerHTML 을 새로 채울 때마다) 새 화면이 살며시 떠오른다. transform 대신 translate 라서 원래 transform 과 안 부딪힌다 */
+#app > * { animation: screenIn .35s ease-out backwards; }
+@keyframes screenIn { from { opacity: 0; translate: 0 18px; } }
+@media (prefers-reduced-motion: reduce) { #app > * { animation: none; } }
+h1, h2 { font-family: var(--title); font-weight: 400; margin: 0; }
+small { color: var(--dim); }
+button { font: inherit; cursor: pointer; border-radius: 16px; border: 0; color: var(--ink); background: var(--panel2); padding: 12px 26px; box-shadow: 0 4px 0 #0006; transition: transform .1s, box-shadow .1s; }
+button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 0 #0006; }
+button:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 1px 0 #0006; }
+button:disabled { opacity: .45; cursor: default; }
+.scene { width: 100%; display: block; }
+
+/* 그림체: 실사 느낌 — 외곽선은 얇고 은은하게, 입체는 빛·질감 겹(.vol)이 만든다 */
+.human path { stroke: #00000055; stroke-width: 1; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+/* 동물은 외곽선 없이 빛·그늘로만 형태를 만든다(관절 마디의 이음새가 보이지 않게) */
+.animal path { stroke: none; }
+.animal path.vol { stroke: none; pointer-events: none; }
+.animal .tex { stroke: none; }
+.animal circle.tex { opacity: .35; }
+.animal .brow { fill: none; stroke: #15130dcc; stroke-width: 2; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+
+/* 관절: 마디마다 축을 두고 따로 움직인다(transform-box: 마디 자기 크기 기준) */
+.animal :is(.head, .jaw, .body, .leg, .arm, .j1, .j2, .j3, .j4, .a1, .a2, .a3, .t1, .t2, .t3, .t4, .t5, .n1, .n2, .n3, .aleg, .flipper, .tail) { transform-box: fill-box; }
+.animal .head { transform-origin: 0% 70%; animation: nod 2.6s ease-in-out infinite alternate; }
+.animal .jaw { transform-origin: 5% 10%; animation: snap 4s ease-in-out infinite; }
+
+/* 꼬리: 몸 쪽 끝을 축으로, 끝으로 갈수록 늦게 휘어 물결 */
+.animal :is(.t1, .t2, .t3, .t4, .t5) { transform-origin: 100% 50%; animation: wag 2.6s ease-in-out infinite alternate; }
+.animal .t1 { animation-delay: -1.3s; } .animal .t2 { animation-delay: -1s; } .animal .t3 { animation-delay: -0.7s; } .animal .t4 { animation-delay: -0.4s; } .animal .t5 { animation-delay: -0.1s; }
+.animal .snake :is(.t1, .t2, .t3, .t4, .t5) { animation-name: slither; animation-duration: 1.6s; }
+.swimming .animal :is(.t1, .t2, .t3) { animation-name: wagBig; animation-duration: .9s; }
+/* 목: 몸 쪽을 축으로 두 마디가 살짝 */
+.animal :is(.n1, .n2, .n3) { transform-origin: 0% 100%; animation: neck 3.2s ease-in-out infinite alternate; }
+.animal .n2 { animation-delay: -0.5s; } .animal .n3 { animation-delay: -1s; }
+/* 팔·지느러미·절지동물 다리 */
+.animal :is(.a1, .a2, .a3) { transform-origin: 0% 0%; animation: arm 2.8s ease-in-out infinite alternate; }
+.animal .a2 { animation-delay: -0.7s; } .animal .a3 { animation-delay: -1.4s; }
+.animal .flipper { transform-origin: 60% 0%; animation: paddle 2.4s ease-in-out infinite alternate; }
+.swimming .animal .flipper { animation-duration: .8s; animation-name: paddleBig; }
+.animal .aleg { transform-origin: 50% 0%; animation: scuttle .6s ease-in-out infinite alternate; }
+/* 걷기(움직이는 동안 .walking): 엉덩이·무릎·발목이 번갈아. 반대쪽 다리는 반대 박자, 네발은 대각선 걸음 */
+/* --step: 반 걸음 시간. 배틀에서 이동 속도에 맞춰 바뀐다 */
+.walking .animal .leg .j1 { transform-origin: 50% 4%; animation: hip var(--step, .5s) ease-in-out infinite alternate; }
+.walking .animal .leg .j2 { transform-origin: 50% 2%; animation: knee var(--step, .5s) ease-in-out infinite alternate; animation-delay: calc(var(--step, .5s) * -.5); }
+.walking .animal .leg .j3 { transform-origin: 50% 2%; animation: ankle var(--step, .5s) ease-in-out infinite alternate; animation-delay: calc(var(--step, .5s) * -.24); }
+.walking .animal .leg .j4 { transform-origin: 10% 60%; animation: toe var(--step, .5s) ease-in-out infinite alternate; animation-delay: calc(var(--step, .5s) * -.1); }
+.walking .animal :is(.leg.hind.far, .leg.front.near) :is(.j1, .j2, .j3, .j4) { animation-direction: alternate-reverse; }
+.walking .animal .aleg { animation-duration: calc(var(--step, .5s) * .5); }
+/* 날 때는 다리를 뒤로 접는다 */
+.flying .animal .leg .j1 { transform-origin: 50% 4%; rotate: 45deg; animation: none; }
+.flying .animal .leg .j2 { transform-origin: 50% 2%; rotate: -70deg; animation: none; }
+/* 걸음마다 몸이 살짝 오르내린다(발 디딜 때 무게). 반 걸음에 한 번 */
+.walking .animal { animation: bob calc(var(--step, .5s) / 2) ease-in-out infinite alternate; }
+/* 달리기(.running, 달려들 때): 걷기보다 크게 휘두르고 크게 출렁 */
+.running .animal { animation-name: runBob; }
+.running .animal .leg .j1 { animation-name: runHip; }
+.running .animal .leg .j2 { animation-name: runKnee; }
+.running .animal .leg .j3 { animation-name: runAnkle; }
+/* 점프·피하기: 웅크림(.crouch, 착지 때도) → 공중(.airborne)에서 다리를 접는다. 걷기 동작보다 앞선다 */
+:is(.crouch, .airborne) .animal { animation: none; transition: translate .12s ease-out; }
+:is(.crouch, .airborne) .animal .leg :is(.j1, .j2, .j3, .j4) { animation: none; transition: rotate .12s ease-out; }
+.crouch .animal { translate: 0 0.035px; }
+.crouch .animal .leg .j1 { transform-origin: 50% 4%; rotate: -22deg; }
+.crouch .animal .leg .j2 { transform-origin: 50% 2%; rotate: 40deg; }
+.crouch .animal .leg .j3 { transform-origin: 50% 2%; rotate: -22deg; }
+.airborne .animal .leg .j1 { transform-origin: 50% 4%; rotate: -38deg; }
+.airborne .animal .leg .j2 { transform-origin: 50% 2%; rotate: 70deg; }
+.airborne .animal .leg .j3 { transform-origin: 50% 2%; rotate: -30deg; }
+.airborne .animal .leg .j4 { transform-origin: 10% 60%; rotate: 25deg; }
+@keyframes bob { from { translate: 0 0; } to { translate: 0 -0.012px; } }
+@keyframes runBob { from { translate: 0 0.005px; } to { translate: 0 -0.03px; } }
+@keyframes runHip { from { rotate: -26deg; } to { rotate: 22deg; } }
+@keyframes runKnee { 0% { rotate: 4deg; } 50% { rotate: 50deg; } 100% { rotate: 4deg; } }
+@keyframes runAnkle { from { rotate: -22deg; } to { rotate: 20deg; } }
+@keyframes nod { from { rotate: -1.5deg; } to { rotate: 1.5deg; } }
+@keyframes snap { 0%, 80%, 100% { rotate: 0deg; } 88% { rotate: 9deg; } }
+@keyframes breathe { from { scale: 1 1; } to { scale: 1.006 1.02; } }
+@keyframes wag { from { rotate: -3deg; } to { rotate: 3deg; } }
+@keyframes wagBig { from { rotate: -9deg; } to { rotate: 9deg; } }
+@keyframes slither { from { rotate: -7deg; } to { rotate: 7deg; } }
+@keyframes neck { from { rotate: -1.5deg; } to { rotate: 1.5deg; } }
+@keyframes arm { from { rotate: -6deg; } to { rotate: 8deg; } }
+@keyframes paddle { from { rotate: -8deg; } to { rotate: 8deg; } }
+@keyframes paddleBig { from { rotate: -22deg; } to { rotate: 18deg; } }
+@keyframes scuttle { from { rotate: -10deg; } to { rotate: 10deg; } }
+@keyframes hip { from { rotate: -18deg; } to { rotate: 16deg; } }
+@keyframes knee { 0% { rotate: 2deg; } 50% { rotate: 24deg; } 100% { rotate: 2deg; } }
+@keyframes ankle { from { rotate: -10deg; } to { rotate: 12deg; } }
+@keyframes toe { from { rotate: -8deg; } to { rotate: 14deg; } }
+.biting .jaw { animation: bite .35s ease-out infinite; }
+@keyframes bite { 50% { rotate: 16deg; } }
+.whip .tail { transform-origin: 100% 50%; animation: whip .3s ease-in-out infinite alternate; }
+@keyframes whip { from { rotate: -14deg; } to { rotate: 12deg; } }
+
+/* ── 고르기 ── */
+.title { text-align: center; margin-bottom: 14px; }
+.title h1 { font-size: 64px; letter-spacing: 2px; background: linear-gradient(#fff3b0, var(--gold) 45%, var(--gold2)); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 4px 0 #5a2a0c) drop-shadow(0 8px 12px #0008); }
+.title p { margin: 4px 0 0; color: var(--dim); font-size: 28px; }
+.pick { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 18px; padding-bottom: 130px; }
+.card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 10px 14px; background: linear-gradient(var(--panel2), var(--panel)); outline: 4px solid transparent; }
+.card .scene { height: 150px; border-radius: 12px; background: radial-gradient(ellipse at 50% 80%, #4d6b45, #2a3a2c 75%); padding: 6px; }
+.card b { font-family: var(--title); font-weight: 400; font-size: 30px; }
+.card .tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.card .tags i { font-style: normal; font-size: 17px; background: #0004; padding: 2px 10px; border-radius: 99px; color: var(--dim); }
+.card small { font-size: 18px; }
+.card.on { outline-color: var(--p1); background: linear-gradient(#5a3a30, var(--panel)); }
+.card.on.p2 { outline-color: var(--p2); background: linear-gradient(#2f4560, var(--panel)); }
+.card em { position: absolute; top: 4px; left: 10px; font: 400 52px var(--title); color: var(--p1); font-style: normal; text-shadow: 0 3px 0 #0008; }
+.card.p2 em { color: var(--p2); }
+.tray { position: fixed; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; gap: 20px; padding: 16px; background: linear-gradient(#0000, #0b100cee 35%); }
+.tray .slot { min-width: 260px; text-align: center; font: 400 34px var(--title); padding: 10px 20px; border-radius: 14px; border: 3px dashed #fff3; }
+.tray .s1 { color: #ff9a85; } .tray .s2 { color: #8cc0ff; }
+.tray strong { font: 400 44px var(--title); color: var(--gold); }
+.go { font: 400 40px var(--title); padding: 14px 56px; background: linear-gradient(#ff7a3d, #c2361a); box-shadow: 0 6px 0 #6d1a0a; }
+
+/* ── 배틀 ── */
+.arena { position: relative; height: calc(100vh - 40px); border-radius: 22px; overflow: hidden; background: linear-gradient(#7fbfe6, #bfe0e9 45%, #f1f2d6 78%); box-shadow: 0 10px 40px #000a; }
+.field { width: 100%; height: 100%; display: block; }
+.shadow { fill: #1c2a10; opacity: .28; }
+.cloud { transform-box: fill-box; }
+.fx circle, .spark { transform-box: fill-box; transform-origin: center; }
+.spark { fill: #fff6c2; stroke: #ffb52e; stroke-width: 3; vector-effect: non-scaling-stroke; }
+.slash { fill: none; stroke: #fff; stroke-width: 6; stroke-linecap: round; stroke-dasharray: 1; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 4px #fff); }
+.star { fill: var(--gold); stroke: #8a4a00; stroke-width: 2; vector-effect: non-scaling-stroke; text-anchor: middle; dominant-baseline: middle; }
+.pos, .jiggle, .pose { transform-box: fill-box; transform-origin: 50% 100%; } /* .jiggle: 맞았을 때 탱글(발 가운데가 축) */
+
+.hud { position: absolute; inset: 16px 22px auto; display: flex; align-items: flex-start; gap: 24px; z-index: 2; }
+.plate { flex: 1; background: #0f1a12d9; border: 3px solid #ffffff22; border-radius: 16px; padding: 8px 14px 10px; box-shadow: 0 6px 16px #0006; }
+.plate b { font: 400 32px var(--title); }
+.plate.p1 b { color: #ffb3a3; } .plate.p2 { text-align: right; } .plate.p2 b { color: #a9d0ff; }
+.bar { position: relative; display: block; height: 26px; margin-top: 4px; background: #000a; border-radius: 13px; overflow: hidden; border: 2px solid #0008; }
+.p2 .bar { transform: scaleX(-1); }
+.bar i { position: absolute; inset: 0 auto 0 0; width: 100%; border-radius: 11px; }
+.bar .ghost { background: #fff; transition: width .6s .35s; }
+.bar .hp { background: linear-gradient(#b8f07a, #4fb32c); transition: width .25s; box-shadow: inset 0 3px 0 #ffffff55; }
+.plate.low .hp { background: linear-gradient(#ffb36b, #e0461f); }
+.pips { display: flex; gap: 8px; margin-top: 6px; }
+.p2 .pips { justify-content: flex-end; }
+.pips u { width: 20px; height: 20px; border-radius: 50%; background: #0007; border: 2px solid #fff4; }
+.pips u.won { background: radial-gradient(circle at 35% 35%, #fff6b0, var(--gold) 55%, var(--gold2)); border-color: #fff; box-shadow: 0 0 10px var(--gold); }
+.round { align-self: center; font: 400 30px var(--title); color: #fff; background: #0f1a12d9; padding: 6px 22px; border-radius: 99px; border: 3px solid var(--gold); white-space: nowrap; }
+.round:empty { visibility: hidden; }
+
+.vs { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 40px; font: 400 64px var(--title); opacity: 0; pointer-events: none; z-index: 3; text-shadow: 0 4px 0 #000, 0 0 30px #000; }
+.vs span:first-child { color: #ffb3a3; } .vs span:last-child { color: #a9d0ff; }
+.vs em { font-style: normal; font-size: 150px; color: var(--gold); -webkit-text-stroke: 6px #6b2a12; paint-order: stroke; }
+.banner { position: absolute; top: 34%; left: 0; right: 0; text-align: center; font: 400 96px var(--title); color: #fff; -webkit-text-stroke: 6px #1b3550; paint-order: stroke; opacity: 0; pointer-events: none; z-index: 3; }
+.boom { position: absolute; top: 24%; left: 0; right: 0; text-align: center; font: 400 150px var(--title); color: #ffe066; -webkit-text-stroke: 8px #6b2a12; paint-order: stroke; opacity: 0; pointer-events: none; z-index: 3; filter: drop-shadow(0 8px 0 #0006); }
+.boom.ko { font-size: 230px; color: #ff5a3c; -webkit-text-stroke: 10px #fff3c0; }
+.caption { position: absolute; left: 0; right: 0; bottom: 22px; text-align: center; z-index: 2; }
+.caption span { display: inline-block; font-size: 42px; color: #fff; background: #0f1a12d9; padding: 10px 34px; border-radius: 99px; border: 3px solid #ffffff2a; box-shadow: 0 6px 16px #0007; }
+
+/* ── 결과 ── */
+.result { display: grid; grid-template-columns: 5fr 6fr; gap: 40px; align-items: center; min-height: calc(100vh - 40px); }
+.podium { position: relative; text-align: center; padding: 60px 20px 24px; border-radius: 28px; background: radial-gradient(ellipse at 50% 30%, #fff6c055, #0000 60%), linear-gradient(#36513a, #1c281f); box-shadow: inset 0 0 0 4px var(--gold), 0 14px 40px #000a; }
+.podium .scene { height: 26vh; }
+/* 백과 그림: 흰 바탕 사진을 액자처럼. 있으면 게임 그림은 숨긴다 */
+.podium .bookpic { display: block; height: 30vh; max-width: 100%; margin: 0 auto 10px; object-fit: contain; border-radius: 16px; background: #fff; box-shadow: 0 6px 18px #0008; }
+.podium:has(.bookpic) .scene { display: none; }
+.result .left { display: grid; gap: 14px; }
+.dex { background: linear-gradient(#3a3322, #2a251a); border-radius: 18px; padding: 12px 20px; box-shadow: inset 0 0 0 3px #d9b45a66; }
+.dex h2 { font-size: 30px; color: var(--gold); margin: 0 0 6px; }
+.dex ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.dex li { display: grid; grid-template-columns: 36px 130px 1fr; align-items: baseline; font-size: 21px; }
+.dex li span { font-size: 24px; }
+.dex li b { color: #f3dfa4; font-weight: 400; }
+.dex li em { font-style: normal; }
+.dex .src { margin: 8px 0 0; font-size: 17px; color: var(--dim); text-align: right; }
+.podium b { font: 400 54px var(--title); color: var(--gold); text-shadow: 0 4px 0 #0008; }
+.ribbon { position: absolute; top: -26px; left: 50%; translate: -50%; font: 400 50px var(--title); padding: 6px 40px; color: #fff; background: linear-gradient(#ff7a3d, #c2361a); border-radius: 14px; box-shadow: 0 6px 0 #6d1a0a; white-space: nowrap; }
+.why h1 { font-size: 54px; }
+.why h2 { font-size: 30px; color: var(--gold); margin: 10px 0 8px; }
+.reasons { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.reasons li { display: flex; gap: 16px; align-items: center; font-size: 28px; background: var(--panel2); padding: 10px 18px; border-radius: 16px; }
+.reasons li span { font-size: 40px; }
+.reasons.top li { font-size: 40px; padding: 18px 24px; }
+.reasons.top li span { font-size: 60px; }
+.more { margin-top: 22px; }
+.more summary { cursor: pointer; font-size: 24px; color: var(--dim); }
+.more[open] { display: grid; gap: 14px; }
+.upset { color: var(--gold); font-size: 28px; }
+.odds p { margin: 14px 0 6px; color: var(--dim); font-size: 22px; }
+.oddbar { display: flex; height: 44px; border-radius: 22px; overflow: hidden; font-size: 20px; }
+.oddbar i { font-style: normal; display: flex; align-items: center; padding: 0 14px; white-space: nowrap; overflow: hidden; }
+.oddbar i:first-child { background: var(--p1); } .oddbar i:last-child { background: var(--p2); justify-content: flex-end; }
+.buttons { display: flex; gap: 16px; margin-top: 18px; }
+.buttons button { font-size: 30px; padding: 16px 30px; }
+.again { background: linear-gradient(#ff7a3d, #c2361a); box-shadow: 0 6px 0 #6d1a0a; }
+
+/* ── 그림 확인(#gallery) ── */
+#lineup { height: auto; background: var(--panel); border-radius: 12px; }
+.cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-top: 16px; }
+.cards .scene { height: 15vh; background: var(--panel); border-radius: 12px; }
+figure { margin: 0; }
+#lineup .ground { stroke: #c9bc94; stroke-width: 2; vector-effect: non-scaling-stroke; }
+.tick { stroke: #c9bc94; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.tick-label { fill: #c9bc94; text-anchor: middle; }
+
+/* ── 단계 화면 공통(크기 비교, 투표) ── */
+.step { text-align: center; margin-bottom: 10px; }
+.step h1 { font-size: 52px; color: var(--gold); text-shadow: 0 4px 0 #5a2a0c; }
+.step p { margin: 2px 0 0; color: var(--dim); }
+nav { display: flex; justify-content: center; gap: 18px; margin-top: 18px; }
+nav button { font-size: 30px; padding: 14px 32px; }
+nav .next { font-family: var(--title); background: linear-gradient(#ff7a3d, #c2361a); box-shadow: 0 6px 0 #6d1a0a; }
+
+/* 크기 비교 */
+.compare { height: 50vh; background: linear-gradient(#2e4433, #223027 70%); border-radius: 20px; box-shadow: inset 0 0 0 3px #ffffff14; }
+.compare .label { fill: var(--ink); text-anchor: middle; font-family: var(--title); }
+.compare .human text { font-family: var(--body); }
+.ghostmax .animal * { fill: none !important; stroke: #ffffff80 !important; stroke-dasharray: 5 5; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.ghostmax .animal .tex { display: none; }
+.maglens { fill: #2e4433; }
+.magring { fill: none; stroke: var(--gold); stroke-width: 4; vector-effect: non-scaling-stroke; }
+.magline { stroke: var(--gold); stroke-width: 2; stroke-dasharray: 6 6; vector-effect: non-scaling-stroke; }
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 12px; }
+.fact { display: grid; grid-template-columns: auto auto; justify-content: start; column-gap: 28px; background: var(--panel2); border-radius: 18px; padding: 10px 22px; border-left: 10px solid var(--p1); }
+.fact.p2 { border-left-color: var(--p2); }
+.fact b, .fact small { grid-column: 1 / -1; }
+.fact b { font: 400 34px var(--title); }
+.fact span { font-size: 28px; }
+.fact small { font-size: 22px; }
+
+/* 예측 투표 */
+.vote { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 22px; align-items: center; }
+.side { display: flex; flex-direction: column; align-items: center; gap: 6px; background: var(--panel2); border-radius: 22px; padding: 16px; border-top: 10px solid var(--p1); }
+.side.p2 { border-top-color: var(--p2); }
+.side .scene { height: 26vh; }
+.side b { font: 400 40px var(--title); }
+.hint { margin: 0; font-size: 22px; color: #9fd6ff; background: #0004; padding: 4px 14px; border-radius: 99px; }
+.count { display: flex; align-items: center; gap: 14px; }
+.count button { width: 64px; height: 64px; padding: 0; font: 400 40px var(--title); border-radius: 50%; }
+.count output { min-width: 80px; text-align: center; font: 400 64px var(--title); color: var(--gold); }
+.stats { display: grid; gap: 14px; }
+.row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; }
+.row em { font-style: normal; font-size: 26px; min-width: 120px; text-align: center; }
+.row span { height: 30px; background: #0005; border-radius: 15px; display: flex; overflow: hidden; }
+.row .l { justify-content: flex-end; }
+.row i { display: block; height: 100%; border-radius: 15px; opacity: .55; }
+.row .l i { background: var(--p1); } .row .r i { background: var(--p2); }
+.row .more i { opacity: 1; box-shadow: 0 0 12px currentColor; }
+
+/* 결과: 예측 비교, 만약에 */
+.predict { background: var(--panel2); border-radius: 16px; padding: 12px 20px; }
+.predict p { margin: 0; font-size: 24px; color: var(--dim); }
+.predict .c1 { color: #ff9a85; } .predict .c2 { color: #8cc0ff; }
+.predict strong { font: 400 30px var(--title); color: var(--gold); }
+.whatif { background: linear-gradient(#3b3560, #2a2745); border-radius: 16px; padding: 12px 20px; }
+.whatif.met { background: linear-gradient(#3d5a35, #2a3f26); }
+.whatif h2 { font-size: 28px; color: #ffd6f5; }
+.whatif.met h2 { color: #d9ffb0; }
+.whatif p { margin: 4px 0; font-size: 21px; }
+.whatif ul { margin: 4px 0 0; padding-left: 22px; font-size: 20px; color: #e3ddff; }
+
+/* ── 무대 ── */
+.sky-grassland { background: linear-gradient(#7fbfe6, #bfe0e9 45%, #f1f2d6 78%); }
+.sky-jungle { background: linear-gradient(#a9cf8e, #cfe6b0 40%, #e3eec4 78%); }
+.sky-waterside { background: linear-gradient(#8cc8ea, #cde8ef 45%, #f5efd6 78%); }
+.sky-underwater { background: linear-gradient(#3aa3c8, #17739b 45%, #0e4f75 80%); }
+.sway { transform-box: fill-box; transform-origin: 50% 100%; animation: kelp 4s ease-in-out infinite alternate; }
+@keyframes kelp { from { rotate: -4deg; } to { rotate: 4deg; } }
+.bubble { fill: #e8f8ff; opacity: .6; stroke: #fff; stroke-width: 1; vector-effect: non-scaling-stroke; animation: rise 6s linear infinite; }
+@keyframes rise { from { transform: translateY(0); opacity: .7; } to { transform: translateY(var(--rise)); opacity: 0; } }
+.fish { animation: swim 9s ease-in-out infinite alternate; }
+@keyframes swim { from { transform: translateX(-1.5px); } to { transform: translateX(1.5px); } }
+.stages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.stagecard { padding: 0; overflow: hidden; display: flex; flex-direction: column; border-radius: 22px; outline: 5px solid transparent; }
+.stagecard svg { width: 100%; aspect-ratio: 4 / 5; display: block; }
+.stagecard span { display: flex; flex-direction: column; padding: 10px 0 14px; background: #0f1a12e6; }
+.stagecard b { font: 400 40px var(--title); }
+.stagecard small { font-size: 20px; }
+.stagecard.on { outline-color: var(--gold); }
+.hint.good { color: #c4ffa0; }
+.hint.bad { color: #ffc9a0; }
+.mute { position: fixed; right: 14px; bottom: 14px; z-index: 10; width: 56px; height: 56px; padding: 0; border-radius: 50%; font-size: 26px; background: #0f1a12cc; }
+.mute.tune { bottom: 80px; }
+.mute.tune.off { opacity: .45; text-decoration: line-through; } /* 배경음악 꺼짐 */
+
+/* ── 내 그림 ── */
+.card.add { justify-content: center; border: 4px dashed #ffffff40; background: #2c3d3166; min-height: 250px; }
+.card.add span { font-size: 70px; }
+.card.mine .scene { background: radial-gradient(ellipse at 50% 80%, #6b6a45, #2f3a2c 75%); }
+.draw { display: grid; grid-template-columns: 3fr 2fr; gap: 26px; align-items: start; }
+.drop { position: relative; display: flex; align-items: center; justify-content: center; height: 58vh; border-radius: 22px; border: 4px dashed #ffffff40; cursor: pointer;
+  background: repeating-conic-gradient(#3a4a3e 0 25%, #2c3a30 0 50%) 0 0 / 28px 28px; }
+.drop.over { border-color: var(--gold); }
+.drop canvas { max-width: 92%; max-height: 92%; filter: drop-shadow(0 6px 10px #000a); }
+.drop .empty { position: absolute; text-align: center; font-size: 34px; }
+.drop .empty[hidden] { display: none; }
+.controls { display: flex; flex-direction: column; gap: 14px; background: var(--panel2); border-radius: 22px; padding: 20px 24px; }
+.controls label { display: flex; flex-direction: column; gap: 6px; font-size: 28px; }
+.controls small { font-size: 19px; color: var(--dim); }
+.controls input[type=range] { width: 100%; accent-color: var(--gold); height: 30px; }
+.controls .name { font: 400 32px var(--body); padding: 10px 16px; border-radius: 12px; border: 3px solid #ffffff30; background: #0f1a12; color: var(--ink); }
+.controls .flip { align-self: flex-start; }
+.found { margin: 0; font-size: 24px; min-height: 70px; }
+.animal.drawing image { transform-box: fill-box; transform-origin: 50% 100%; animation: breathe 1.4s ease-in-out infinite alternate; }
+@keyframes breathe { from { scale: 1 1; } to { scale: 1.02 1.04; } }
+.biting .drawing image { animation: chomp .25s ease-in-out infinite alternate; }
+@keyframes chomp { from { rotate: -3deg; scale: 1.04 .97; } to { rotate: 3deg; scale: .97 1.05; } }
+.ghostmax .drawing image { opacity: .25; }
+
+/* ── AI 동물 찾기 ── */
+.lookup { max-width: 1200px; margin: 0 auto; }
+.ask { display: flex; gap: 14px; }
+.ask .name { flex: 1; font: 400 36px var(--body); padding: 12px 18px; border-radius: 14px; border: 3px solid #ffffff30; background: #0f1a12; color: var(--ink); }
+.ask .find { font: 400 34px var(--title); background: linear-gradient(#4f9be8, #2a62b8); box-shadow: 0 6px 0 #173a70; }
+.msg { font-size: 26px; min-height: 36px; }
+.preview { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; background: var(--panel2); border-radius: 22px; padding: 18px; }
+.preview[hidden] { display: none; }
+.preview .scene { height: 34vh; }
+.facts1 { display: flex; flex-direction: column; gap: 10px; }
+.facts1 .nm { font: 400 44px var(--title); color: var(--gold); }
+.facts1 .meta { margin: 0; font-size: 21px; color: var(--dim); }
+.facts1 label { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 26px; }
+.facts1 input, .facts1 select { width: 220px; font: 400 26px var(--body); padding: 6px 12px; border-radius: 10px; border: 2px solid #ffffff30; background: #0f1a12; color: var(--ink); }
+.badge { align-self: flex-start; font-size: 20px; background: #3b3560; color: #ffd6f5; padding: 4px 14px; border-radius: 99px; }
+.badge[hidden] { display: none; }
+.found .ai-find { font-size: 22px; padding: 6px 16px; margin-top: 6px; }
+
+/* 새 체형 장식 */
+.animal .seam { fill: none !important; stroke: #1a1d1466; stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+.animal .wing { transform-box: fill-box; transform-origin: 85% 90%; animation: flap 1.8s ease-in-out infinite alternate; }
+@keyframes flap { from { rotate: -3deg; } to { rotate: 4deg; } }
+
+/* 고르기: 검색·책 탭 */
+.filters { display: flex; gap: 10px; align-items: center; justify-content: center; margin: 0 0 16px; flex-wrap: wrap; }
+.filters .search { font: 400 26px var(--body); padding: 10px 18px; border-radius: 99px; border: 3px solid #ffffff30; background: #0f1a12; color: var(--ink); width: 340px; }
+.tab { font-size: 24px; padding: 8px 20px; border-radius: 99px; }
+.tab.on { background: var(--gold); color: #2a1d08; }
+.tab small { font-size: 0.7em; opacity: 0.7; }
+.card[hidden] { display: none; }
+.sizebox { position: absolute; left: 22px; bottom: 100px; z-index: 2; background: #0f1a12d9; border: 3px solid #ffffff2a; border-radius: 16px; padding: 8px 16px; font-size: 22px; color: #fff; }
+.sizebox em { font-style: normal; color: var(--gold); }
+.hitrow b { font: 400 30px var(--title); color: var(--gold); text-align: center; }
+.shadows .shadow { transform-box: fill-box; transform-origin: center; }
+.flying .animal .wing { animation-duration: .35s; }
+
+.zoomed .animal :is(path.vol, .seam) { display: none; } /* 크게 확대하는 판: 빛 겹과 주름선(선 굵기 계산이 무겁다)은 뺀다 */
+
+/* 부위끼리 드리우는 그림자(앞다리·목·머리가 몸통 위에): 몸길이 1 좌표라 크기와 상관없이 같은 비율 */
+
+.arena .animal .gshadow { display: none; } /* 배틀에서는 따로 움직이는 그림자를 쓴다 */
+.closeup .animal [filter] { filter: none; }
+.shadow { fill: url(#battleShadow); opacity: 1; }
+.cards.model { grid-template-columns: repeat(3, 1fr); }
+.cards.model .scene { height: 36vh; width: 100%; object-fit: contain; display: block; }
+.cards.model { grid-template-columns: repeat(4, 1fr); }
+.cards.model .scene { height: 24vh; }
+.cards.motions { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.cards.motions .scene { height: 14vh; width: 100%; object-fit: contain; display: block; }
+.motion-btns { display: flex; gap: 8px; margin: 8px 0; }
+.motion-btns button { font: 400 22px var(--body); padding: 6px 16px; border-radius: 99px; }
+.live-demo .scene { height: 50vh; width: 100%; background: #f2f1ec; border-radius: 12px; }
+.cards.templates { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.cards.templates figure { margin: 0; position: relative; background: #f2f1ec; border-radius: 12px; padding: 6px; }
+.cards.templates .s3 { height: 22vh; width: 100%; background: none; object-fit: contain; display: block; }
+.cards.templates .s2 { position: absolute; left: 8px; top: 8px; width: 28%; height: 6vh; background: #0002; border-radius: 6px; }
+.cards.templates figcaption { color: #2a2a22; font-size: 18px; }
+.cards.templates.all { grid-template-columns: repeat(8, 1fr); gap: 6px; }
+.cards.templates.all .s3 { height: 120px; }
+.cards.templates.all .s2 { display: none; }
+.cards.templates.all figcaption { font-size: 13px; }
+.fps { position: fixed; left: 8px; bottom: 8px; z-index: 99; font: 14px monospace; background: #000a; color: #9f9; padding: 4px 8px; border-radius: 6px; }
+/* 울음소리 확인 화면 (#sounds) */
+.sounds { max-width: 900px; margin: 0 auto 18px; }
+.sounds h2 { color: var(--gold); margin: 0 0 6px; }
+.sounds div { display: flex; gap: 10px; align-items: center; margin: 6px 0; font-size: 22px; }
+.sounds div b { width: 220px; }
+.sounds div small { width: 160px; color: var(--dim); }
+/* 시간 띠(만약에 칸): 동물 이름·막대 두 줄 + 시대 띠. TV에서 유치원생이 읽게 크게 */
+.tl { position: relative; margin: 10px 0 8px; }
+.tl-row { position: relative; height: 44px; }
+.tl-row i { position: absolute; bottom: 4px; height: 14px; border-radius: 7px; }
+.tl-row b { position: absolute; top: 0; font-weight: 400; white-space: nowrap; font-size: 22px; line-height: 1; }
+.tl-row .c1 { color: #ff9a85; } .tl-row .c2 { color: #8cc0ff; }
+.tl-row i.c1 { background: #ff9a85; } .tl-row i.c2 { background: #8cc0ff; }
+.tl-row b small { font-size: 17px; opacity: .85; }
+.tl-bands { position: relative; height: 30px; margin-top: 3px; }
+.tl-bands span { position: absolute; top: 0; height: 100%; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 16px; white-space: nowrap; overflow: hidden; background: #ffffff10; box-shadow: inset 0 0 0 1px #ffffff26; }
+.tl-bands.era span { font-size: 17px; }
+.tl-bands.era span:nth-child(2) { background: #6fae5a38; }
+.tl-bands.era span:nth-child(4) { background: #ffd86b38; }
+.tl-bands.sub { height: 24px; } .tl-bands.sub span { font-size: 14px; }
+.tl-bands span.on { background: #ffffff30; box-shadow: inset 0 0 0 2px #ffe08a; color: #fff6d0; } /* 두 동물이 살았던 때 */
+
+/* 3D 무대(arena3d.js): 캔버스를 맨 뒤에 깔고, 2D 그림(SVG)은 움직임 계산용으로만 남겨 숨긴다 */
+.a3d-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.arena.a3d .field { opacity: 0; }
+
+/* ── 토너먼트 ── */
+.title { position: relative; }
+.title .tour { position: absolute; top: 6px; right: 0; font: 400 30px var(--title); background: linear-gradient(#ffd34d, #c98a12); color: #3a2400; box-shadow: 0 6px 0 #6b4a08; }
+.sizes { display: flex; gap: 30px; justify-content: center; margin-top: 6vh; }
+.sizes button { display: grid; gap: 6px; width: 240px; padding: 30px 20px; font: 400 34px var(--title); }
+.sizes b { font-size: 110px; color: var(--gold); font-weight: 400; line-height: 1; }
+.sizes small { font-size: 26px; }
+.bracket { display: flex; gap: 18px; height: calc(100vh - 230px); }
+.bracket .col { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.bracket .ms { flex: 1; display: flex; flex-direction: column; justify-content: space-around; gap: 6px; }
+.bracket h3 { margin: 0; text-align: center; color: var(--gold); font-size: 26px; }
+.bracket .m { display: grid; gap: 4px; padding: 6px; border-radius: 14px; background: #0003; position: relative; }
+.bracket .m.now { outline: 4px solid var(--gold); animation: glow 1s ease-in-out infinite alternate; }
+@keyframes glow { to { box-shadow: 0 0 24px #ffd34d88; } }
+.bracket .slot { display: flex; align-items: center; gap: 8px; padding: 4px 10px; border-radius: 10px; background: var(--panel2); font-size: 24px; min-height: 52px; }
+.bracket .slot svg { height: 44px; width: 70px; flex: none; }
+.bracket .slot b { font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bracket .slot.out { opacity: .35; filter: grayscale(1); }
+.bracket .slot.guess { outline: 3px solid var(--gold); }
+.bracket .slot.guess b::before { content: '⭐ '; }
+.bracket .slot.empty { justify-content: center; color: var(--dim); }
+.bracket .slot[data-r] { cursor: pointer; }
+.bracket .final .slot { font: 400 34px var(--title); min-height: 90px; }
+.bracket .final .slot svg { height: 80px; width: 120px; }
+.bracket.n16 .slot { min-height: 36px; font-size: 19px; padding: 2px 8px; }
+.bracket.n16 .slot svg { height: 30px; width: 48px; }
+.bracket.n16 .ms { gap: 2px; }
+.bracket.n16 .m { gap: 2px; padding: 3px; }
+.matchend { display: grid; gap: 24px; justify-items: center; }
+.matchend .scene { height: 40vh; }
+.pair { display: block; height: 18vh; margin: 0 auto; }
+.wheel { position: relative; width: min(46vh, 90vw); margin: 10px auto 0; }
+.wheel svg { display: block; width: 100%; filter: drop-shadow(0 10px 20px #000a); }
+.wheel .pointer { position: absolute; top: -34px; left: 50%; translate: -50%; font-size: 52px; color: var(--gold); z-index: 1; text-shadow: 0 4px 0 #0008; }
+.spun { text-align: center; font: 400 56px var(--title); color: var(--gold); min-height: 70px; margin: 10px 0 0; }
+.champ { display: grid; gap: 18px; max-width: 900px; margin: 40px auto 0; }
+.champ .scene { height: 32vh; }
+.trail { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 4px; list-style: none; padding: 0; margin: 0; font-size: 30px; }
+.trail li + li::before { content: '→ '; color: var(--gold); }
+.trail li:last-child { color: var(--gold); font-family: var(--title); }
+.champ .buttons { justify-content: center; }
+
+/* ── 자연 사건(배틀 중 날씨) ── */
+.mute.evt { bottom: 146px; }
+.mute.evt.off { opacity: .45; filter: grayscale(1); }
+.mute.fs { bottom: 212px; }
+/* 사건 날씨는 다음 사건까지 남는다(나타나기·옅어지기는 ui/battle.js) */
+.weather { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.weather::after { content: ''; position: absolute; inset: 0; }
+.w-rain { background: #3b4f6a55; }
+.w-rain::after { background: repeating-linear-gradient(105deg, #0000 0 22px, #d9ecffaa 22px 24px, #0000 24px 52px); background-size: 160px 160px; animation: rainfall .3s linear infinite; }
+@keyframes rainfall { to { background-position: -40px 160px; } }
+.w-flood::after { display: none; }
+/* 홍수: 물이 화면 가운데 가까이 차올라 출렁이고, 물결 위로 물방울이 튄다(조각은 ui/battle.js) */
+.water { position: absolute; left: -5%; right: -5%; bottom: 0; height: 0; background: linear-gradient(#5fb3e8cc, #1d5d9add); animation: flood calc(var(--ms) * .35) ease-out both, waterbob 2.2s ease-in-out infinite alternate; }
+@keyframes flood { to { height: 42%; } } /* 차오른 채로 남는다 */
+@keyframes waterbob { from { translate: 0 0; } to { translate: 0 2.5vh; } }
+.surf { position: absolute; left: 0; right: 0; top: -3.5vh; height: 3.6vh; background: radial-gradient(circle at 50% 100%, #8fcdf0dd 2.6vh, #0000 2.7vh) 0 0 / 9vh 3.6vh repeat-x, radial-gradient(circle at 50% 100%, #d8f1ffbb 2vh, #0000 2.1vh) 4vh 1vh / 13vh 3.6vh repeat-x; animation: surf 1.8s linear infinite; }
+@keyframes surf { to { background-position: 9vh 0, -9vh 1vh; } } /* 물결 두 겹이 엇갈려 흐른다 */
+.water .splash { position: absolute; top: 0; left: var(--x); width: calc(var(--s) * 2.2vh); aspect-ratio: .8; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: #e4f6ff; opacity: 0; animation: splash var(--t) ease-out var(--d) infinite; }
+@keyframes splash { 0% { opacity: 0; transform: translate(0, 0); } 10% { opacity: .95; } 45% { transform: translate(calc(var(--s) * 3vh - 2vh), calc(var(--s) * -9vh)); } 90% { opacity: .9; } 100% { opacity: 0; transform: translate(calc(var(--s) * 5vh - 3vh), 1vh); } }
+/* 뜨거운 햇볕: 건기처럼 하늘은 뿌옇게 바래고, 땅은 누렇게 마르며 갈라진다 */
+.w-heat { background: radial-gradient(circle at 85% 12%, #fff6b0 0 6%, #ffb43a88 12%, #ff7a2a33 40%, #ffb45a22); }
+.w-heat::after { top: 38%; backdrop-filter: sepia(.65) saturate(1.15) hue-rotate(-8deg) brightness(1.05); -webkit-mask-image: linear-gradient(#0000, #000 18%); mask-image: linear-gradient(#0000, #000 18%);
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='90'%3E%3Cpath d='M0 40 L30 35 L55 50 L80 42 M55 50 L60 80 M80 42 L110 48 L140 30 L160 36 M110 48 L120 75 L150 85 M30 35 L25 10 M140 30 L135 0' fill='none' stroke='%237a5530' stroke-opacity='.45' stroke-width='2'/%3E%3C/svg%3E") 0 0 / 160px 90px, #d8a24a22; animation: shimmer 1.2s ease-in-out infinite alternate; }
+@keyframes shimmer { to { filter: brightness(1.08); } }
+.w-ash { background: linear-gradient(#a0180acc, #e0401a77 45%, #5a1a0a55); animation: redglow 1.6s ease-in-out infinite alternate; } /* 붉은 하늘이 일렁인다 */
+@keyframes redglow { from { box-shadow: inset 0 0 8vh #ff2a0a66; } to { box-shadow: inset 0 0 30vh #ff3a0acc; } }
+/* 하늘에서 떨어지는 용암·돌·작은 운석(조각은 ui/battle.js 의 bits) */
+.w-ash i, .w-meteor .mini { position: absolute; top: -12%; left: calc(var(--x) + 25%); font-style: normal; animation: drop var(--t) linear var(--d) infinite; }
+.lava { width: calc(var(--s) * 3vh); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #fff3a0, #ff8a1a 45%, #c42a0a); box-shadow: 0 0 2vh #ff6a1acc; }
+.rock { width: calc(var(--s) * 3.5vh); aspect-ratio: 1.2; border-radius: 40% 55% 45% 60%; background: radial-gradient(circle at 35% 30%, #8a7a70, #3a302c); }
+@keyframes drop { to { transform: translate(-45vh, 125vh) rotate(540deg); } } /* 오른쪽 위에서 왼쪽 아래로 비스듬히 */
+.w-meteor .mini { width: calc(var(--s) * 20vh); height: calc(var(--s) * 2.4vh); border-radius: 50%; background: linear-gradient(90deg, #fffbe0, #ffc84a 12%, #ff6a1aaa 40%, #0000); box-shadow: 0 0 2vh #ffb43a88; rotate: -36deg; top: -10%; left: auto; right: calc(var(--x) - 25%); animation-name: streak; } /* 머리(왼쪽 밝은 끝)가 떨어지는 쪽 */
+@keyframes streak { 70% { opacity: .85; } to { transform: translate(-45vw, 55vh); opacity: 0; } } /* 하늘을 비스듬히 가로질러 사라진다 */
+.w-ash::after { background: radial-gradient(ellipse at 50% 120%, #ff6a1a55, #0000 60%); } /* 땅 쪽이 용암빛으로 달아오른다(회색 재 점은 눈처럼 보여서 뺐다) */
+.w-cold { background: #e4f4ff55; box-shadow: inset 0 0 120px #ffffffaa; }
+.w-cold::after { background-image: radial-gradient(#fff 3px, #0000 4px), radial-gradient(#fff 2px, #0000 3px); background-size: 80px 80px, 50px 50px; animation: snow 3s linear infinite; }
+@keyframes snow { to { background-position: 20px 80px, -15px 50px; } }
+.w-whirl { background: #0b3a6a44; }
+.w-whirl::after { display: none; }
+/* 소용돌이 토네이도: 깔때기가 무대를 왔다 갔다 돌아다닌다 */
+.tornado { position: absolute; top: 2%; bottom: 6%; left: 10%; width: 46vh; opacity: .7; animation: roam 9s ease-in-out infinite alternate; }
+.tornado::before { content: ''; position: absolute; inset: 0; clip-path: polygon(0 3%, 100% 3%, 56% 100%, 44% 100%); background: linear-gradient(90deg, #ffffff22, #d6f0ff77 40%, #ffffff33); } /* 깔때기 몸통 */
+.tornado b { position: absolute; top: calc(var(--i) * 6.4%); left: 50%; width: calc(100% - var(--i) * 6.6%); height: 8%; transform: translateX(-50%); border-radius: 50%; border: 1vh solid #eef8ffdd; border-left-color: #7fc0eebb; border-bottom-color: #ffffff33; animation: twist .8s ease-in-out infinite alternate; animation-delay: calc(var(--i) * -0.1s); }
+@keyframes twist { from { translate: -10% 0; } to { translate: 10% 0; } }
+@keyframes roam { 0% { left: -5%; } 35% { left: 40%; } 65% { left: 15%; } 100% { left: 65%; } }
+.w-meteor { background: linear-gradient(#2a0a1acc, #8a2a0a77 50%, #0000); }
+.meteor { position: absolute; left: 115%; top: -20%; width: 70vh; height: 9vh; translate: 0 -50%; transform-origin: 0 50%; rotate: -38deg; border-radius: 50%; font-style: normal;
+  background: linear-gradient(90deg, #fffbe6, #ffd864 8%, #ff7a1add 30%, #ff3a0a66 60%, #0000); box-shadow: 0 0 8vh #ffb43acc; animation: meteor var(--fall) ease-in both; } /* 왼쪽 끝이 머리. 머리가 땅(45%, 72%)에 닿는다 */
+.meteor::before { content: ''; position: absolute; left: -3vh; top: 50%; width: 12vh; aspect-ratio: 1; translate: 0 -50%; border-radius: 50%; background: radial-gradient(#fffbe6 20%, #ffd864 45%, #ff7a1a 68%, #0000 72%); box-shadow: 0 0 6vh #ffd864aa; } /* 불타는 머리 */
+@keyframes meteor { 92% { opacity: 1; } to { left: 45%; top: 72%; opacity: 0; } }
+/* 쾅! 떨어진 자리에서 불덩이가 부풀고, 납작한 충격파 고리가 퍼진다 */
+.mboom, .shock { position: absolute; left: 45%; top: 72%; translate: -50% -50%; border-radius: 50%; opacity: 0; animation: boom 1.3s ease-out var(--fall) forwards; }
+.mboom { width: 6vh; aspect-ratio: 1; background: radial-gradient(#fff6c0, #ffa030 35%, #ff4a0a88 60%, #0000 72%); }
+.shock { width: 10vh; height: 3vh; border: .8vh solid #ffd090; animation-name: shock; }
+@keyframes boom { 0% { opacity: 1; scale: 1; } 35% { opacity: 1; scale: 8; } 100% { opacity: 0; scale: 11; } }
+@keyframes shock { 0% { opacity: 1; scale: 1; } 100% { opacity: 0; scale: 14; } }
+.w-meteor .mini { opacity: 0; animation-delay: calc(var(--fall) + var(--d) * -1); } /* 작은 운석은 큰 운석이 떨어진 뒤부터 */
+.weather .flash { position: absolute; inset: 0; background: #fff8e0; opacity: 0; animation: flash .8s ease-out var(--fall) forwards; }
+@keyframes flash { 0% { opacity: .95; } 100% { opacity: 0; } }

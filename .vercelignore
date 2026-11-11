@@ -1,0 +1,8 @@
+.env
+node_modules
+dist
+source/*.pdf
+reference
+m1-preview.png
+_pose.html
+.env.local

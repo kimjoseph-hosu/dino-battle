@@ -1,0 +1,5757 @@
+[
+ {
+  "id": "trilobite",
+  "name_ko": "삼엽충",
+  "name_en": "Trilobite",
+  "habitat": "sea",
+  "length_m": {
+   "min": 0.03,
+   "avg": 0.065,
+   "max": 0.7
+  },
+  "mass_kg": {
+   "min": 0.005,
+   "avg": 0.05,
+   "max": 2.5
+  },
+  "stats": {
+   "attack": 1,
+   "defense": 4,
+   "speed": 2,
+   "agility": 2,
+   "senses": 4,
+   "social": 3
+  },
+  "weapons": [],
+  "armor": [
+   "단단한 껍데기"
+  ],
+  "fun_fact": "삼엽충의 눈은 돌처럼 단단했어요.",
+  "kin": "🦀 후손은 없지만, 게·새우·곤충과 먼 친척이에요",
+  "archetype": "arthropod",
+  "art": {
+   "palette": [
+    "#6b5a46",
+    "#b8a283"
+   ],
+   "features": [],
+   "params": {
+    "kind": "trilobite"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.1 / 조사: 무게: 3~10cm 개체는 수십 g 수준으로 추정, 큰 종은 수 kg(조사 추정) / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "anomalocaris",
+  "name_ko": "아노말로카리스",
+  "name_en": "Anomalocaris",
+  "habitat": "sea",
+  "length_m": {
+   "min": 0.4,
+   "avg": 0.7,
+   "max": 1.0
+  },
+  "mass_kg": {
+   "min": 0.2,
+   "avg": 0.5,
+   "max": 2
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 2,
+   "speed": 5,
+   "agility": 6,
+   "senses": 7,
+   "social": 1
+  },
+  "weapons": [
+   "가시 달린 집게 팔"
+  ],
+  "armor": [],
+  "fun_fact": "아노말로카리스는 옛날 바다의 큰 사냥꾼이었어요.",
+  "kin": "🦐 후손은 없지만, 새우·곤충과 먼 친척이에요",
+  "archetype": "arthropod",
+  "art": {
+   "palette": [
+    "#a8604c",
+    "#e6bea6",
+    "#c27a5e"
+   ],
+   "features": [],
+   "params": {
+    "kind": "anomalocaris"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.2 / 조사: 무게: 문헌 값 없음, 몸길이(최근 연구 최대 약 38cm)로 어림 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "hallucigenia",
+  "name_ko": "할루키게니아",
+  "name_en": "Hallucigenia",
+  "habitat": "sea",
+  "length_m": {
+   "min": 0.005,
+   "avg": 0.0275,
+   "max": 0.05
+  },
+  "mass_kg": {
+   "min": 1e-05,
+   "avg": 0.0002,
+   "max": 0.002
+  },
+  "stats": {
+   "attack": 0,
+   "defense": 4,
+   "speed": 1,
+   "agility": 1,
+   "senses": 2,
+   "social": 3
+  },
+  "weapons": [],
+  "armor": [
+   "등의 가시"
+  ],
+  "fun_fact": "할루키게니아는 처음에 거꾸로 뒤집어서 그렸대요.",
+  "kin": "🐛 지금 사는 우단벌레와 친척이에요",
+  "archetype": "arthropod",
+  "art": {
+   "palette": [
+    "#c58466",
+    "#f0d2bc",
+    "#e8c8a0"
+   ],
+   "features": [],
+   "params": {
+    "kind": "hallucigenia"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.3 / 조사: 무게: 0.5~5cm 벌레 크기로 어림(1g 미만) / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "eurypterus",
+  "name_ko": "유립테루스",
+  "name_en": "Eurypterus",
+  "habitat": "sea",
+  "length_m": {
+   "min": 0.1,
+   "avg": 0.15,
+   "max": 1.3
+  },
+  "mass_kg": {
+   "min": 0.02,
+   "avg": 0.1,
+   "max": 8
+  },
+  "stats": {
+   "attack": 4,
+   "defense": 4,
+   "speed": 3,
+   "agility": 4,
+   "senses": 5,
+   "social": 2
+  },
+  "weapons": [
+   "가시 달린 다리",
+   "꼬리 가시"
+  ],
+  "armor": [
+   "딱딱한 껍데기"
+  ],
+  "fun_fact": "유립테루스는 노처럼 생긴 다리로 헤엄쳤어요.",
+  "kin": "🦂 전갈·거미·투구게와 친척이에요",
+  "archetype": "arthropod",
+  "art": {
+   "palette": [
+    "#5f5a48",
+    "#a9a07c"
+   ],
+   "features": [],
+   "params": {
+    "kind": "eurypterid"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.4 / 조사: 무게: 문헌 값 없음, 몸길이로 어림 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "dunkleosteus",
+  "name_ko": "둔클레오스테우스",
+  "name_en": "Dunkleosteus",
+  "habitat": "sea",
+  "length_m": {
+   "min": 4.0,
+   "avg": 4.0,
+   "max": 4.0
+  },
+  "mass_kg": {
+   "min": 1000.0,
+   "avg": 1000.0,
+   "max": 1000.0
+  },
+  "stats": {
+   "attack": 9,
+   "defense": 8,
+   "speed": 5,
+   "agility": 3,
+   "senses": 5,
+   "social": 1
+  },
+  "weapons": [
+   "날카로운 뼈 턱"
+  ],
+  "armor": [
+   "머리 뼈 갑옷"
+  ],
+  "fun_fact": "둔클레오스테우스는 이빨 대신 날카로운 뼈로 먹이를 잘랐어요.",
+  "kin": "🐟 후손은 없지만, 지금 물고기들과 먼 친척이에요",
+  "archetype": "fish",
+  "art": {
+   "palette": [
+    "#5b6470",
+    "#c8c9be"
+   ],
+   "features": [
+    "dorsal",
+    "tail_fluke"
+   ],
+   "params": {
+    "head": "plate",
+    "bd": 0.09,
+    "hl": 0.22,
+    "dp": 0.9,
+    "flukeUp": 1.1,
+    "flukeDown": 0.5
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.5 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "tiktaalik",
+  "name_ko": "틱타알릭",
+  "name_en": "Tiktaalik",
+  "habitat": "amphibious",
+  "length_m": {
+   "min": 1.2,
+   "avg": 1.95,
+   "max": 2.7
+  },
+  "mass_kg": {
+   "min": 10,
+   "avg": 25,
+   "max": 80
+  },
+  "stats": {
+   "attack": 3,
+   "defense": 3,
+   "speed": 2,
+   "agility": 2,
+   "senses": 4,
+   "social": 1
+  },
+  "weapons": [
+   "뾰족한 이빨"
+  ],
+  "armor": [
+   "비늘"
+  ],
+  "fun_fact": "틱타알릭은 물에서 땅으로 올라오던 물고기예요.",
+  "kin": "🐸 개구리·도마뱀·사람처럼 다리 달린 동물들의 아주 먼 친척이에요",
+  "archetype": "sprawler",
+  "art": {
+   "palette": [
+    "#6d6a4b",
+    "#c9c19a"
+   ],
+   "features": [],
+   "params": {
+    "hl": 0.16,
+    "dp": 0.4,
+    "bd": 0.05,
+    "pattern": "mottle",
+    "mark": "#3a4a3a"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.6 / 조사: 무게: 문헌 값 없음, 비슷한 크기 악어로 어림 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "meganeura",
+  "name_ko": "메가네우라",
+  "name_en": "Meganeura",
+  "habitat": "air",
+  "length_m": {
+   "min": 0.3,
+   "avg": 0.35,
+   "max": 0.4
+  },
+  "mass_kg": {
+   "min": 0.018,
+   "avg": 0.06,
+   "max": 0.15
+  },
+  "size_basis": "wingspan",
+  "stats": {
+   "attack": 2,
+   "defense": 1,
+   "speed": 9,
+   "agility": 9,
+   "senses": 8,
+   "social": 1
+  },
+  "weapons": [
+   "가시 다리"
+  ],
+  "armor": [],
+  "fun_fact": "메가네우라는 날개가 아주 큰 잠자리였어요.",
+  "kin": "🔎 지금 잠자리와 친척이에요",
+  "archetype": "arthropod",
+  "art": {
+   "palette": [
+    "#3f6e5a",
+    "#a3c7a0",
+    "#b9dcc8"
+   ],
+   "features": [],
+   "params": {
+    "kind": "dragonfly"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.7 / 조사: 몸길이: 날개 편 길이 65~75cm인 잠자리 비율로 환산. 무게: May 1982 17.8g, Paul 2002 60g, Cannell 2018 100~150g / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "arthropleura",
+  "name_ko": "아르트로플레우라",
+  "name_en": "Arthropleura",
+  "habitat": "land",
+  "length_m": {
+   "min": 2.0,
+   "avg": 2.3,
+   "max": 2.6
+  },
+  "mass_kg": {
+   "min": 50.0,
+   "avg": 50.0,
+   "max": 50.0
+  },
+  "stats": {
+   "attack": 1,
+   "defense": 7,
+   "speed": 2,
+   "agility": 1,
+   "senses": 3,
+   "social": 1
+  },
+  "weapons": [],
+  "armor": [
+   "단단한 껍데기"
+  ],
+  "fun_fact": "아르트로플레우라는 어른 키보다 긴 노래기였어요.",
+  "kin": "🐛 다리가 많은 노래기와 친척이에요",
+  "archetype": "arthropod",
+  "art": {
+   "palette": [
+    "#4a3a30",
+    "#9c7b5c"
+   ],
+   "features": [],
+   "params": {
+    "kind": "millipede"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.8 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "dimetrodon",
+  "name_ko": "디메트로돈",
+  "name_en": "Dimetrodon",
+  "habitat": "land",
+  "length_m": {
+   "min": 2.0,
+   "avg": 3.25,
+   "max": 4.5
+  },
+  "mass_kg": {
+   "min": 250.0,
+   "avg": 250.0,
+   "max": 250.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 4,
+   "speed": 4,
+   "agility": 3,
+   "senses": 5,
+   "social": 2
+  },
+  "weapons": [
+   "크기가 다른 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "디메트로돈은 공룡처럼 보이지만 공룡이 아니에요.",
+  "kin": "🧒 공룡이 아니에요. 오히려 우리 사람과 먼 친척이에요",
+  "archetype": "sprawler",
+  "art": {
+   "palette": [
+    "#7a5a3a",
+    "#d4b98a",
+    "#b0563a"
+   ],
+   "features": [],
+   "params": {
+    "hip": 0.1,
+    "sh": 0.1,
+    "bd": 0.06,
+    "b0": 0.3,
+    "b1": 0.66,
+    "neck": [
+     0.78,
+     0.11
+    ],
+    "hl": 0.15,
+    "dp": 0.65,
+    "head": "lizard",
+    "sail": 0.22,
+    "legR": 0.02,
+    "pattern": "stripes",
+    "mark": "#5a3a2a"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.9 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "gorgonops",
+  "name_ko": "고르고놉스",
+  "name_en": "Gorgonops",
+  "habitat": "land",
+  "length_m": {
+   "min": 2.0,
+   "avg": 2.0,
+   "max": 2.0
+  },
+  "mass_kg": {
+   "min": 100.0,
+   "avg": 200.0,
+   "max": 300.0
+  },
+  "stats": {
+   "attack": 8,
+   "defense": 4,
+   "speed": 6,
+   "agility": 5,
+   "senses": 6,
+   "social": 2
+  },
+  "weapons": [
+   "긴 송곳니"
+  ],
+  "armor": [],
+  "fun_fact": "고르고놉스는 공룡보다 먼저 산 무서운 사냥꾼이에요.",
+  "kin": "🧒 공룡이 아니에요. 오히려 우리 사람과 먼 친척이에요",
+  "archetype": "sprawler",
+  "art": {
+   "palette": [
+    "#6a5a46",
+    "#c4ae88"
+   ],
+   "features": [
+    "sabre"
+   ],
+   "params": {
+    "hip": 0.15,
+    "sh": 0.15,
+    "bd": 0.07,
+    "b0": 0.25,
+    "b1": 0.66,
+    "neck": [
+     0.8,
+     0.18
+    ],
+    "nr": 0.05,
+    "hl": 0.2,
+    "dp": 0.75,
+    "head": "mammal",
+    "tail": [
+     0,
+     0.1
+    ],
+    "tr": 0.03,
+    "legR": 0.025,
+    "bend": 0.5,
+    "pattern": "stripes",
+    "mark": "#4a3a2a",
+    "skull": "dog"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.10 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "lystrosaurus",
+  "name_ko": "리스트로사우루스",
+  "name_en": "Lystrosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 0.6,
+   "avg": 1.55,
+   "max": 2.5
+  },
+  "mass_kg": {
+   "min": 50.0,
+   "avg": 70.0,
+   "max": 90.0
+  },
+  "stats": {
+   "attack": 2,
+   "defense": 4,
+   "speed": 3,
+   "agility": 2,
+   "senses": 4,
+   "social": 6
+  },
+  "weapons": [
+   "부리",
+   "작은 엄니"
+  ],
+  "armor": [],
+  "fun_fact": "리스트로사우루스는 아주 힘든 때에도 살아남았어요.",
+  "kin": "🧒 공룡이 아니에요. 오히려 우리 사람과 먼 친척이에요",
+  "archetype": "sprawler",
+  "art": {
+   "palette": [
+    "#7a6a50",
+    "#cdbb94"
+   ],
+   "features": [],
+   "params": {
+    "hip": 0.13,
+    "sh": 0.13,
+    "bd": 0.1,
+    "b0": 0.22,
+    "b1": 0.68,
+    "neck": [
+     0.82,
+     0.15
+    ],
+    "nr": 0.06,
+    "hl": 0.18,
+    "dp": 0.8,
+    "head": "beak",
+    "tail": [
+     0.06,
+     0.1
+    ],
+    "tr": 0.02,
+    "legR": 0.03,
+    "bend": 0.6,
+    "pattern": "mottle",
+    "mark": "#5a4a3a"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.11 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "rhamphorhynchus",
+  "name_ko": "람포린쿠스",
+  "name_en": "Rhamphorhynchus",
+  "habitat": "air",
+  "length_m": {
+   "min": 1.0,
+   "avg": 1.2,
+   "max": 1.26
+  },
+  "mass_kg": {
+   "min": 1.0,
+   "avg": 1.0,
+   "max": 1.0
+  },
+  "size_basis": "wingspan",
+  "stats": {
+   "attack": 3,
+   "defense": 1,
+   "speed": 7,
+   "agility": 8,
+   "senses": 7,
+   "social": 3
+  },
+  "weapons": [
+   "뾰족한 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "람포린쿠스는 긴 꼬리 끝에 작은 깃발이 달려 있었어요.",
+  "kin": "🐦 후손은 없지만, 새·악어와 먼 친척이에요",
+  "archetype": "pterosaur",
+  "art": {
+   "palette": [
+    "#6b5a45",
+    "#d6c6a2",
+    "#c0703a"
+   ],
+   "features": [],
+   "params": {
+    "h": 0.12,
+    "bd": 0.05,
+    "neck": [
+     0.77,
+     0.22
+    ],
+    "hl": 0.24,
+    "dp": 0.4,
+    "longTail": true,
+    "teeth": true,
+    "wing": 0.5,
+    "pattern": "stripes",
+    "mark": "#4a3a2a",
+    "crest": 0
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.12 / 조사: 몸길이(꼬리 포함): 날개 편 길이 1.81m 표본의 몸길이 약 1.26m / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "tupuxuara",
+  "name_ko": "투푹수아라",
+  "name_en": "Tupuxuara",
+  "habitat": "air",
+  "length_m": {
+   "min": 1.7,
+   "avg": 2.0,
+   "max": 2.3
+  },
+  "mass_kg": {
+   "min": 20.0,
+   "avg": 25.0,
+   "max": 30.0
+  },
+  "size_basis": "wingspan",
+  "stats": {
+   "attack": 4,
+   "defense": 2,
+   "speed": 6,
+   "agility": 6,
+   "senses": 7,
+   "social": 3
+  },
+  "weapons": [
+   "단단한 부리"
+  ],
+  "armor": [],
+  "fun_fact": "투푹수아라는 머리 위에 커다란 볏이 있었어요.",
+  "kin": "🐦 후손은 없지만, 새·악어와 먼 친척이에요",
+  "archetype": "pterosaur",
+  "art": {
+   "palette": [
+    "#4e5a6a",
+    "#d8d2c0",
+    "#c04a3a"
+   ],
+   "features": [],
+   "params": {
+    "h": 0.22,
+    "bd": 0.08,
+    "neck": [
+     0.58,
+     0.42
+    ],
+    "hl": 0.44,
+    "dp": 0.45,
+    "crest": 0.8,
+    "wing": 0.6,
+    "pattern": "mottle",
+    "mark": "#5a4a3a",
+    "crestType": "sail"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.13 / 조사: 몸길이: 약 2m(날개 편 길이 4.7~5.5m) / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "hatzegopteryx",
+  "name_ko": "하체고프테릭스",
+  "name_en": "Hatzegopteryx",
+  "habitat": "air",
+  "length_m": {
+   "min": 5.0,
+   "avg": 5.5,
+   "max": 6.0
+  },
+  "mass_kg": {
+   "min": 200.0,
+   "avg": 225.0,
+   "max": 250.0
+  },
+  "size_basis": "wingspan",
+  "stats": {
+   "attack": 8,
+   "defense": 4,
+   "speed": 5,
+   "agility": 4,
+   "senses": 7,
+   "social": 2
+  },
+  "weapons": [
+   "거대한 부리"
+  ],
+  "armor": [],
+  "fun_fact": "하체고프테릭스는 섬에서 가장 힘센 사냥꾼이었어요.",
+  "kin": "🐦 후손은 없지만, 새·악어와 먼 친척이에요",
+  "archetype": "pterosaur",
+  "art": {
+   "palette": [
+    "#5a5048",
+    "#d0c4aa",
+    "#b0463a"
+   ],
+   "features": [],
+   "params": {
+    "h": 0.3,
+    "bd": 0.09,
+    "neck": [
+     0.58,
+     0.7
+    ],
+    "hl": 0.44,
+    "dp": 0.6,
+    "crest": 0.35,
+    "wing": 0.7,
+    "pattern": "saddle",
+    "mark": "#4a3a30",
+    "crestType": "back"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.14 / 조사: 몸길이: 케찰코아틀루스와 비슷한 크기, 목이 짧고 굵음. 서 있는 키 약 4.5m / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "nothosaurus",
+  "name_ko": "노토사우루스",
+  "name_en": "Nothosaurus",
+  "habitat": "sea",
+  "length_m": {
+   "min": 1.0,
+   "avg": 2.5,
+   "max": 4.0
+  },
+  "mass_kg": {
+   "min": 150.0,
+   "avg": 150.0,
+   "max": 150.0
+  },
+  "stats": {
+   "attack": 6,
+   "defense": 3,
+   "speed": 6,
+   "agility": 6,
+   "senses": 6,
+   "social": 2
+  },
+  "weapons": [
+   "바늘 같은 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "노토사우루스는 물개처럼 물과 땅을 오갔어요.",
+  "kin": "🌊 후손 없이 사라진 바다 파충류예요",
+  "archetype": "marine_reptile",
+  "art": {
+   "palette": [
+    "#4f6450",
+    "#bdb998"
+   ],
+   "features": [],
+   "params": {
+    "bd": 0.05,
+    "hl": 0.12,
+    "dp": 0.4,
+    "neckL": 0.12,
+    "pattern": "spots",
+    "mark": "#2e3a34",
+    "skull": "plesio",
+    "hind": 0.8
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.15 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "archelon",
+  "name_ko": "아르켈론",
+  "name_en": "Archelon",
+  "habitat": "sea",
+  "length_m": {
+   "min": 4.0,
+   "avg": 4.3,
+   "max": 4.6
+  },
+  "mass_kg": {
+   "min": 2000.0,
+   "avg": 2000.0,
+   "max": 2000.0
+  },
+  "stats": {
+   "attack": 4,
+   "defense": 8,
+   "speed": 4,
+   "agility": 3,
+   "senses": 5,
+   "social": 1
+  },
+  "weapons": [
+   "갈고리 부리"
+  ],
+  "armor": [
+   "가죽 등딱지"
+  ],
+  "fun_fact": "아르켈론은 자동차만큼 큰 거북이었어요.",
+  "kin": "🐢 지금 바다거북(장수거북)과 친척이에요",
+  "archetype": "marine_reptile",
+  "art": {
+   "palette": [
+    "#4b5c56",
+    "#c4c0a4"
+   ],
+   "features": [
+    "shell"
+   ],
+   "params": {
+    "bd": 0.1,
+    "hl": 0.12,
+    "dp": 0.9,
+    "head": "beak",
+    "fl": 1.6,
+    "pattern": "mottle",
+    "mark": "#3a4438",
+    "hind": 0.6
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.16 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "deinosuchus",
+  "name_ko": "데이노수쿠스",
+  "name_en": "Deinosuchus",
+  "habitat": "amphibious",
+  "length_m": {
+   "min": 10.0,
+   "avg": 11.0,
+   "max": 12.0
+  },
+  "mass_kg": {
+   "min": 3000.0,
+   "avg": 4000.0,
+   "max": 5000.0
+  },
+  "stats": {
+   "attack": 10,
+   "defense": 8,
+   "speed": 4,
+   "agility": 3,
+   "senses": 7,
+   "social": 2
+  },
+  "weapons": [
+   "엄청나게 센 턱"
+  ],
+  "armor": [
+   "뼈 비늘"
+  ],
+  "fun_fact": "데이노수쿠스는 공룡도 사냥한 커다란 악어예요.",
+  "kin": "🐊 지금 앨리게이터 악어와 친척이에요",
+  "archetype": "sprawler",
+  "art": {
+   "palette": [
+    "#4a5040",
+    "#b8b08c"
+   ],
+   "features": [
+    "bumps"
+   ],
+   "params": {
+    "pattern": "bands",
+    "mark": "#2e3426"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.17 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "sarcosuchus",
+  "name_ko": "사르코수쿠스",
+  "name_en": "Sarcosuchus",
+  "habitat": "amphibious",
+  "length_m": {
+   "min": 9.0,
+   "avg": 9.25,
+   "max": 9.5
+  },
+  "mass_kg": {
+   "min": 3000.0,
+   "avg": 3500.0,
+   "max": 4000.0
+  },
+  "stats": {
+   "attack": 9,
+   "defense": 8,
+   "speed": 4,
+   "agility": 3,
+   "senses": 7,
+   "social": 1
+  },
+  "weapons": [
+   "긴 턱",
+   "많은 이빨"
+  ],
+  "armor": [
+   "뼈 비늘"
+  ],
+  "fun_fact": "사르코수쿠스는 버스만큼 긴 악어였어요.",
+  "kin": "🐊 지금 악어들과 먼 친척이에요",
+  "archetype": "sprawler",
+  "art": {
+   "palette": [
+    "#575a44",
+    "#c0b890"
+   ],
+   "features": [
+    "bumps"
+   ],
+   "params": {
+    "hl": 0.22,
+    "dp": 0.32,
+    "pattern": "spots",
+    "mark": "#2e3424"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.18 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "repenomamus",
+  "name_ko": "레페노마무스",
+  "name_en": "Repenomamus",
+  "habitat": "land",
+  "length_m": {
+   "min": 1.0,
+   "avg": 1.0,
+   "max": 1.0
+  },
+  "mass_kg": {
+   "min": 12.0,
+   "avg": 13.0,
+   "max": 14.0
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 3,
+   "speed": 5,
+   "agility": 6,
+   "senses": 6,
+   "social": 2
+  },
+  "weapons": [
+   "날카로운 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "레페노마무스는 아기 공룡을 잡아먹은 털북숭이 동물이에요.",
+  "kin": "🐀 후손은 없지만, 우리처럼 아기에게 젖을 먹이는 동물이에요",
+  "archetype": "large_mammal",
+  "art": {
+   "palette": [
+    "#6a5040",
+    "#c8ac88"
+   ],
+   "features": [],
+   "params": {
+    "hip": 0.15,
+    "sh": 0.15,
+    "bd": 0.11,
+    "b0": 0.2,
+    "b1": 0.7,
+    "neck": [
+     0.86,
+     0.2
+    ],
+    "nr": 0.06,
+    "hl": 0.17,
+    "tail": [
+     0,
+     0.15
+    ],
+    "legR": 0.03,
+    "skull": "dog",
+    "pattern": "mottle",
+    "mark": "#3a2e26"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.19 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "woolly_mammoth",
+  "name_ko": "털매머드",
+  "name_en": "Woolly mammoth",
+  "habitat": "land",
+  "length_m": {
+   "min": 4.0,
+   "avg": 4.5,
+   "max": 5.0
+  },
+  "mass_kg": {
+   "min": 6000.0,
+   "avg": 6000.0,
+   "max": 6000.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 8,
+   "speed": 4,
+   "agility": 2,
+   "senses": 6,
+   "social": 8
+  },
+  "weapons": [
+   "구부러진 엄니",
+   "긴 코"
+  ],
+  "armor": [
+   "두꺼운 털"
+  ],
+  "fun_fact": "털매머드는 두꺼운 털옷을 입고 추운 곳에 살았어요.",
+  "kin": "🐘 아시아코끼리와 가장 가까운 친척이에요",
+  "archetype": "large_mammal",
+  "art": {
+   "palette": [
+    "#6b4a30",
+    "#a07a54"
+   ],
+   "features": [
+    "trunk",
+    "tusks",
+    "hump",
+    "fur"
+   ],
+   "params": {
+    "hip": 0.48,
+    "sh": 0.55,
+    "bd": 0.16,
+    "b0": 0.15,
+    "b1": 0.6,
+    "neck": [
+     0.72,
+     0.66
+    ],
+    "nr": 0.11,
+    "hl": 0.22,
+    "dp": 1.1,
+    "tail": [
+     0.08,
+     0.5
+    ],
+    "tr": 0.02,
+    "legR": 0.05,
+    "foot": "pillar",
+    "skull": "elephant"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.20 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "mastodon",
+  "name_ko": "마스토돈",
+  "name_en": "Mastodon",
+  "habitat": "land",
+  "length_m": {
+   "min": 4.0,
+   "avg": 4.25,
+   "max": 4.5
+  },
+  "mass_kg": {
+   "min": 4000.0,
+   "avg": 6000.0,
+   "max": 8000.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 7,
+   "speed": 4,
+   "agility": 2,
+   "senses": 6,
+   "social": 7
+  },
+  "weapons": [
+   "긴 엄니",
+   "긴 코"
+  ],
+  "armor": [],
+  "fun_fact": "마스토돈은 뾰족한 이빨로 나뭇잎을 씹었어요.",
+  "kin": "🐘 지금 코끼리와 친척이에요",
+  "archetype": "large_mammal",
+  "art": {
+   "palette": [
+    "#5a4030",
+    "#9a7a5a"
+   ],
+   "features": [
+    "trunk",
+    "tusks"
+   ],
+   "params": {
+    "hip": 0.45,
+    "sh": 0.48,
+    "bd": 0.15,
+    "b0": 0.15,
+    "b1": 0.62,
+    "neck": [
+     0.74,
+     0.6
+    ],
+    "nr": 0.1,
+    "hl": 0.22,
+    "dp": 1.0,
+    "tail": [
+     0.08,
+     0.45
+    ],
+    "tr": 0.02,
+    "legR": 0.05,
+    "foot": "pillar",
+    "skull": "elephant"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.21 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "deinotherium",
+  "name_ko": "데이노테리움",
+  "name_en": "Deinotherium",
+  "habitat": "land",
+  "length_m": {
+   "min": 6.0,
+   "avg": 7.0,
+   "max": 8.0
+  },
+  "mass_kg": {
+   "min": 8000.0,
+   "avg": 10000.0,
+   "max": 12000.0
+  },
+  "size_basis": "shoulder",
+  "stats": {
+   "attack": 7,
+   "defense": 8,
+   "speed": 4,
+   "agility": 2,
+   "senses": 6,
+   "social": 6
+  },
+  "weapons": [
+   "아래로 휜 엄니",
+   "긴 코"
+  ],
+  "armor": [],
+  "fun_fact": "데이노테리움의 엄니는 아래로 굽어 있었어요.",
+  "kin": "🐘 지금 코끼리와 먼 친척이에요",
+  "archetype": "large_mammal",
+  "art": {
+   "palette": [
+    "#6a6460",
+    "#a8a29a"
+   ],
+   "features": [
+    "trunk",
+    "tusks_down",
+    "ears"
+   ],
+   "params": {
+    "hip": 0.48,
+    "sh": 0.52,
+    "bd": 0.13,
+    "b0": 0.15,
+    "b1": 0.62,
+    "neck": [
+     0.74,
+     0.66
+    ],
+    "nr": 0.09,
+    "hl": 0.2,
+    "dp": 1.0,
+    "tail": [
+     0.08,
+     0.48
+    ],
+    "tr": 0.02,
+    "legR": 0.045,
+    "foot": "pillar",
+    "skull": "elephant"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.22 / 조사: 몸길이: 코~꼬리 약 6~8m, 어깨 높이 3.6~4m, 무게 8.8~12톤 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "smilodon",
+  "name_ko": "스밀로돈",
+  "alias": "검치호",
+  "name_en": "Smilodon",
+  "habitat": "land",
+  "length_m": {
+   "min": 1.7,
+   "avg": 1.9,
+   "max": 2.1
+  },
+  "mass_kg": {
+   "min": 160.0,
+   "avg": 280.0,
+   "max": 400.0
+  },
+  "stats": {
+   "attack": 8,
+   "defense": 4,
+   "speed": 6,
+   "agility": 7,
+   "senses": 7,
+   "social": 5
+  },
+  "weapons": [
+   "칼 같은 송곳니",
+   "힘센 앞발"
+  ],
+  "armor": [],
+  "fun_fact": "스밀로돈은 입을 아주 크게 벌릴 수 있었어요.",
+  "kin": "🐈 고양이·사자와 같은 고양이 무리예요",
+  "archetype": "large_mammal",
+  "art": {
+   "palette": [
+    "#A07A48",
+    "#E5D3AE"
+   ],
+   "features": [
+    "sabre"
+   ],
+   "params": {
+    "pattern": "spots",
+    "mark": "#6a4a2a",
+    "markOp": 0.35,
+    "skull": "cat"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.23 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "dire_wolf",
+  "name_ko": "다이어울프",
+  "name_en": "Dire wolf",
+  "habitat": "land",
+  "length_m": {
+   "min": 1.5,
+   "avg": 1.65,
+   "max": 1.8
+  },
+  "mass_kg": {
+   "min": 60.0,
+   "avg": 65.0,
+   "max": 70.0
+  },
+  "stats": {
+   "attack": 6,
+   "defense": 3,
+   "speed": 7,
+   "agility": 7,
+   "senses": 8,
+   "social": 9
+  },
+  "weapons": [
+   "강한 턱",
+   "날카로운 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "다이어울프는 지금 늑대보다 크고 튼튼했어요.",
+  "kin": "🐺 늑대·개와 친척이에요",
+  "archetype": "large_mammal",
+  "art": {
+   "palette": [
+    "#7a7068",
+    "#d0c8bc"
+   ],
+   "features": [],
+   "params": {
+    "hip": 0.4,
+    "sh": 0.42,
+    "bd": 0.11,
+    "b0": 0.15,
+    "b1": 0.66,
+    "neck": [
+     0.83,
+     0.56
+    ],
+    "nr": 0.06,
+    "hl": 0.2,
+    "dp": 0.6,
+    "tail": [
+     0,
+     0.33
+    ],
+    "tr": 0.04,
+    "legR": 0.025,
+    "pattern": "saddle",
+    "mark": "#3a3632",
+    "markOp": 0.45,
+    "skull": "dog"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.24 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "cave_bear",
+  "name_ko": "동굴곰",
+  "name_en": "Cave bear",
+  "habitat": "land",
+  "length_m": {
+   "min": 2.7,
+   "avg": 3.1,
+   "max": 3.5
+  },
+  "mass_kg": {
+   "min": 400.0,
+   "avg": 450.0,
+   "max": 500.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 6,
+   "speed": 4,
+   "agility": 4,
+   "senses": 7,
+   "social": 2
+  },
+  "weapons": [
+   "큰 발톱",
+   "강한 턱"
+  ],
+  "armor": [
+   "두꺼운 털"
+  ],
+  "fun_fact": "동굴곰은 덩치가 컸지만 풀과 열매를 좋아했어요.",
+  "kin": "🐻 지금 불곰과 친척이에요",
+  "archetype": "large_mammal",
+  "art": {
+   "palette": [
+    "#5a3e2a",
+    "#8a6a4a"
+   ],
+   "features": [
+    "round_ears",
+    "fur"
+   ],
+   "params": {
+    "hip": 0.32,
+    "sh": 0.36,
+    "bd": 0.16,
+    "b0": 0.12,
+    "b1": 0.68,
+    "neck": [
+     0.85,
+     0.45
+    ],
+    "nr": 0.09,
+    "hl": 0.17,
+    "dp": 0.8,
+    "tail": [
+     0.08,
+     0.36
+    ],
+    "tr": 0.03,
+    "legR": 0.05,
+    "skull": "bear"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.25 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "woolly_rhinoceros",
+  "name_ko": "털코뿔소",
+  "name_en": "Woolly rhinoceros",
+  "habitat": "land",
+  "length_m": {
+   "min": 3.5,
+   "avg": 3.65,
+   "max": 3.8
+  },
+  "mass_kg": {
+   "min": 2000.0,
+   "avg": 2500.0,
+   "max": 3000.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 8,
+   "speed": 5,
+   "agility": 3,
+   "senses": 5,
+   "social": 3
+  },
+  "weapons": [
+   "큰 코뿔"
+  ],
+  "armor": [
+   "두꺼운 털과 가죽"
+  ],
+  "fun_fact": "옛날 사람들이 동굴 벽에 털코뿔소를 그렸어요.",
+  "kin": "🦏 수마트라코뿔소와 가장 가까운 친척이에요",
+  "archetype": "large_mammal",
+  "art": {
+   "palette": [
+    "#7a5a3a",
+    "#b89a74"
+   ],
+   "features": [
+    "horn_nose",
+    "fur",
+    "hump"
+   ],
+   "params": {
+    "hip": 0.35,
+    "sh": 0.38,
+    "bd": 0.15,
+    "b0": 0.12,
+    "b1": 0.68,
+    "neck": [
+     0.84,
+     0.36
+    ],
+    "nr": 0.09,
+    "hl": 0.2,
+    "dp": 0.8,
+    "tail": [
+     0.05,
+     0.4
+    ],
+    "tr": 0.02,
+    "legR": 0.045,
+    "foot": "pillar",
+    "skull": "rhino"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.26 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "megaloceros",
+  "name_ko": "큰뿔사슴",
+  "name_en": "Megaloceros",
+  "habitat": "land",
+  "length_m": {
+   "min": 2.5,
+   "avg": 2.75,
+   "max": 3.0
+  },
+  "mass_kg": {
+   "min": 450.0,
+   "avg": 575.0,
+   "max": 700.0
+  },
+  "stats": {
+   "attack": 6,
+   "defense": 4,
+   "speed": 7,
+   "agility": 6,
+   "senses": 7,
+   "social": 7
+  },
+  "weapons": [
+   "거대한 뿔"
+  ],
+  "armor": [],
+  "fun_fact": "큰뿔사슴의 뿔은 해마다 빠지고 새로 났어요.",
+  "kin": "🦌 다마사슴과 가까운 친척이에요",
+  "archetype": "large_mammal",
+  "art": {
+   "palette": [
+    "#8a5a34",
+    "#d0a878"
+   ],
+   "features": [
+    "antlers"
+   ],
+   "params": {
+    "hip": 0.58,
+    "sh": 0.63,
+    "bd": 0.12,
+    "b0": 0.15,
+    "b1": 0.62,
+    "neck": [
+     0.8,
+     0.88
+    ],
+    "nr": 0.06,
+    "hl": 0.2,
+    "dp": 0.6,
+    "tail": [
+     0.12,
+     0.6
+    ],
+    "tr": 0.03,
+    "legR": 0.025,
+    "foot": "hoof",
+    "skull": "deer",
+    "pattern": "spots",
+    "mark": "#e8dcc0",
+    "markOp": 0.35
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.27 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "paraceratherium",
+  "name_ko": "파라케라테리움",
+  "name_en": "Paraceratherium",
+  "habitat": "land",
+  "length_m": {
+   "min": 7.0,
+   "avg": 7.5,
+   "max": 8.0
+  },
+  "mass_kg": {
+   "min": 15000.0,
+   "avg": 17500.0,
+   "max": 20000.0
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 8,
+   "speed": 4,
+   "agility": 2,
+   "senses": 5,
+   "social": 3
+  },
+  "weapons": [
+   "큰 앞니",
+   "밟기"
+  ],
+  "armor": [
+   "두꺼운 가죽"
+  ],
+  "fun_fact": "파라케라테리움은 코뿔소 친척인데 뿔이 없었어요.",
+  "kin": "🦏 뿔은 없지만 코뿔소와 친척이에요",
+  "archetype": "large_mammal",
+  "art": {
+   "palette": [
+    "#7a7068",
+    "#b8b0a2"
+   ],
+   "features": [],
+   "params": {
+    "hip": 0.5,
+    "sh": 0.58,
+    "bd": 0.14,
+    "b0": 0.12,
+    "b1": 0.58,
+    "neck": [
+     0.85,
+     0.88
+    ],
+    "nr": 0.07,
+    "hl": 0.16,
+    "dp": 0.8,
+    "tail": [
+     0.05,
+     0.5
+    ],
+    "tr": 0.02,
+    "legR": 0.045,
+    "foot": "pillar",
+    "skull": "rhino",
+    "pattern": "mottle",
+    "mark": "#5a5650"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.28 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "entelodont",
+  "name_ko": "엔텔로돈트",
+  "name_en": "Entelodont",
+  "habitat": "land",
+  "length_m": {
+   "min": 1.5,
+   "avg": 2.55,
+   "max": 3.6
+  },
+  "mass_kg": {
+   "min": 150,
+   "avg": 400,
+   "max": 1000
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 5,
+   "speed": 6,
+   "agility": 4,
+   "senses": 6,
+   "social": 3
+  },
+  "weapons": [
+   "큰 턱",
+   "튼튼한 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "엔텔로돈트는 '지옥 돼지'라는 별명이 있어요.",
+  "kin": "🦛 하마·고래와 먼 친척일지도 몰라요",
+  "archetype": "large_mammal",
+  "art": {
+   "palette": [
+    "#4a3a30",
+    "#8a7058"
+   ],
+   "features": [
+    "hump"
+   ],
+   "params": {
+    "hip": 0.38,
+    "sh": 0.44,
+    "bd": 0.14,
+    "b0": 0.12,
+    "b1": 0.6,
+    "neck": [
+     0.74,
+     0.44
+    ],
+    "nr": 0.08,
+    "hl": 0.26,
+    "dp": 0.8,
+    "tail": [
+     0.04,
+     0.4
+    ],
+    "tr": 0.02,
+    "legR": 0.03,
+    "foot": "hoof",
+    "skull": "pig",
+    "pattern": "saddle",
+    "mark": "#2e2620"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.29 / 조사: 무게: 종마다 크기가 달라 작은 종 약 150kg, 큰 종 약 1톤 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "megatherium",
+  "name_ko": "메가테리움",
+  "name_en": "Megatherium",
+  "habitat": "land",
+  "length_m": {
+   "min": 6.0,
+   "avg": 6.0,
+   "max": 6.0
+  },
+  "mass_kg": {
+   "min": 4000.0,
+   "avg": 4000.0,
+   "max": 4000.0
+  },
+  "stats": {
+   "attack": 6,
+   "defense": 7,
+   "speed": 2,
+   "agility": 2,
+   "senses": 5,
+   "social": 2
+  },
+  "weapons": [
+   "긴 발톱"
+  ],
+  "armor": [
+   "두꺼운 가죽"
+  ],
+  "fun_fact": "메가테리움은 코끼리만 한 나무늘보예요.",
+  "kin": "🦥 지금 나무늘보와 친척이에요",
+  "archetype": "large_mammal",
+  "art": {
+   "palette": [
+    "#7a6048",
+    "#b49878"
+   ],
+   "features": [
+    "claws",
+    "fur"
+   ],
+   "params": {
+    "hip": 0.3,
+    "sh": 0.3,
+    "bd": 0.17,
+    "b0": 0.2,
+    "b1": 0.65,
+    "neck": [
+     0.82,
+     0.42
+    ],
+    "nr": 0.08,
+    "hl": 0.14,
+    "dp": 0.9,
+    "tail": [
+     0,
+     0.15
+    ],
+    "tr": 0.07,
+    "legR": 0.05,
+    "foot": "stout",
+    "skull": "sloth"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.30 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "glyptodon",
+  "name_ko": "글립토돈",
+  "name_en": "Glyptodon",
+  "habitat": "land",
+  "length_m": {
+   "min": 3.0,
+   "avg": 3.15,
+   "max": 3.3
+  },
+  "mass_kg": {
+   "min": 2000.0,
+   "avg": 2000.0,
+   "max": 2000.0
+  },
+  "stats": {
+   "attack": 3,
+   "defense": 10,
+   "speed": 2,
+   "agility": 1,
+   "senses": 4,
+   "social": 2
+  },
+  "weapons": [
+   "꼬리 고리"
+  ],
+  "armor": [
+   "둥근 등딱지"
+  ],
+  "fun_fact": "글립토돈은 거북처럼 단단한 등딱지를 메고 다녔어요.",
+  "kin": "🛡️ 아르마딜로와 친척이에요",
+  "archetype": "armored",
+  "art": {
+   "palette": [
+    "#6a5a44",
+    "#b0a080",
+    "#8a7458"
+   ],
+   "features": [
+    "shell"
+   ],
+   "params": {
+    "head": "mammal",
+    "hip": 0.15,
+    "sh": 0.14,
+    "bd": 0.14,
+    "b0": 0.25,
+    "b1": 0.75,
+    "neck": [
+     0.88,
+     0.13
+    ],
+    "hl": 0.13,
+    "dp": 0.9,
+    "tail": [
+     0.02,
+     0.1
+    ],
+    "tr": 0.05,
+    "foot": "stout",
+    "skull": "sloth"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.31 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "diprotodon",
+  "name_ko": "디프로토돈",
+  "name_en": "Diprotodon",
+  "habitat": "land",
+  "length_m": {
+   "min": 3.0,
+   "avg": 3.4,
+   "max": 3.8
+  },
+  "mass_kg": {
+   "min": 2700.0,
+   "avg": 2700.0,
+   "max": 2700.0
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 7,
+   "speed": 4,
+   "agility": 2,
+   "senses": 5,
+   "social": 5
+  },
+  "weapons": [
+   "큰 앞니"
+  ],
+  "armor": [
+   "두꺼운 가죽"
+  ],
+  "fun_fact": "디프로토돈은 배 주머니에 아기를 넣어 키웠어요.",
+  "kin": "🐨 웜뱃·코알라와 친척이에요",
+  "archetype": "large_mammal",
+  "art": {
+   "palette": [
+    "#6a5040",
+    "#a8907a"
+   ],
+   "features": [],
+   "params": {
+    "hip": 0.3,
+    "sh": 0.32,
+    "bd": 0.15,
+    "b0": 0.12,
+    "b1": 0.68,
+    "neck": [
+     0.84,
+     0.35
+    ],
+    "nr": 0.09,
+    "hl": 0.18,
+    "dp": 0.9,
+    "tail": [
+     0.06,
+     0.3
+    ],
+    "tr": 0.02,
+    "legR": 0.045,
+    "foot": "stout",
+    "skull": "bear",
+    "pattern": "saddle",
+    "mark": "#3a3026"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.32 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "megalodon",
+  "name_ko": "메갈로돈",
+  "name_en": "Megalodon",
+  "habitat": "sea",
+  "length_m": {
+   "min": 15.0,
+   "avg": 16.5,
+   "max": 18.0
+  },
+  "mass_kg": {
+   "min": 30000.0,
+   "avg": 45000.0,
+   "max": 60000.0
+  },
+  "stats": {
+   "attack": 10,
+   "defense": 6,
+   "speed": 7,
+   "agility": 5,
+   "senses": 8,
+   "social": 1
+  },
+  "weapons": [
+   "톱니 이빨",
+   "엄청난 턱"
+  ],
+  "armor": [],
+  "fun_fact": "메갈로돈은 이빨 하나가 어른 손바닥만 했어요.",
+  "kin": "🦈 지금 상어들과 친척이에요",
+  "archetype": "fish",
+  "art": {
+   "palette": [
+    "#5a6874",
+    "#d4dcdc"
+   ],
+   "features": [
+    "dorsal",
+    "tail_fluke"
+   ],
+   "params": {
+    "bd": 0.09,
+    "hl": 0.15,
+    "pattern": "mottle",
+    "mark": "#3a4450",
+    "markOp": 0.3,
+    "flukeUp": 1.2,
+    "flukeDown": 0.75
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.33 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "basilosaurus",
+  "name_ko": "바실로사우루스",
+  "name_en": "Basilosaurus",
+  "habitat": "sea",
+  "length_m": {
+   "min": 15.0,
+   "avg": 16.5,
+   "max": 18.0
+  },
+  "mass_kg": {
+   "min": 5000.0,
+   "avg": 6000.0,
+   "max": 7000.0
+  },
+  "stats": {
+   "attack": 8,
+   "defense": 5,
+   "speed": 7,
+   "agility": 5,
+   "senses": 7,
+   "social": 2
+  },
+  "weapons": [
+   "날카로운 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "바실로사우루스는 아주 작은 뒷다리가 있는 고래였어요.",
+  "kin": "🐋 지금 고래들의 먼 친척이에요",
+  "archetype": "marine_reptile",
+  "art": {
+   "palette": [
+    "#4a5a64",
+    "#b4bcbc"
+   ],
+   "features": [
+    "tail_fluke"
+   ],
+   "params": {
+    "bd": 0.035,
+    "hl": 0.08,
+    "dp": 0.6,
+    "flukeUp": 0.3,
+    "pattern": "mottle",
+    "mark": "#3a4248",
+    "markOp": 0.35,
+    "skull": "whale",
+    "flukeDown": 0.3,
+    "hind": 0.12,
+    "fl": 0.75
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.34 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "ambulocetus",
+  "name_ko": "암불로케투스",
+  "name_en": "Ambulocetus",
+  "habitat": "amphibious",
+  "length_m": {
+   "min": 3.0,
+   "avg": 3.0,
+   "max": 3.0
+  },
+  "mass_kg": {
+   "min": 150.0,
+   "avg": 150.0,
+   "max": 150.0
+  },
+  "stats": {
+   "attack": 6,
+   "defense": 4,
+   "speed": 4,
+   "agility": 4,
+   "senses": 6,
+   "social": 1
+  },
+  "weapons": [
+   "긴 턱"
+  ],
+  "armor": [],
+  "fun_fact": "암불로케투스는 걷기도 하고 헤엄도 치는 고래였어요.",
+  "kin": "🐋 고래의 아주 먼 조상 쪽이에요",
+  "archetype": "sprawler",
+  "art": {
+   "palette": [
+    "#5a4a3a",
+    "#b49a7a"
+   ],
+   "features": [],
+   "params": {
+    "hip": 0.1,
+    "sh": 0.1,
+    "bd": 0.07,
+    "b0": 0.3,
+    "b1": 0.68,
+    "neck": [
+     0.8,
+     0.1
+    ],
+    "nr": 0.05,
+    "hl": 0.2,
+    "dp": 0.45,
+    "tail": [
+     0,
+     0.07
+    ],
+    "tr": 0.03,
+    "legR": 0.025
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.35 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "titanoboa",
+  "name_ko": "티타노보아",
+  "name_en": "Titanoboa",
+  "habitat": "amphibious",
+  "length_m": {
+   "min": 13.0,
+   "avg": 13.0,
+   "max": 13.0
+  },
+  "mass_kg": {
+   "min": 1000.0,
+   "avg": 1000.0,
+   "max": 1000.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 5,
+   "speed": 4,
+   "agility": 5,
+   "senses": 6,
+   "social": 1
+  },
+  "weapons": [
+   "조이는 몸",
+   "넓은 입"
+  ],
+  "armor": [
+   "비늘"
+  ],
+  "fun_fact": "티타노보아는 버스만큼 긴 뱀이었어요.",
+  "kin": "🐍 보아뱀·아나콘다와 친척이에요",
+  "archetype": "snake",
+  "art": {
+   "palette": [
+    "#4a5034",
+    "#b0aa74",
+    "#2e3420"
+   ],
+   "features": [],
+   "params": {
+    "r": 0.04,
+    "pattern": "saddle",
+    "mark": "#2a3020"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.36 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "gastornis",
+  "name_ko": "가스토르니스",
+  "name_en": "Gastornis",
+  "habitat": "land",
+  "length_m": {
+   "min": 1.6,
+   "avg": 1.9,
+   "max": 2.2
+  },
+  "mass_kg": {
+   "min": 150.0,
+   "avg": 150.0,
+   "max": 150.0
+  },
+  "size_basis": "height",
+  "stats": {
+   "attack": 6,
+   "defense": 5,
+   "speed": 5,
+   "agility": 4,
+   "senses": 5,
+   "social": 3
+  },
+  "weapons": [
+   "거대한 부리",
+   "발톱"
+  ],
+  "armor": [],
+  "fun_fact": "가스토르니스는 큰 부리로 열매를 깨 먹었을 거예요.",
+  "kin": "🦆 오리·거위와 친척이에요",
+  "archetype": "bird",
+  "art": {
+   "palette": [
+    "#4a4038",
+    "#a89478",
+    "#3a3028"
+   ],
+   "features": [
+    "feathers"
+   ],
+   "params": {
+    "head": "beak",
+    "hl": 0.22,
+    "dp": 1.1,
+    "h": 0.45,
+    "bd": 0.18,
+    "neck": 1.3,
+    "pattern": "mottle",
+    "mark": "#3a3026"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.37 / 조사: 몸길이: 키 약 2~2.3m인 새의 비율로 환산 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "phorusrhacos",
+  "name_ko": "포루스라코스",
+  "name_en": "Phorusrhacos",
+  "habitat": "land",
+  "length_m": {
+   "min": 2.4,
+   "avg": 2.6,
+   "max": 2.8
+  },
+  "mass_kg": {
+   "min": 130.0,
+   "avg": 130.0,
+   "max": 130.0
+  },
+  "size_basis": "height",
+  "stats": {
+   "attack": 7,
+   "defense": 3,
+   "speed": 8,
+   "agility": 7,
+   "senses": 7,
+   "social": 2
+  },
+  "weapons": [
+   "갈고리 부리",
+   "발차기"
+  ],
+  "armor": [],
+  "fun_fact": "포루스라코스는 날지 못하지만 아주 빨리 달렸어요.",
+  "kin": "🦅 남아메리카의 세리에마라는 새와 친척이에요",
+  "archetype": "bird",
+  "art": {
+   "palette": [
+    "#5a4a3a",
+    "#c8b496",
+    "#3e3226"
+   ],
+   "features": [
+    "feathers"
+   ],
+   "params": {
+    "hl": 0.22,
+    "dp": 0.9,
+    "h": 0.5,
+    "bd": 0.14,
+    "neck": 1.8,
+    "pattern": "stripes",
+    "mark": "#4a3a28"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.38 / 조사: 몸길이: 약 2.8m, 키 약 2.4m / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "haasts_eagle",
+  "name_ko": "하스트독수리",
+  "name_en": "Haast's eagle",
+  "habitat": "air",
+  "length_m": {
+   "min": 1.0,
+   "avg": 1.2,
+   "max": 1.4
+  },
+  "mass_kg": {
+   "min": 10.0,
+   "avg": 12.5,
+   "max": 15.0
+  },
+  "size_basis": "wingspan",
+  "stats": {
+   "attack": 7,
+   "defense": 2,
+   "speed": 8,
+   "agility": 8,
+   "senses": 9,
+   "social": 1
+  },
+  "weapons": [
+   "큰 발톱",
+   "갈고리 부리"
+  ],
+  "armor": [],
+  "fun_fact": "하스트독수리는 세상에서 가장 큰 독수리였어요.",
+  "kin": "🦅 지금 독수리와 친척이에요",
+  "archetype": "bird",
+  "art": {
+   "palette": [
+    "#4a3a2a",
+    "#c8b494",
+    "#3a2a1c"
+   ],
+   "features": [
+    "feathers"
+   ],
+   "params": {
+    "hl": 0.16,
+    "dp": 0.8,
+    "h": 0.28,
+    "bd": 0.16,
+    "neck": 1.0,
+    "wing": 0.55,
+    "leg": 0.6,
+    "hipX": 0.33,
+    "pattern": "stripes",
+    "mark": "#2a2420"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.39 / 조사: 몸길이: 약 0.9~1.4m(암컷이 큼) / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "doedicurus",
+  "name_ko": "도에디쿠루스",
+  "name_en": "Doedicurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 3.6,
+   "avg": 3.8,
+   "max": 4.0
+  },
+  "mass_kg": {
+   "min": 1400.0,
+   "avg": 1900.0,
+   "max": 2400.0
+  },
+  "stats": {
+   "attack": 6,
+   "defense": 10,
+   "speed": 2,
+   "agility": 1,
+   "senses": 4,
+   "social": 2
+  },
+  "weapons": [
+   "가시 철퇴 꼬리"
+  ],
+  "armor": [
+   "둥근 등딱지"
+  ],
+  "fun_fact": "도에디쿠루스의 등딱지는 작은 자동차만 했어요.",
+  "kin": "🛡️ 아르마딜로와 친척이에요",
+  "archetype": "armored",
+  "art": {
+   "palette": [
+    "#5a4a3a",
+    "#a89070",
+    "#7a6650"
+   ],
+   "features": [
+    "shell",
+    "spiked_club"
+   ],
+   "params": {
+    "head": "mammal",
+    "hip": 0.15,
+    "sh": 0.14,
+    "bd": 0.14,
+    "b0": 0.3,
+    "b1": 0.78,
+    "neck": [
+     0.9,
+     0.13
+    ],
+    "hl": 0.11,
+    "dp": 0.9,
+    "tail": [
+     0.02,
+     0.12
+    ],
+    "tr": 0.05,
+    "foot": "stout",
+    "skull": "sloth"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.40 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "purussaurus",
+  "name_ko": "푸루사우루스",
+  "name_en": "Purussaurus",
+  "habitat": "amphibious",
+  "length_m": {
+   "min": 10.0,
+   "avg": 11.0,
+   "max": 12.0
+  },
+  "mass_kg": {
+   "min": 5000.0,
+   "avg": 6500.0,
+   "max": 8000.0
+  },
+  "stats": {
+   "attack": 10,
+   "defense": 8,
+   "speed": 4,
+   "agility": 3,
+   "senses": 7,
+   "social": 1
+  },
+  "weapons": [
+   "엄청나게 센 턱"
+  ],
+  "armor": [
+   "뼈 비늘"
+  ],
+  "fun_fact": "푸루사우루스는 옛날 아마존 강의 힘센 악어예요.",
+  "kin": "🐊 지금 카이만 악어와 친척이에요",
+  "archetype": "sprawler",
+  "art": {
+   "palette": [
+    "#4a5040",
+    "#b8b08c"
+   ],
+   "features": [
+    "bumps"
+   ],
+   "params": {
+    "hl": 0.2,
+    "dp": 0.42,
+    "pattern": "mottle",
+    "mark": "#30362a"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.41 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "kelenken",
+  "name_ko": "켈렌켄",
+  "name_en": "Kelenken",
+  "habitat": "land",
+  "length_m": {
+   "min": 2.8,
+   "avg": 3.1,
+   "max": 3.4
+  },
+  "mass_kg": {
+   "min": 100,
+   "avg": 200,
+   "max": 250
+  },
+  "size_basis": "height",
+  "stats": {
+   "attack": 8,
+   "defense": 3,
+   "speed": 7,
+   "agility": 6,
+   "senses": 7,
+   "social": 2
+  },
+  "weapons": [
+   "거대한 갈고리 부리"
+  ],
+  "armor": [],
+  "fun_fact": "켈렌켄은 머리가 아주 아주 큰 새였어요.",
+  "kin": "🦅 남아메리카의 세리에마라는 새와 친척이에요",
+  "archetype": "bird",
+  "art": {
+   "palette": [
+    "#4a3e34",
+    "#b8a488",
+    "#2e261e"
+   ],
+   "features": [
+    "feathers"
+   ],
+   "params": {
+    "hl": 0.24,
+    "dp": 0.9,
+    "h": 0.55,
+    "bd": 0.14,
+    "neck": 2.0,
+    "pattern": "bands",
+    "mark": "#3e3226"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.42 / 조사: 몸길이: 키 약 3m(머리뼈 71.6cm)로 환산. 무게: 100kg 이상~약 200kg 추정(머리뼈·다리뼈만 발견) / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "giant_moa",
+  "name_ko": "자이언트모아",
+  "name_en": "Giant moa",
+  "habitat": "land",
+  "length_m": {
+   "min": 2.4,
+   "avg": 3.0,
+   "max": 3.6
+  },
+  "mass_kg": {
+   "min": 200.0,
+   "avg": 225.0,
+   "max": 250.0
+  },
+  "size_basis": "height",
+  "stats": {
+   "attack": 3,
+   "defense": 4,
+   "speed": 5,
+   "agility": 3,
+   "senses": 5,
+   "social": 3
+  },
+  "weapons": [
+   "발차기"
+  ],
+  "armor": [],
+  "fun_fact": "자이언트모아는 날개가 아예 없는 새였어요.",
+  "kin": "🐦 키위·타조 같은 날지 못하는 새들과 친척이에요",
+  "archetype": "bird",
+  "art": {
+   "palette": [
+    "#6a4a30",
+    "#b08860",
+    "#4a3220"
+   ],
+   "features": [
+    "feathers"
+   ],
+   "params": {
+    "head": "beak",
+    "hl": 0.1,
+    "dp": 0.8,
+    "h": 0.55,
+    "bd": 0.2,
+    "neck": 3.2,
+    "hipX": 0.33,
+    "pattern": "mottle",
+    "mark": "#4a3a2c"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.43 / 조사: 몸길이: 약 2.4~3.6m(암컷이 훨씬 큼) / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "megalania",
+  "name_ko": "메갈라니아",
+  "name_en": "Megalania",
+  "habitat": "land",
+  "length_m": {
+   "min": 5.0,
+   "avg": 6.0,
+   "max": 7.0
+  },
+  "mass_kg": {
+   "min": 300.0,
+   "avg": 450.0,
+   "max": 600.0
+  },
+  "stats": {
+   "attack": 8,
+   "defense": 5,
+   "speed": 5,
+   "agility": 4,
+   "senses": 7,
+   "social": 1
+  },
+  "weapons": [
+   "톱니 이빨",
+   "강한 턱"
+  ],
+  "armor": [
+   "비늘"
+  ],
+  "fun_fact": "메갈라니아는 아주 커다란 도마뱀이었어요.",
+  "kin": "🦎 코모도왕도마뱀과 친척이에요",
+  "archetype": "sprawler",
+  "art": {
+   "palette": [
+    "#5a5440",
+    "#bcb08a"
+   ],
+   "features": [],
+   "params": {
+    "hip": 0.08,
+    "sh": 0.08,
+    "bd": 0.05,
+    "b0": 0.35,
+    "b1": 0.66,
+    "neck": [
+     0.8,
+     0.09
+    ],
+    "nr": 0.03,
+    "hl": 0.12,
+    "dp": 0.55,
+    "head": "lizard",
+    "legR": 0.02,
+    "pattern": "spots",
+    "mark": "#d8c8a0",
+    "markOp": 0.5
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.44 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "gorgops",
+  "name_ko": "고르곱스",
+  "name_en": "Hippopotamus gorgops",
+  "habitat": "amphibious",
+  "length_m": {
+   "min": 4.3,
+   "avg": 4.3,
+   "max": 4.3
+  },
+  "mass_kg": {
+   "min": 4000.0,
+   "avg": 4000.0,
+   "max": 4000.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 7,
+   "speed": 4,
+   "agility": 2,
+   "senses": 5,
+   "social": 6
+  },
+  "weapons": [
+   "큰 송곳니"
+  ],
+  "armor": [
+   "두꺼운 가죽"
+  ],
+  "fun_fact": "고르곱스는 물속에 숨어 눈만 쏙 내밀었어요.",
+  "kin": "🦛 지금 하마와 친척이에요",
+  "archetype": "large_mammal",
+  "art": {
+   "palette": [
+    "#7a6a6a",
+    "#c4a8a0"
+   ],
+   "features": [],
+   "params": {
+    "hip": 0.22,
+    "sh": 0.24,
+    "bd": 0.16,
+    "b0": 0.12,
+    "b1": 0.7,
+    "neck": [
+     0.8,
+     0.3
+    ],
+    "nr": 0.1,
+    "hl": 0.24,
+    "dp": 0.95,
+    "tail": [
+     0.06,
+     0.25
+    ],
+    "tr": 0.02,
+    "legR": 0.045,
+    "foot": "hoof",
+    "skull": "rhino",
+    "pattern": "mottle",
+    "mark": "#5a4a52"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.45 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "ancylotherium",
+  "name_ko": "안킬로테리움",
+  "name_en": "Ancylotherium",
+  "habitat": "land",
+  "length_m": {
+   "min": 3.0,
+   "avg": 3.5,
+   "max": 4.0
+  },
+  "mass_kg": {
+   "min": 500.0,
+   "avg": 500.0,
+   "max": 500.0
+  },
+  "size_basis": "shoulder",
+  "stats": {
+   "attack": 5,
+   "defense": 5,
+   "speed": 4,
+   "agility": 3,
+   "senses": 5,
+   "social": 3
+  },
+  "weapons": [
+   "갈고리 발톱"
+  ],
+  "armor": [],
+  "fun_fact": "안킬로테리움은 발톱으로 나뭇가지를 끌어당겼어요.",
+  "kin": "🐴 말·코뿔소와 먼 친척이에요",
+  "archetype": "large_mammal",
+  "art": {
+   "palette": [
+    "#6a5a48",
+    "#b8a488"
+   ],
+   "features": [
+    "claws"
+   ],
+   "params": {
+    "hip": 0.4,
+    "sh": 0.55,
+    "bd": 0.12,
+    "b0": 0.15,
+    "b1": 0.65,
+    "neck": [
+     0.8,
+     0.62
+    ],
+    "nr": 0.06,
+    "hl": 0.18,
+    "dp": 0.7,
+    "tail": [
+     0.08,
+     0.4
+    ],
+    "tr": 0.02,
+    "legR": 0.03,
+    "frontLeg": 1.1,
+    "foot": "hoof",
+    "skull": "deer",
+    "pattern": "stripes",
+    "mark": "#4a3a2a"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 고대동물백과 p.46 / 조사: 몸길이: 약 3~4m, 어깨 높이 약 2m / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "apatosaurus",
+  "name_ko": "아파토사우루스",
+  "name_en": "Apatosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 21.0,
+   "avg": 22.0,
+   "max": 23.0
+  },
+  "mass_kg": {
+   "min": 20000.0,
+   "avg": 25000.0,
+   "max": 30000.0
+  },
+  "stats": {
+   "attack": 6,
+   "defense": 8,
+   "speed": 2,
+   "agility": 1,
+   "senses": 4,
+   "social": 6
+  },
+  "weapons": [
+   "채찍 꼬리",
+   "밟기"
+  ],
+  "armor": [],
+  "fun_fact": "아파토사우루스는 목과 꼬리가 아주 길었어요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "sauropod",
+  "art": {
+   "palette": [
+    "#5f6a5a",
+    "#bab49a"
+   ],
+   "features": [],
+   "params": {
+    "hip": 0.18,
+    "sh": 0.16,
+    "bd": 0.07,
+    "b0": 0.38,
+    "b1": 0.58,
+    "neck": [
+     0.94,
+     0.24
+    ],
+    "nr": 0.034,
+    "hl": 0.05,
+    "tail": [
+     0,
+     0.12
+    ],
+    "legR": 0.02,
+    "snout": "diplo",
+    "pattern": "mottle",
+    "mark": "#3e4a3e",
+    "sag": 0.25
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.1 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "brachiosaurus",
+  "name_ko": "브라키오사우루스",
+  "name_en": "Brachiosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 22.0,
+   "avg": 24.0,
+   "max": 26.0
+  },
+  "mass_kg": {
+   "min": 30000.0,
+   "avg": 40000.0,
+   "max": 50000.0
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 8,
+   "speed": 2,
+   "agility": 1,
+   "senses": 5,
+   "social": 6
+  },
+  "weapons": [
+   "거대한 몸무게",
+   "밟기"
+  ],
+  "armor": [],
+  "fun_fact": "브라키오사우루스는 기린처럼 앞쪽이 높았어요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "sauropod",
+  "art": {
+   "palette": [
+    "#5E6B58",
+    "#BDB79C"
+   ],
+   "features": [],
+   "params": {
+    "snout": "brachio",
+    "nr": 0.026,
+    "pattern": "spots",
+    "mark": "#3e5040"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.2 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "asiatosaurus",
+  "name_ko": "아시아토사우루스",
+  "name_en": "Asiatosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 15.0,
+   "avg": 15.0,
+   "max": 15.0
+  },
+  "mass_kg": {
+   "min": 8000,
+   "avg": 12000,
+   "max": 18000
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 7,
+   "speed": 2,
+   "agility": 1,
+   "senses": 4,
+   "social": 6
+  },
+  "weapons": [
+   "밟기"
+  ],
+  "armor": [],
+  "fun_fact": "아시아토사우루스는 이빨 몇 개만 찾은 수수께끼 공룡이에요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "sauropod",
+  "art": {
+   "palette": [
+    "#6a6a58",
+    "#c0b89a"
+   ],
+   "features": [],
+   "params": {
+    "hip": 0.18,
+    "sh": 0.18,
+    "neck": [
+     0.92,
+     0.32
+    ],
+    "hl": 0.06,
+    "snout": "cama",
+    "pattern": "stripes",
+    "mark": "#4a4a3a"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.3 / 조사: 무게: 화석이 적어 알려지지 않음. 비슷한 몸길이(15m) 용각류로 어림 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "camarasaurus",
+  "name_ko": "카마라사우루스",
+  "name_en": "Camarasaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 15.0,
+   "avg": 16.5,
+   "max": 18.0
+  },
+  "mass_kg": {
+   "min": 15000.0,
+   "avg": 17500.0,
+   "max": 20000.0
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 8,
+   "speed": 2,
+   "agility": 1,
+   "senses": 4,
+   "social": 6
+  },
+  "weapons": [
+   "밟기"
+  ],
+  "armor": [],
+  "fun_fact": "카마라사우루스는 숟가락 모양 이빨로 잎을 씹었어요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "sauropod",
+  "art": {
+   "palette": [
+    "#6a6450",
+    "#c4b894"
+   ],
+   "features": [],
+   "params": {
+    "hip": 0.2,
+    "sh": 0.22,
+    "bd": 0.09,
+    "b0": 0.35,
+    "b1": 0.62,
+    "neck": [
+     0.9,
+     0.38
+    ],
+    "nr": 0.028,
+    "hl": 0.08,
+    "legR": 0.025,
+    "snout": "cama",
+    "pattern": "saddle",
+    "mark": "#4a4232"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.4 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "diplodocus",
+  "name_ko": "디플로도쿠스",
+  "name_en": "Diplodocus",
+  "habitat": "land",
+  "length_m": {
+   "min": 25.0,
+   "avg": 27.5,
+   "max": 30.0
+  },
+  "mass_kg": {
+   "min": 12000.0,
+   "avg": 13500.0,
+   "max": 15000.0
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 6,
+   "speed": 3,
+   "agility": 2,
+   "senses": 4,
+   "social": 6
+  },
+  "weapons": [
+   "채찍 꼬리"
+  ],
+  "armor": [],
+  "fun_fact": "디플로도쿠스는 채찍 같은 꼬리로 탁 소리를 냈을지도 몰라요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "sauropod",
+  "art": {
+   "palette": [
+    "#5a6a60",
+    "#b8b8a0"
+   ],
+   "features": [],
+   "params": {
+    "hip": 0.16,
+    "sh": 0.14,
+    "bd": 0.055,
+    "b0": 0.4,
+    "b1": 0.58,
+    "neck": [
+     0.95,
+     0.2
+    ],
+    "nr": 0.018,
+    "hl": 0.05,
+    "tail": [
+     0,
+     0.1
+    ],
+    "tr": 0.03,
+    "legR": 0.016,
+    "snout": "diplo",
+    "pattern": "bands",
+    "mark": "#344038"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.5 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "stegosaurus",
+  "name_ko": "스테고사우루스",
+  "name_en": "Stegosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 7.0,
+   "avg": 8.0,
+   "max": 9.0
+  },
+  "mass_kg": {
+   "min": 5000.0,
+   "avg": 6000.0,
+   "max": 7000.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 7,
+   "speed": 3,
+   "agility": 2,
+   "senses": 3,
+   "social": 4
+  },
+  "weapons": [
+   "꼬리 가시"
+  ],
+  "armor": [
+   "등의 골판"
+  ],
+  "fun_fact": "스테고사우루스는 몸은 버스만 한데 뇌는 호두만 했대요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "armored",
+  "art": {
+   "palette": [
+    "#6a6a44",
+    "#c8be90",
+    "#b05a34"
+   ],
+   "features": [
+    "plates",
+    "thagomizer"
+   ],
+   "params": {
+    "hip": 0.25,
+    "sh": 0.14,
+    "bd": 0.12,
+    "b0": 0.3,
+    "b1": 0.72,
+    "neck": [
+     0.9,
+     0.12
+    ],
+    "hl": 0.09,
+    "tail": [
+     0,
+     0.2
+    ],
+    "legR": 0.03,
+    "frontLeg": 0.8,
+    "pattern": "mottle",
+    "mark": "#3e4a30",
+    "sag": 0.25
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.6 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "hylaeosaurus",
+  "name_ko": "힐라에오사우루스",
+  "name_en": "Hylaeosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 5.0,
+   "avg": 5.0,
+   "max": 5.0
+  },
+  "mass_kg": {
+   "min": 1000.0,
+   "avg": 1500.0,
+   "max": 2000.0
+  },
+  "stats": {
+   "attack": 4,
+   "defense": 9,
+   "speed": 2,
+   "agility": 1,
+   "senses": 3,
+   "social": 3
+  },
+  "weapons": [
+   "어깨 가시"
+  ],
+  "armor": [
+   "가시 갑옷"
+  ],
+  "fun_fact": "힐라에오사우루스는 아주 먼저 이름이 붙은 공룡이에요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "armored",
+  "art": {
+   "palette": [
+    "#6a6040",
+    "#c0b088"
+   ],
+   "features": [
+    "spikes",
+    "bumps"
+   ],
+   "params": {
+    "pattern": "mottle",
+    "mark": "#4a4030"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.7 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "ankylosaurus",
+  "name_ko": "안킬로사우루스",
+  "name_en": "Ankylosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 6.0,
+   "avg": 7.0,
+   "max": 8.0
+  },
+  "mass_kg": {
+   "min": 5000.0,
+   "avg": 6500.0,
+   "max": 8000.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 10,
+   "speed": 2,
+   "agility": 1,
+   "senses": 4,
+   "social": 2
+  },
+  "weapons": [
+   "꼬리 곤봉"
+  ],
+  "armor": [
+   "뼈 갑옷"
+  ],
+  "fun_fact": "안킬로사우루스는 탱크처럼 생겼어요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "armored",
+  "art": {
+   "palette": [
+    "#6a5a40",
+    "#bca880"
+   ],
+   "features": [
+    "bumps",
+    "club"
+   ],
+   "params": {
+    "bd": 0.11,
+    "sag": 0.1
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.8 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "edmontonia",
+  "name_ko": "에드몬토니아",
+  "name_en": "Edmontonia",
+  "habitat": "land",
+  "length_m": {
+   "min": 6.0,
+   "avg": 6.0,
+   "max": 6.0
+  },
+  "mass_kg": {
+   "min": 3000.0,
+   "avg": 3500.0,
+   "max": 4000.0
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 10,
+   "speed": 2,
+   "agility": 1,
+   "senses": 4,
+   "social": 3
+  },
+  "weapons": [
+   "어깨 가시"
+  ],
+  "armor": [
+   "뼈 갑옷"
+  ],
+  "fun_fact": "에드몬토니아는 어깨에 커다란 가시가 있었어요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "armored",
+  "art": {
+   "palette": [
+    "#5a5a40",
+    "#b4ac88"
+   ],
+   "features": [
+    "spikes",
+    "bumps"
+   ],
+   "params": {
+    "pattern": "saddle",
+    "mark": "#3e3a2c"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.9 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "saltasaurus",
+  "name_ko": "살타사우루스",
+  "name_en": "Saltasaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 12.0,
+   "avg": 12.0,
+   "max": 12.0
+  },
+  "mass_kg": {
+   "min": 7000.0,
+   "avg": 7500.0,
+   "max": 8000.0
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 8,
+   "speed": 2,
+   "agility": 1,
+   "senses": 4,
+   "social": 7
+  },
+  "weapons": [
+   "밟기"
+  ],
+  "armor": [
+   "등의 뼈 판"
+  ],
+  "fun_fact": "살타사우루스는 목 긴 공룡인데 갑옷을 입었어요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "sauropod",
+  "art": {
+   "palette": [
+    "#6a5a48",
+    "#c0a888"
+   ],
+   "features": [
+    "bumps"
+   ],
+   "params": {
+    "hip": 0.2,
+    "sh": 0.19,
+    "bd": 0.09,
+    "b0": 0.35,
+    "b1": 0.63,
+    "neck": [
+     0.92,
+     0.32
+    ],
+    "nr": 0.03,
+    "hl": 0.07,
+    "legR": 0.025,
+    "snout": "cama",
+    "sag": 0.25
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.10 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "scelidosaurus",
+  "name_ko": "스켈리도사우루스",
+  "name_en": "Scelidosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 4.0,
+   "avg": 4.0,
+   "max": 4.0
+  },
+  "mass_kg": {
+   "min": 200.0,
+   "avg": 300.0,
+   "max": 400.0
+  },
+  "stats": {
+   "attack": 3,
+   "defense": 8,
+   "speed": 3,
+   "agility": 2,
+   "senses": 3,
+   "social": 2
+  },
+  "weapons": [],
+  "armor": [
+   "뼈 혹"
+  ],
+  "fun_fact": "스켈리도사우루스는 갑옷 공룡의 할아버지 같은 공룡이에요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "armored",
+  "art": {
+   "palette": [
+    "#5a6040",
+    "#b8b48a"
+   ],
+   "features": [
+    "bumps"
+   ],
+   "params": {
+    "hip": 0.17,
+    "sh": 0.13,
+    "bd": 0.08,
+    "b0": 0.35,
+    "b1": 0.7,
+    "tail": [
+     0,
+     0.12
+    ],
+    "pattern": "spots",
+    "mark": "#3a3a28"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.11 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "therizinosaurus",
+  "name_ko": "테리지노사우루스",
+  "name_en": "Therizinosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 9.0,
+   "avg": 9.5,
+   "max": 10.0
+  },
+  "mass_kg": {
+   "min": 3000.0,
+   "avg": 4000.0,
+   "max": 5000.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 5,
+   "speed": 3,
+   "agility": 3,
+   "senses": 5,
+   "social": 3
+  },
+  "weapons": [
+   "낫 같은 긴 발톱"
+  ],
+  "armor": [],
+  "fun_fact": "테리지노사우루스는 발톱이 길지만 나뭇잎을 먹었어요.",
+  "kin": "🐔 닭·참새 같은 새들이 이 공룡의 가까운 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#7a6a50",
+    "#cdbd96",
+    "#5a4a36"
+   ],
+   "features": [
+    "claws",
+    "feathers"
+   ],
+   "params": {
+    "h": 0.38,
+    "bd": 0.1,
+    "hl": 0.06,
+    "dp": 0.7,
+    "arm": 0.2,
+    "neck": 2.4,
+    "head": "small",
+    "hand": "scythe",
+    "tl": 0.2,
+    "hipX": 0.42,
+    "belly": 0.55,
+    "meta": 0.7,
+    "leg": 1.1
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.12 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "mamenchisaurus",
+  "name_ko": "마멘키사우루스",
+  "name_en": "Mamenchisaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 22.0,
+   "avg": 28.5,
+   "max": 35.0
+  },
+  "mass_kg": {
+   "min": 20000.0,
+   "avg": 40000.0,
+   "max": 60000.0
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 8,
+   "speed": 2,
+   "agility": 1,
+   "senses": 4,
+   "social": 6
+  },
+  "weapons": [
+   "아주 긴 목",
+   "밟기"
+  ],
+  "armor": [],
+  "fun_fact": "마멘키사우루스는 몸의 절반이 목이었어요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "sauropod",
+  "art": {
+   "palette": [
+    "#5e6a58",
+    "#bcb69a"
+   ],
+   "features": [],
+   "params": {
+    "hip": 0.12,
+    "sh": 0.12,
+    "bd": 0.05,
+    "b0": 0.3,
+    "b1": 0.45,
+    "neck": [
+     0.96,
+     0.32
+    ],
+    "nr": 0.015,
+    "hl": 0.04,
+    "tail": [
+     0,
+     0.08
+    ],
+    "tr": 0.03,
+    "legR": 0.013,
+    "snout": "base",
+    "pattern": "stripes",
+    "mark": "#3a4234"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.13 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "shonisaurus",
+  "name_ko": "쇼니사우루스",
+  "name_en": "Shonisaurus",
+  "habitat": "sea",
+  "length_m": {
+   "min": 15.0,
+   "avg": 15.0,
+   "max": 15.0
+  },
+  "mass_kg": {
+   "min": 30000.0,
+   "avg": 30000.0,
+   "max": 30000.0
+  },
+  "stats": {
+   "attack": 6,
+   "defense": 6,
+   "speed": 6,
+   "agility": 4,
+   "senses": 6,
+   "social": 4
+  },
+  "weapons": [
+   "긴 주둥이"
+  ],
+  "armor": [],
+  "fun_fact": "쇼니사우루스는 돌고래처럼 생긴 바다 파충류예요.",
+  "kin": "🐬 돌고래처럼 생겼지만 친척은 아니에요. 후손 없이 사라졌어요",
+  "archetype": "marine_reptile",
+  "art": {
+   "palette": [
+    "#4a5a6a",
+    "#bcc4c4"
+   ],
+   "features": [
+    "dorsal",
+    "tail_fluke"
+   ],
+   "params": {
+    "bd": 0.08,
+    "hl": 0.17,
+    "dp": 0.42,
+    "flukeUp": 1,
+    "pattern": "saddle",
+    "mark": "#2e3640",
+    "skull": "ichthy",
+    "deep": 1.3,
+    "flukeDown": 1.1,
+    "hind": 0.6
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.14 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "shastasaurus",
+  "name_ko": "샤스타사우루스",
+  "name_en": "Shastasaurus",
+  "habitat": "sea",
+  "length_m": {
+   "min": 20.0,
+   "avg": 20.0,
+   "max": 20.0
+  },
+  "mass_kg": {
+   "min": 30000,
+   "avg": 50000,
+   "max": 80000
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 7,
+   "speed": 6,
+   "agility": 4,
+   "senses": 6,
+   "social": 3
+  },
+  "weapons": [
+   "큰 몸집"
+  ],
+  "armor": [],
+  "fun_fact": "샤스타사우루스는 먹이를 쭉 빨아들여 먹었을 거예요.",
+  "kin": "🐬 돌고래처럼 생겼지만 친척은 아니에요. 후손 없이 사라졌어요",
+  "archetype": "marine_reptile",
+  "art": {
+   "palette": [
+    "#4f5f6a",
+    "#c0c6c4"
+   ],
+   "features": [
+    "tail_fluke",
+    "toothless"
+   ],
+   "params": {
+    "bd": 0.06,
+    "hl": 0.08,
+    "dp": 0.6,
+    "flukeUp": 0.8,
+    "pattern": "stripes",
+    "mark": "#344048",
+    "skull": "ichthy",
+    "deep": 1.1,
+    "flukeDown": 1,
+    "hind": 0.6
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.15 / 조사: 무게: 몸길이 21m 표본에 약 80톤 추정이 있으나 불확실. 쇼니사우루스(15m, 30톤) 비율로 어림 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "plateosaurus",
+  "name_ko": "플라테오사우루스",
+  "name_en": "Plateosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 5.0,
+   "avg": 7.5,
+   "max": 10.0
+  },
+  "mass_kg": {
+   "min": 600.0,
+   "avg": 2300.0,
+   "max": 4000.0
+  },
+  "stats": {
+   "attack": 4,
+   "defense": 5,
+   "speed": 4,
+   "agility": 3,
+   "senses": 4,
+   "social": 6
+  },
+  "weapons": [
+   "엄지 발톱"
+  ],
+  "armor": [],
+  "fun_fact": "플라테오사우루스는 뒷다리로 서서 걸었어요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#7a6a48",
+    "#cbbd94"
+   ],
+   "features": [],
+   "params": {
+    "h": 0.29,
+    "bd": 0.072,
+    "hl": 0.06,
+    "dp": 0.7,
+    "arm": 0.11,
+    "neck": 2,
+    "head": "small",
+    "hand": "grasp",
+    "tl": 0.24,
+    "belly": 0.35,
+    "pattern": "mottle",
+    "mark": "#4a3c26"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.16 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "velociraptor",
+  "name_ko": "벨로키랍토르",
+  "name_en": "Velociraptor",
+  "habitat": "land",
+  "length_m": {
+   "min": 1.8,
+   "avg": 1.8,
+   "max": 1.8
+  },
+  "mass_kg": {
+   "min": 15.0,
+   "avg": 17.5,
+   "max": 20.0
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 2,
+   "speed": 8,
+   "agility": 9,
+   "senses": 7,
+   "social": 5
+  },
+  "weapons": [
+   "낫 모양 발톱",
+   "날카로운 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "벨로키랍토르는 칠면조만 하고 깃털이 있었어요.",
+  "kin": "🐦 새와 아주 가까운 친척이에요. 깃털도 있었대요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#7A5A3A",
+    "#D8C7A0",
+    "#3E2E20"
+   ],
+   "features": [
+    "sickle_claw",
+    "feathers"
+   ],
+   "params": {
+    "h": 0.26,
+    "bd": 0.05,
+    "hl": 0.12,
+    "dp": 0.48,
+    "arm": 0.16,
+    "hand": "wing",
+    "skull": "raptor",
+    "tl": 0.2,
+    "meta": 1.1,
+    "tailUp": 0.3,
+    "pattern": "bands",
+    "mark": "#3a2a1a"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.17 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "carnotaurus",
+  "name_ko": "카르노타우루스",
+  "name_en": "Carnotaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 8.0,
+   "avg": 8.5,
+   "max": 9.0
+  },
+  "mass_kg": {
+   "min": 1300.0,
+   "avg": 1650.0,
+   "max": 2000.0
+  },
+  "stats": {
+   "attack": 8,
+   "defense": 5,
+   "speed": 8,
+   "agility": 5,
+   "senses": 7,
+   "social": 2
+  },
+  "weapons": [
+   "머리 뿔",
+   "날카로운 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "카르노타우루스는 팔이 아주 아주 짧았어요.",
+  "kin": "🐔 닭·참새 같은 새들이 이 공룡의 가까운 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#7a4a3a",
+    "#d0a888"
+   ],
+   "features": [
+    "horns"
+   ],
+   "params": {
+    "hl": 0.085,
+    "dp": 0.9,
+    "arm": 0.02,
+    "h": 0.3,
+    "bd": 0.072,
+    "hand": "nub",
+    "skull": "abel",
+    "tl": 0.22,
+    "meta": 1.25,
+    "pattern": "spots",
+    "mark": "#3e2a20",
+    "markOp": 0.6
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.18 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "troodon",
+  "name_ko": "트로오돈",
+  "name_en": "Troodon",
+  "habitat": "land",
+  "length_m": {
+   "min": 2.0,
+   "avg": 2.2,
+   "max": 2.4
+  },
+  "mass_kg": {
+   "min": 40.0,
+   "avg": 45.0,
+   "max": 50.0
+  },
+  "stats": {
+   "attack": 4,
+   "defense": 2,
+   "speed": 7,
+   "agility": 8,
+   "senses": 9,
+   "social": 5
+  },
+  "weapons": [
+   "낫 발톱"
+  ],
+  "armor": [],
+  "fun_fact": "트로오돈은 똑똑하고 눈이 큰 공룡이에요.",
+  "kin": "🐦 새와 아주 가까운 친척이에요. 깃털도 있었대요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#6a5a40",
+    "#d4c49c",
+    "#4a3e2c"
+   ],
+   "features": [
+    "feathers",
+    "bigeye",
+    "sickle_claw"
+   ],
+   "params": {
+    "h": 0.29,
+    "bd": 0.05,
+    "hl": 0.1,
+    "dp": 0.55,
+    "arm": 0.14,
+    "hand": "wing",
+    "skull": "raptor",
+    "tl": 0.2,
+    "meta": 1.3,
+    "pattern": "spots",
+    "mark": "#3e3020"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.19 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "ceratosaurus",
+  "name_ko": "케라토사우루스",
+  "name_en": "Ceratosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 6.0,
+   "avg": 6.5,
+   "max": 7.0
+  },
+  "mass_kg": {
+   "min": 500.0,
+   "avg": 750.0,
+   "max": 1000.0
+  },
+  "stats": {
+   "attack": 8,
+   "defense": 5,
+   "speed": 6,
+   "agility": 4,
+   "senses": 6,
+   "social": 2
+  },
+  "weapons": [
+   "코뿔",
+   "긴 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "케라토사우루스는 코 위에 뿔이 있었어요.",
+  "kin": "🐔 닭·참새 같은 새들이 이 공룡의 가까운 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#6a5a3a",
+    "#c8b48a",
+    "#a04a30"
+   ],
+   "features": [
+    "nosehorn"
+   ],
+   "params": {
+    "bd": 0.075,
+    "hl": 0.12,
+    "dp": 0.72,
+    "arm": 0.06,
+    "h": 0.28,
+    "hand": "claw",
+    "skull": "allo",
+    "tl": 0.22,
+    "tailUp": 0.2,
+    "pattern": "bands",
+    "mark": "#3a3020"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.20 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "compsognathus",
+  "name_ko": "콤프소그나투스",
+  "name_en": "Compsognathus",
+  "habitat": "land",
+  "length_m": {
+   "min": 1.0,
+   "avg": 1.0,
+   "max": 1.0
+  },
+  "mass_kg": {
+   "min": 2.0,
+   "avg": 2.5,
+   "max": 3.0
+  },
+  "stats": {
+   "attack": 2,
+   "defense": 1,
+   "speed": 7,
+   "agility": 9,
+   "senses": 7,
+   "social": 3
+  },
+  "weapons": [
+   "작은 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "콤프소그나투스는 닭만 한 작은 공룡이에요.",
+  "kin": "🐔 닭·참새 같은 새들이 이 공룡의 가까운 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#7a6a3a",
+    "#d8c890"
+   ],
+   "features": [],
+   "params": {
+    "h": 0.25,
+    "bd": 0.045,
+    "hl": 0.095,
+    "dp": 0.5,
+    "arm": 0.08,
+    "hand": "claw",
+    "skull": "raptor",
+    "tl": 0.18,
+    "neck": 1.3,
+    "meta": 1.3,
+    "pattern": "stripes",
+    "mark": "#4a3c1c"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.21 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "protoceratops",
+  "name_ko": "프로토케라톱스",
+  "name_en": "Protoceratops",
+  "habitat": "land",
+  "length_m": {
+   "min": 1.8,
+   "avg": 1.9,
+   "max": 2.0
+  },
+  "mass_kg": {
+   "min": 100.0,
+   "avg": 140.0,
+   "max": 180.0
+  },
+  "stats": {
+   "attack": 4,
+   "defense": 6,
+   "speed": 3,
+   "agility": 3,
+   "senses": 4,
+   "social": 7
+  },
+  "weapons": [
+   "단단한 부리"
+  ],
+  "armor": [
+   "목 방패"
+  ],
+  "fun_fact": "프로토케라톱스는 벨로키랍토르와 싸우던 모습 그대로 화석이 됐어요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "ceratopsian",
+  "art": {
+   "palette": [
+    "#8a7a58",
+    "#d8c8a0",
+    "#a87a50"
+   ],
+   "features": [],
+   "params": {
+    "brow": 0,
+    "nose": 0.2,
+    "frill": 0.9,
+    "hl": 0.32,
+    "pattern": "mottle",
+    "mark": "#5a4630",
+    "edge": false,
+    "sag": 0.2
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.22 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "pachyrhinosaurus",
+  "name_ko": "파키리노사우루스",
+  "name_en": "Pachyrhinosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 6.0,
+   "avg": 7.0,
+   "max": 8.0
+  },
+  "mass_kg": {
+   "min": 3000.0,
+   "avg": 3500.0,
+   "max": 4000.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 8,
+   "speed": 4,
+   "agility": 3,
+   "senses": 5,
+   "social": 7
+  },
+  "weapons": [
+   "코 위 뼈 혹"
+  ],
+  "armor": [
+   "목 방패"
+  ],
+  "fun_fact": "파키리노사우루스는 코에 울퉁불퉁한 혹이 있었어요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "ceratopsian",
+  "art": {
+   "palette": [
+    "#6a6048",
+    "#c4b890",
+    "#8a5a3a"
+   ],
+   "features": [],
+   "params": {
+    "brow": 0,
+    "nose": 0,
+    "boss": true,
+    "frillSpikes": true,
+    "pattern": "saddle",
+    "mark": "#4a3a28",
+    "frill": 1.1
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.23 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "leptoceratops",
+  "name_ko": "렙토케라톱스",
+  "name_en": "Leptoceratops",
+  "habitat": "land",
+  "length_m": {
+   "min": 2.0,
+   "avg": 2.0,
+   "max": 2.0
+  },
+  "mass_kg": {
+   "min": 70.0,
+   "avg": 85.0,
+   "max": 100.0
+  },
+  "stats": {
+   "attack": 3,
+   "defense": 5,
+   "speed": 4,
+   "agility": 4,
+   "senses": 4,
+   "social": 4
+  },
+  "weapons": [
+   "부리"
+  ],
+  "armor": [],
+  "fun_fact": "렙토케라톱스는 뿔이 거의 없는 작은 뿔 공룡이에요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "ceratopsian",
+  "art": {
+   "palette": [
+    "#7a7050",
+    "#ccc098",
+    "#9a8058"
+   ],
+   "features": [],
+   "params": {
+    "brow": 0,
+    "nose": 0,
+    "frill": 0.55,
+    "hip": 0.22,
+    "sh": 0.17,
+    "pattern": "stripes",
+    "mark": "#5a4a30",
+    "edge": false
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.24 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "triceratops",
+  "name_ko": "트리케라톱스",
+  "name_en": "Triceratops",
+  "habitat": "land",
+  "length_m": {
+   "min": 8.0,
+   "avg": 8.5,
+   "max": 9.0
+  },
+  "mass_kg": {
+   "min": 6000.0,
+   "avg": 9000.0,
+   "max": 12000.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 9,
+   "speed": 4,
+   "agility": 3,
+   "senses": 5,
+   "social": 5
+  },
+  "weapons": [
+   "뿔 세 개",
+   "단단한 부리"
+  ],
+  "armor": [
+   "뼈로 된 목 방패"
+  ],
+  "fun_fact": "트리케라톱스는 이빨이 닳으면 새 이빨이 또 났어요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "ceratopsian",
+  "art": {
+   "palette": [
+    "#6a5a3c",
+    "#c8b890",
+    "#8a4a2a"
+   ],
+   "features": [],
+   "params": {
+    "brow": 1.25,
+    "nose": 0.7,
+    "frill": 1.05,
+    "pattern": "mottle",
+    "mark": "#4a3a26"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.25 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "styracosaurus",
+  "name_ko": "스티라코사우루스",
+  "name_en": "Styracosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 5.0,
+   "avg": 5.25,
+   "max": 5.5
+  },
+  "mass_kg": {
+   "min": 2000.0,
+   "avg": 2500.0,
+   "max": 3000.0
+  },
+  "stats": {
+   "attack": 8,
+   "defense": 8,
+   "speed": 4,
+   "agility": 3,
+   "senses": 5,
+   "social": 7
+  },
+  "weapons": [
+   "긴 코뿔",
+   "목 방패 가시"
+  ],
+  "armor": [
+   "목 방패"
+  ],
+  "fun_fact": "스티라코사우루스는 왕관 같은 가시가 있었어요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "ceratopsian",
+  "art": {
+   "palette": [
+    "#6a5a44",
+    "#c8b48c",
+    "#b0603a"
+   ],
+   "features": [],
+   "params": {
+    "brow": 0.2,
+    "nose": 1.6,
+    "frillSpikes": true,
+    "pattern": "bands",
+    "mark": "#4a3a28",
+    "frill": 1.1
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.26 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "chasmosaurus",
+  "name_ko": "카스모사우루스",
+  "name_en": "Chasmosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 5.0,
+   "avg": 5.5,
+   "max": 6.0
+  },
+  "mass_kg": {
+   "min": 1500.0,
+   "avg": 1750.0,
+   "max": 2000.0
+  },
+  "stats": {
+   "attack": 6,
+   "defense": 8,
+   "speed": 4,
+   "agility": 3,
+   "senses": 5,
+   "social": 6
+  },
+  "weapons": [
+   "이마 뿔"
+  ],
+  "armor": [
+   "커다란 목 방패"
+  ],
+  "fun_fact": "카스모사우루스의 머리 장식에는 큰 구멍이 있었어요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "ceratopsian",
+  "art": {
+   "palette": [
+    "#6a6a4a",
+    "#c4c094",
+    "#c0503a"
+   ],
+   "features": [],
+   "params": {
+    "brow": 0.45,
+    "nose": 0.4,
+    "frill": 1.45,
+    "fen": true,
+    "pattern": "spots",
+    "mark": "#3e4a2a"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.27 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "pliosaurus",
+  "name_ko": "플리오사우루스",
+  "name_en": "Pliosaurus",
+  "habitat": "sea",
+  "length_m": {
+   "min": 10.0,
+   "avg": 11.0,
+   "max": 12.0
+  },
+  "mass_kg": {
+   "min": 10000.0,
+   "avg": 15000.0,
+   "max": 20000.0
+  },
+  "stats": {
+   "attack": 10,
+   "defense": 6,
+   "speed": 6,
+   "agility": 4,
+   "senses": 7,
+   "social": 1
+  },
+  "weapons": [
+   "엄청나게 센 턱"
+  ],
+  "armor": [],
+  "fun_fact": "플리오사우루스는 머리만 어른 키보다 컸어요.",
+  "kin": "🌊 후손 없이 사라진 바다 파충류예요",
+  "archetype": "marine_reptile",
+  "art": {
+   "palette": [
+    "#3f5560",
+    "#b8bcb0"
+   ],
+   "features": [],
+   "params": {
+    "bd": 0.085,
+    "hl": 0.22,
+    "dp": 0.55,
+    "fl": 1.3,
+    "pattern": "mottle",
+    "mark": "#2a3238",
+    "skull": "plio",
+    "hind": 1
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.28 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "mosasaurus",
+  "name_ko": "모사사우루스",
+  "name_en": "Mosasaurus",
+  "habitat": "sea",
+  "length_m": {
+   "min": 13.0,
+   "avg": 15.0,
+   "max": 17.0
+  },
+  "mass_kg": {
+   "min": 10000.0,
+   "avg": 12500.0,
+   "max": 15000.0
+  },
+  "stats": {
+   "attack": 9,
+   "defense": 5,
+   "speed": 7,
+   "agility": 5,
+   "senses": 7,
+   "social": 2
+  },
+  "weapons": [
+   "강한 턱",
+   "원뿔형 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "모사사우루스는 바다에 사는 커다란 도마뱀이에요.",
+  "kin": "🦎 왕도마뱀·뱀과 친척이에요",
+  "archetype": "marine_reptile",
+  "art": {
+   "palette": [
+    "#4A6853",
+    "#B8B596"
+   ],
+   "features": [
+    "tail_fluke"
+   ],
+   "params": {
+    "pattern": "bands",
+    "mark": "#2e3828",
+    "markOp": 0.4,
+    "skull": "mosa",
+    "flukeUp": 0.8,
+    "flukeDown": 1,
+    "hind": 0.85,
+    "hl": 0.15,
+    "dp": 0.55
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.29 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "liopleurodon",
+  "name_ko": "리오플레우로돈",
+  "name_en": "Liopleurodon",
+  "habitat": "sea",
+  "length_m": {
+   "min": 5.0,
+   "avg": 6.0,
+   "max": 7.0
+  },
+  "mass_kg": {
+   "min": 1000.0,
+   "avg": 1500.0,
+   "max": 2000.0
+  },
+  "stats": {
+   "attack": 9,
+   "defense": 5,
+   "speed": 6,
+   "agility": 5,
+   "senses": 8,
+   "social": 1
+  },
+  "weapons": [
+   "큰 턱",
+   "날카로운 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "리오플레우로돈은 코로 물속 냄새를 맡았을 거예요.",
+  "kin": "🌊 후손 없이 사라진 바다 파충류예요",
+  "archetype": "marine_reptile",
+  "art": {
+   "palette": [
+    "#45585e",
+    "#bcc0b4"
+   ],
+   "features": [],
+   "params": {
+    "bd": 0.08,
+    "hl": 0.2,
+    "dp": 0.55,
+    "fl": 1.3,
+    "pattern": "spots",
+    "mark": "#2a3038",
+    "skull": "plio",
+    "hind": 1
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.30 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "elasmosaurus",
+  "name_ko": "엘라스모사우루스",
+  "name_en": "Elasmosaurus",
+  "habitat": "sea",
+  "length_m": {
+   "min": 10.0,
+   "avg": 12.0,
+   "max": 14.0
+  },
+  "mass_kg": {
+   "min": 2000.0,
+   "avg": 2500.0,
+   "max": 3000.0
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 3,
+   "speed": 5,
+   "agility": 4,
+   "senses": 6,
+   "social": 3
+  },
+  "weapons": [
+   "긴 목",
+   "바늘 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "엘라스모사우루스는 목이 아주 아주 길었어요.",
+  "kin": "🌊 후손 없이 사라진 바다 파충류예요",
+  "archetype": "marine_reptile",
+  "art": {
+   "palette": [
+    "#4a6058",
+    "#bcbca0"
+   ],
+   "features": [],
+   "params": {
+    "bd": 0.06,
+    "hl": 0.05,
+    "dp": 0.7,
+    "neckL": 0.5,
+    "fl": 1.3,
+    "pattern": "stripes",
+    "mark": "#30403a",
+    "skull": "plesio",
+    "hind": 1
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.31 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "baptornis",
+  "name_ko": "바프토르니스",
+  "name_en": "Baptornis",
+  "habitat": "sea",
+  "length_m": {
+   "min": 1.0,
+   "avg": 1.0,
+   "max": 1.0
+  },
+  "mass_kg": {
+   "min": 6.0,
+   "avg": 6.5,
+   "max": 7.0
+  },
+  "stats": {
+   "attack": 2,
+   "defense": 1,
+   "speed": 6,
+   "agility": 6,
+   "senses": 6,
+   "social": 4
+  },
+  "weapons": [
+   "이빨 달린 부리"
+  ],
+  "armor": [],
+  "fun_fact": "바프토르니스는 날지 못하고 헤엄쳐서 물고기를 잡았어요.",
+  "kin": "🐦 후손은 없지만, 지금 새들과 먼 친척이에요",
+  "archetype": "bird",
+  "art": {
+   "palette": [
+    "#3a4a54",
+    "#d8dcd4",
+    "#2a3640"
+   ],
+   "features": [
+    "feathers"
+   ],
+   "params": {
+    "head": "beakTooth",
+    "hl": 0.16,
+    "dp": 0.5,
+    "h": 0.25,
+    "bd": 0.1,
+    "neck": 1.6,
+    "hipX": 0.3,
+    "pattern": "spots",
+    "mark": "#d8d8d0",
+    "markOp": 0.4
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.32 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "archaeopteryx",
+  "name_ko": "시조새",
+  "name_en": "Archaeopteryx",
+  "habitat": "air",
+  "length_m": {
+   "min": 0.5,
+   "avg": 0.5,
+   "max": 0.5
+  },
+  "mass_kg": {
+   "min": 0.5,
+   "avg": 0.75,
+   "max": 1.0
+  },
+  "stats": {
+   "attack": 1,
+   "defense": 1,
+   "speed": 5,
+   "agility": 8,
+   "senses": 6,
+   "social": 2
+  },
+  "weapons": [
+   "날개 발톱",
+   "작은 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "시조새는 깃털도 있고 이빨도 있었어요.",
+  "kin": "🐦 지금 새들의 아주 먼 친척이에요",
+  "archetype": "bird",
+  "art": {
+   "palette": [
+    "#3a3a3a",
+    "#c8c0b0",
+    "#4a5058"
+   ],
+   "features": [
+    "feathers"
+   ],
+   "params": {
+    "head": "beakTooth",
+    "hl": 0.14,
+    "dp": 0.6,
+    "h": 0.3,
+    "bd": 0.06,
+    "neck": 1.4,
+    "wing": 0.35,
+    "hipX": 0.45,
+    "leg": 1,
+    "pattern": "bands",
+    "mark": "#1e1e1e",
+    "markOp": 0.45
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.33 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "quetzalcoatlus",
+  "name_ko": "케찰코아틀루스",
+  "name_en": "Quetzalcoatlus",
+  "habitat": "air",
+  "length_m": {
+   "min": 5.0,
+   "avg": 6.0,
+   "max": 7.0
+  },
+  "mass_kg": {
+   "min": 200.0,
+   "avg": 225.0,
+   "max": 250.0
+  },
+  "size_basis": "wingspan",
+  "stats": {
+   "attack": 7,
+   "defense": 3,
+   "speed": 6,
+   "agility": 5,
+   "senses": 8,
+   "social": 2
+  },
+  "weapons": [
+   "긴 부리"
+  ],
+  "armor": [],
+  "fun_fact": "케찰코아틀루스는 땅에 서면 기린만큼 컸어요.",
+  "kin": "🐦 후손은 없지만, 새·악어와 먼 친척이에요",
+  "archetype": "pterosaur",
+  "art": {
+   "palette": [
+    "#5a5a5a",
+    "#e0dcd0",
+    "#c04a3a"
+   ],
+   "features": [],
+   "params": {
+    "h": 0.32,
+    "bd": 0.07,
+    "neck": [
+     0.58,
+     0.85
+    ],
+    "hl": 0.44,
+    "dp": 0.3,
+    "crest": 0.35,
+    "wing": 0.75,
+    "pattern": "spots",
+    "mark": "#5a4636",
+    "crestType": "back"
+   }
+  },
+  "confidence": "low",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.34 / 조사: 몸길이: 약 6m, 서 있는 키 약 5.5m. 무게 추정은 70~250kg으로 연구마다 다름 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "researched"
+ },
+ {
+  "id": "dilophosaurus",
+  "name_ko": "딜로포사우루스",
+  "name_en": "Dilophosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 6.0,
+   "avg": 6.5,
+   "max": 7.0
+  },
+  "mass_kg": {
+   "min": 400.0,
+   "avg": 400.0,
+   "max": 400.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 4,
+   "speed": 7,
+   "agility": 5,
+   "senses": 6,
+   "social": 3
+  },
+  "weapons": [
+   "날카로운 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "딜로포사우루스는 머리 위에 볏이 두 개 있었어요.",
+  "kin": "🐔 닭·참새 같은 새들이 이 공룡의 가까운 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#5a6a3a",
+    "#c8c890",
+    "#c0503a"
+   ],
+   "features": [
+    "crest2"
+   ],
+   "params": {
+    "bd": 0.062,
+    "hl": 0.11,
+    "dp": 0.55,
+    "arm": 0.09,
+    "h": 0.3,
+    "hand": "claw",
+    "skull": "slim",
+    "tl": 0.22,
+    "meta": 1.1,
+    "pattern": "stripes",
+    "mark": "#2e3a1e"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.35 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "herrerasaurus",
+  "name_ko": "헤레라사우루스",
+  "name_en": "Herrerasaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 3.0,
+   "avg": 4.5,
+   "max": 6.0
+  },
+  "mass_kg": {
+   "min": 200.0,
+   "avg": 275.0,
+   "max": 350.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 3,
+   "speed": 7,
+   "agility": 6,
+   "senses": 6,
+   "social": 2
+  },
+  "weapons": [
+   "날카로운 이빨",
+   "발톱"
+  ],
+  "armor": [],
+  "fun_fact": "헤레라사우루스는 아주 먼저 나타난 공룡이에요.",
+  "kin": "🐦 아주 오래된 공룡이라, 모든 공룡과 새의 먼 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#7a5a3a",
+    "#d4b88c"
+   ],
+   "features": [],
+   "params": {
+    "bd": 0.06,
+    "hl": 0.11,
+    "dp": 0.55,
+    "arm": 0.1,
+    "h": 0.29,
+    "hand": "claw",
+    "skull": "allo",
+    "tl": 0.2,
+    "meta": 1.1,
+    "pattern": "stripes",
+    "mark": "#4a3020"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.36 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "coelophysis",
+  "name_ko": "코엘로피시스",
+  "name_en": "Coelophysis",
+  "habitat": "land",
+  "length_m": {
+   "min": 3.0,
+   "avg": 3.0,
+   "max": 3.0
+  },
+  "mass_kg": {
+   "min": 15.0,
+   "avg": 20.0,
+   "max": 25.0
+  },
+  "stats": {
+   "attack": 4,
+   "defense": 2,
+   "speed": 8,
+   "agility": 8,
+   "senses": 7,
+   "social": 8
+  },
+  "weapons": [
+   "가는 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "코엘로피시스의 머리뼈는 우주에도 다녀왔어요.",
+  "kin": "🐔 닭·참새 같은 새들이 이 공룡의 가까운 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#8a7a4a",
+    "#dccc98"
+   ],
+   "features": [],
+   "params": {
+    "h": 0.25,
+    "bd": 0.043,
+    "hl": 0.1,
+    "dp": 0.45,
+    "arm": 0.1,
+    "neck": 1.5,
+    "hand": "claw",
+    "skull": "slim",
+    "tl": 0.19,
+    "meta": 1.3,
+    "belly": 0.15,
+    "pattern": "stripes",
+    "mark": "#5a4a28"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.37 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "patagosaurus",
+  "name_ko": "파타고사우루스",
+  "name_en": "Patagosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 15.0,
+   "avg": 16.5,
+   "max": 18.0
+  },
+  "mass_kg": {
+   "min": 8000.0,
+   "avg": 9000.0,
+   "max": 10000.0
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 7,
+   "speed": 2,
+   "agility": 1,
+   "senses": 4,
+   "social": 6
+  },
+  "weapons": [
+   "밟기"
+  ],
+  "armor": [],
+  "fun_fact": "파타고사우루스는 엄마 아빠와 아기가 함께 다녔을 거예요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "sauropod",
+  "art": {
+   "palette": [
+    "#62624e",
+    "#bcb494"
+   ],
+   "features": [],
+   "params": {
+    "hip": 0.2,
+    "sh": 0.2,
+    "bd": 0.08,
+    "neck": [
+     0.9,
+     0.33
+    ],
+    "hl": 0.07,
+    "legR": 0.022,
+    "snout": "cama",
+    "pattern": "mottle",
+    "mark": "#4a4030"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.38 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "lesothosaurus",
+  "name_ko": "레소토사우루스",
+  "name_en": "Lesothosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 1.0,
+   "avg": 1.0,
+   "max": 1.0
+  },
+  "mass_kg": {
+   "min": 4.0,
+   "avg": 4.5,
+   "max": 5.0
+  },
+  "stats": {
+   "attack": 1,
+   "defense": 1,
+   "speed": 8,
+   "agility": 8,
+   "senses": 6,
+   "social": 5
+  },
+  "weapons": [],
+  "armor": [],
+  "fun_fact": "레소토사우루스는 여우만 한 작은 공룡이에요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#8a7a50",
+    "#ddd0a4"
+   ],
+   "features": [],
+   "params": {
+    "h": 0.27,
+    "bd": 0.05,
+    "hl": 0.075,
+    "dp": 0.6,
+    "arm": 0.07,
+    "head": "small",
+    "hand": "claw",
+    "tl": 0.19,
+    "meta": 1.35,
+    "pattern": "stripes",
+    "mark": "#5a4a2a"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.39 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "eoraptor",
+  "name_ko": "에오랍토르",
+  "name_en": "Eoraptor",
+  "habitat": "land",
+  "length_m": {
+   "min": 1.0,
+   "avg": 1.0,
+   "max": 1.0
+  },
+  "mass_kg": {
+   "min": 10.0,
+   "avg": 10.0,
+   "max": 10.0
+  },
+  "stats": {
+   "attack": 3,
+   "defense": 1,
+   "speed": 7,
+   "agility": 8,
+   "senses": 6,
+   "social": 3
+  },
+  "weapons": [
+   "작은 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "에오랍토르는 가장 먼저 나타난 공룡 가운데 하나예요.",
+  "kin": "🐦 아주 오래된 공룡이라, 모든 공룡과 새의 먼 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#7a6440",
+    "#d8c49a"
+   ],
+   "features": [],
+   "params": {
+    "h": 0.27,
+    "bd": 0.05,
+    "hl": 0.085,
+    "dp": 0.6,
+    "arm": 0.1,
+    "hand": "claw",
+    "skull": "raptor",
+    "tl": 0.2,
+    "meta": 1.2,
+    "pattern": "spots",
+    "mark": "#4a3820"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.40 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "spinosaurus",
+  "name_ko": "스피노사우루스",
+  "name_en": "Spinosaurus",
+  "habitat": "amphibious",
+  "length_m": {
+   "min": 14.0,
+   "avg": 14.5,
+   "max": 15.0
+  },
+  "mass_kg": {
+   "min": 7000.0,
+   "avg": 8000.0,
+   "max": 9000.0
+  },
+  "stats": {
+   "attack": 9,
+   "defense": 5,
+   "speed": 5,
+   "agility": 4,
+   "senses": 7,
+   "social": 2
+  },
+  "weapons": [
+   "긴 주둥이",
+   "갈고리 발톱"
+  ],
+  "armor": [],
+  "fun_fact": "스피노사우루스는 헤엄치며 물고기를 잡았어요.",
+  "kin": "🐔 닭·참새 같은 새들이 이 공룡의 가까운 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#5a5040",
+    "#c8b890",
+    "#b04a30"
+   ],
+   "features": [],
+   "params": {
+    "h": 0.19,
+    "bd": 0.072,
+    "hl": 0.16,
+    "dp": 0.34,
+    "arm": 0.1,
+    "sail": 0.14,
+    "head": "croc",
+    "hand": "thumb",
+    "skull": "spino",
+    "tl": 0.3,
+    "leg": 1.05,
+    "meta": 0.6,
+    "belly": 0.2,
+    "neck": 1.3,
+    "paddle": 0.05,
+    "pattern": "mottle",
+    "mark": "#3a3428"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.41 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "acrocanthosaurus",
+  "name_ko": "아크로칸토사우루스",
+  "name_en": "Acrocanthosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 11.0,
+   "avg": 11.5,
+   "max": 12.0
+  },
+  "mass_kg": {
+   "min": 5000.0,
+   "avg": 5500.0,
+   "max": 6000.0
+  },
+  "stats": {
+   "attack": 9,
+   "defense": 6,
+   "speed": 6,
+   "agility": 4,
+   "senses": 6,
+   "social": 3
+  },
+  "weapons": [
+   "큰 이빨",
+   "발톱"
+  ],
+  "armor": [],
+  "fun_fact": "아크로칸토사우루스는 등을 따라 낮은 산등성이가 있었어요.",
+  "kin": "🐔 닭·참새 같은 새들이 이 공룡의 가까운 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#6a5038",
+    "#c8b088",
+    "#8a4a30"
+   ],
+   "features": [],
+   "params": {
+    "bd": 0.085,
+    "hl": 0.115,
+    "dp": 0.66,
+    "arm": 0.07,
+    "sail": 0.04,
+    "h": 0.27,
+    "hand": "claw",
+    "skull": "allo",
+    "tl": 0.25,
+    "leg": 1.1,
+    "pattern": "saddle",
+    "mark": "#4a3424"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.42 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "suchomimus",
+  "name_ko": "수코미무스",
+  "name_en": "Suchomimus",
+  "habitat": "land",
+  "length_m": {
+   "min": 9.0,
+   "avg": 10.0,
+   "max": 11.0
+  },
+  "mass_kg": {
+   "min": 2500.0,
+   "avg": 3750.0,
+   "max": 5000.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 5,
+   "speed": 6,
+   "agility": 4,
+   "senses": 6,
+   "social": 2
+  },
+  "weapons": [
+   "긴 주둥이",
+   "큰 엄지 발톱"
+  ],
+  "armor": [],
+  "fun_fact": "수코미무스는 굽은 이빨로 미끄러운 물고기를 잡았어요.",
+  "kin": "🐔 닭·참새 같은 새들이 이 공룡의 가까운 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#6a6a48",
+    "#ccc49a",
+    "#8a5a3a"
+   ],
+   "features": [],
+   "params": {
+    "bd": 0.07,
+    "hl": 0.15,
+    "dp": 0.38,
+    "arm": 0.1,
+    "head": "croc",
+    "sail": 0.025,
+    "h": 0.26,
+    "hand": "thumb",
+    "skull": "spino",
+    "tl": 0.25,
+    "pattern": "stripes",
+    "mark": "#4a3a26"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.43 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "tyrannosaurus",
+  "name_ko": "티라노사우루스",
+  "name_en": "Tyrannosaurus rex",
+  "habitat": "land",
+  "length_m": {
+   "min": 12.0,
+   "avg": 12.5,
+   "max": 13.0
+  },
+  "mass_kg": {
+   "min": 8000.0,
+   "avg": 8500.0,
+   "max": 9000.0
+  },
+  "stats": {
+   "attack": 10,
+   "defense": 6,
+   "speed": 5,
+   "agility": 3,
+   "senses": 9,
+   "social": 3
+  },
+  "weapons": [
+   "엄청나게 센 턱",
+   "바나나만 한 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "티라노사우루스는 무는 힘이 아주 아주 셌어요.",
+  "kin": "🐔 닭·참새 같은 새들이 이 공룡의 가까운 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#5a5238",
+    "#c9b88e",
+    "#7a4a30"
+   ],
+   "features": [],
+   "params": {
+    "h": 0.27,
+    "bd": 0.095,
+    "hl": 0.125,
+    "dp": 0.78,
+    "arm": 0.04,
+    "hand": "rex",
+    "skull": "rex",
+    "tl": 0.24,
+    "leg": 1.25,
+    "meta": 0.85,
+    "belly": 0.35,
+    "neck": 0.85,
+    "pattern": "mottle",
+    "markOp": 0.4
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.44 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "cryolophosaurus",
+  "name_ko": "크리올로포사우루스",
+  "name_en": "Cryolophosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 6.0,
+   "avg": 6.5,
+   "max": 7.0
+  },
+  "mass_kg": {
+   "min": 450.0,
+   "avg": 475.0,
+   "max": 500.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 4,
+   "speed": 6,
+   "agility": 5,
+   "senses": 6,
+   "social": 3
+  },
+  "weapons": [
+   "날카로운 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "크리올로포사우루스는 아주 추운 남극에서 찾았어요.",
+  "kin": "🐔 닭·참새 같은 새들이 이 공룡의 가까운 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#6a5a48",
+    "#d0c0a0",
+    "#c0603a"
+   ],
+   "features": [
+    "cryo"
+   ],
+   "params": {
+    "bd": 0.07,
+    "hl": 0.11,
+    "dp": 0.6,
+    "arm": 0.08,
+    "h": 0.29,
+    "hand": "claw",
+    "skull": "allo",
+    "tl": 0.23,
+    "pattern": "saddle",
+    "mark": "#3a2c22"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.45 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "monolophosaurus",
+  "name_ko": "모놀로포사우루스",
+  "name_en": "Monolophosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 5.0,
+   "avg": 5.5,
+   "max": 6.0
+  },
+  "mass_kg": {
+   "min": 450.0,
+   "avg": 475.0,
+   "max": 500.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 4,
+   "speed": 6,
+   "agility": 5,
+   "senses": 6,
+   "social": 3
+  },
+  "weapons": [
+   "날카로운 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "모놀로포사우루스는 코 위에 볏이 하나 있었어요.",
+  "kin": "🐔 닭·참새 같은 새들이 이 공룡의 가까운 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#5a6040",
+    "#c8c490",
+    "#b0603a"
+   ],
+   "features": [
+    "crest"
+   ],
+   "params": {
+    "bd": 0.068,
+    "hl": 0.11,
+    "dp": 0.6,
+    "arm": 0.08,
+    "h": 0.29,
+    "hand": "claw",
+    "skull": "allo",
+    "tl": 0.23,
+    "pattern": "mottle",
+    "mark": "#2e3424"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.46 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "ophthalmosaurus",
+  "name_ko": "옵탈모사우루스",
+  "name_en": "Ophthalmosaurus",
+  "habitat": "sea",
+  "length_m": {
+   "min": 4.0,
+   "avg": 5.0,
+   "max": 6.0
+  },
+  "mass_kg": {
+   "min": 1000.0,
+   "avg": 1000.0,
+   "max": 1000.0
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 3,
+   "speed": 8,
+   "agility": 7,
+   "senses": 9,
+   "social": 5
+  },
+  "weapons": [
+   "가는 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "옵탈모사우루스는 눈이 아주 컸어요.",
+  "kin": "🐬 돌고래처럼 생겼지만 친척은 아니에요. 후손 없이 사라졌어요",
+  "archetype": "marine_reptile",
+  "art": {
+   "palette": [
+    "#4a5a6e",
+    "#c8ccd0"
+   ],
+   "features": [
+    "dorsal",
+    "tail_fluke",
+    "bigeye"
+   ],
+   "params": {
+    "bd": 0.09,
+    "hl": 0.19,
+    "dp": 0.5,
+    "flukeUp": 1,
+    "pattern": "spots",
+    "mark": "#e0e4e8",
+    "markOp": 0.4,
+    "skull": "ichthy",
+    "deep": 1.45,
+    "flukeDown": 1.15,
+    "hind": 0.5
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.47 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "pentaceratops",
+  "name_ko": "펜타케라톱스",
+  "name_en": "Pentaceratops",
+  "habitat": "land",
+  "length_m": {
+   "min": 6.0,
+   "avg": 6.5,
+   "max": 7.0
+  },
+  "mass_kg": {
+   "min": 5000.0,
+   "avg": 5000.0,
+   "max": 5000.0
+  },
+  "stats": {
+   "attack": 8,
+   "defense": 8,
+   "speed": 4,
+   "agility": 3,
+   "senses": 5,
+   "social": 6
+  },
+  "weapons": [
+   "이마 뿔",
+   "코뿔"
+  ],
+  "armor": [
+   "커다란 목 방패"
+  ],
+  "fun_fact": "펜타케라톱스는 머리가 아주 큰 뿔 공룡이에요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "ceratopsian",
+  "art": {
+   "palette": [
+    "#6a5a40",
+    "#c8b488",
+    "#c0603a"
+   ],
+   "features": [],
+   "params": {
+    "brow": 1.1,
+    "nose": 0.6,
+    "frill": 1.6,
+    "jugal": 1,
+    "fen": true,
+    "pattern": "saddle",
+    "mark": "#4a3626"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.48 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "allosaurus",
+  "name_ko": "알로사우루스",
+  "name_en": "Allosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 8.0,
+   "avg": 9.0,
+   "max": 10.0
+  },
+  "mass_kg": {
+   "min": 2000.0,
+   "avg": 2000.0,
+   "max": 2000.0
+  },
+  "stats": {
+   "attack": 9,
+   "defense": 5,
+   "speed": 7,
+   "agility": 5,
+   "senses": 7,
+   "social": 4
+  },
+  "weapons": [
+   "날카로운 이빨",
+   "큰 발톱"
+  ],
+  "armor": [],
+  "fun_fact": "알로사우루스는 아주 오래전 가장 흔한 큰 육식 공룡이었어요.",
+  "kin": "🐔 닭·참새 같은 새들이 이 공룡의 가까운 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#7a5a3a",
+    "#d0b48a",
+    "#a04a30"
+   ],
+   "features": [
+    "horns"
+   ],
+   "params": {
+    "bd": 0.078,
+    "hl": 0.11,
+    "dp": 0.65,
+    "arm": 0.09,
+    "h": 0.28,
+    "hand": "claw",
+    "skull": "allo",
+    "tl": 0.23,
+    "meta": 1,
+    "pattern": "stripes",
+    "mark": "#4a3020"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 공룡백과 p.49 / 특성 점수·무기: Claude 판단 초안(2026-10-28), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "baryonyx",
+  "name_ko": "바리오닉스",
+  "name_en": "Baryonyx",
+  "habitat": "land",
+  "length_m": {
+   "min": 7.5,
+   "avg": 8.75,
+   "max": 10
+  },
+  "mass_kg": {
+   "min": 1200,
+   "avg": 1450,
+   "max": 1700
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 4,
+   "speed": 6,
+   "agility": 5,
+   "senses": 6,
+   "social": 2
+  },
+  "weapons": [
+   "큰 엄지 발톱",
+   "긴 주둥이"
+  ],
+  "armor": [],
+  "fun_fact": "바리오닉스는 물고기를 좋아한 공룡이에요.",
+  "kin": "🐔 닭·참새 같은 새들이 이 공룡의 가까운 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#4a5450",
+    "#b4b09a",
+    "#3a4440"
+   ],
+   "features": [],
+   "params": {
+    "bd": 0.07,
+    "hl": 0.15,
+    "dp": 0.38,
+    "arm": 0.1,
+    "head": "croc",
+    "sail": 0.012,
+    "h": 0.26,
+    "hand": "thumb",
+    "skull": "spino",
+    "tl": 0.25,
+    "pattern": "stripes",
+    "mark": "#2e3632"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과(2026-11-02 추가분) / 특성 점수·무기: Claude 판단 초안(2026-11-02), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "pakicetus",
+  "name_ko": "파키케투스",
+  "name_en": "Pakicetus",
+  "habitat": "amphibious",
+  "length_m": {
+   "min": 1,
+   "avg": 1.5,
+   "max": 2
+  },
+  "mass_kg": {
+   "min": 45,
+   "avg": 45,
+   "max": 45
+  },
+  "stats": {
+   "attack": 4,
+   "defense": 3,
+   "speed": 6,
+   "agility": 6,
+   "senses": 6,
+   "social": 3
+  },
+  "weapons": [
+   "날카로운 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "파키케투스는 늑대처럼 생긴 고래의 조상이에요.",
+  "kin": "🐋 고래의 아주 먼 조상 쪽이에요",
+  "archetype": "large_mammal",
+  "art": {
+   "palette": [
+    "#a08868",
+    "#e0d0b4"
+   ],
+   "features": [],
+   "params": {
+    "hip": 0.36,
+    "sh": 0.38,
+    "bd": 0.09,
+    "b0": 0.15,
+    "b1": 0.66,
+    "neck": [
+     0.83,
+     0.5
+    ],
+    "nr": 0.05,
+    "hl": 0.2,
+    "dp": 0.55,
+    "tail": [
+     0,
+     0.18
+    ],
+    "tr": 0.03,
+    "legR": 0.02,
+    "pattern": "mottle",
+    "mark": "#6a4a30",
+    "markOp": 0.5,
+    "skull": "dog"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과(2026-11-02 추가분) / 특성 점수·무기: Claude 판단 초안(2026-11-02), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "carcharodontosaurus",
+  "name_ko": "카르카로돈토사우루스",
+  "name_en": "Carcharodontosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 12,
+   "avg": 12.5,
+   "max": 13
+  },
+  "mass_kg": {
+   "min": 6000,
+   "avg": 7000,
+   "max": 8000
+  },
+  "stats": {
+   "attack": 9,
+   "defense": 6,
+   "speed": 5,
+   "agility": 4,
+   "senses": 7,
+   "social": 3
+  },
+  "weapons": [
+   "상어 같은 톱니 이빨",
+   "발톱"
+  ],
+  "armor": [],
+  "fun_fact": "카르카로돈토사우루스는 티라노사우루스만큼 컸어요.",
+  "kin": "🐔 닭·참새 같은 새들이 이 공룡의 가까운 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#8a5a3a",
+    "#d8c0a0",
+    "#6a3a24"
+   ],
+   "features": [
+    "mane"
+   ],
+   "params": {
+    "bd": 0.09,
+    "hl": 0.125,
+    "dp": 0.7,
+    "arm": 0.06,
+    "sail": 0.012,
+    "h": 0.27,
+    "hand": "claw",
+    "skull": "allo",
+    "tl": 0.25,
+    "leg": 1.15,
+    "pattern": "saddle",
+    "mark": "#5a3420"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과(2026-11-02 추가분) / 특성 점수·무기: Claude 판단 초안(2026-11-02), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "iguanodon",
+  "name_ko": "이구아노돈",
+  "name_en": "Iguanodon",
+  "habitat": "land",
+  "length_m": {
+   "min": 9,
+   "avg": 9.5,
+   "max": 10
+  },
+  "mass_kg": {
+   "min": 3000,
+   "avg": 3500,
+   "max": 4000
+  },
+  "stats": {
+   "attack": 4,
+   "defense": 5,
+   "speed": 4,
+   "agility": 3,
+   "senses": 5,
+   "social": 7
+  },
+  "weapons": [
+   "엄지 가시 발톱"
+  ],
+  "armor": [],
+  "fun_fact": "이구아노돈은 엄지에 뾰족한 가시가 있었어요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "sauropod",
+  "art": {
+   "palette": [
+    "#7a6a48",
+    "#c8b890",
+    "#4a3e2a"
+   ],
+   "features": [],
+   "params": {
+    "hip": 0.25,
+    "sh": 0.18,
+    "bd": 0.125,
+    "b0": 0.3,
+    "b1": 0.66,
+    "neck": [
+     0.9,
+     0.44
+    ],
+    "nr": 0.048,
+    "hl": 0.12,
+    "dp": 0.9,
+    "tail": [
+     0,
+     0.27
+    ],
+    "tr": 0.05,
+    "legR": 0.036,
+    "frontLeg": 0.6,
+    "head": "small",
+    "foot": "stout",
+    "pattern": "bands",
+    "mark": "#4a3e2a",
+    "markOp": 0.45
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과(2026-11-02 추가분 2) / 특성 점수·무기: Claude 판단 초안(2026-11-02), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "giganotosaurus",
+  "name_ko": "기가노토사우루스",
+  "name_en": "Giganotosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 12,
+   "avg": 12.5,
+   "max": 13
+  },
+  "mass_kg": {
+   "min": 6000,
+   "avg": 7000,
+   "max": 8000
+  },
+  "stats": {
+   "attack": 9,
+   "defense": 6,
+   "speed": 5,
+   "agility": 4,
+   "senses": 7,
+   "social": 3
+  },
+  "weapons": [
+   "칼처럼 얇은 톱니 이빨",
+   "발톱"
+  ],
+  "armor": [],
+  "fun_fact": "기가노토사우루스는 칼처럼 얇은 이빨이 있었어요.",
+  "kin": "🐔 닭·참새 같은 새들이 이 공룡의 가까운 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#4e5645",
+    "#bdb59c",
+    "#8a3a30"
+   ],
+   "features": [
+    "mane"
+   ],
+   "params": {
+    "bd": 0.095,
+    "hl": 0.13,
+    "dp": 0.72,
+    "arm": 0.06,
+    "sail": 0.01,
+    "h": 0.28,
+    "hand": "claw",
+    "skull": "allo",
+    "tl": 0.25,
+    "leg": 1.2,
+    "pattern": "stripes",
+    "mark": "#2c3226",
+    "markOp": 0.5
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게·이름 뜻·시대·사는 곳: 기가노토사우루스 백과(2026-11-03 추가) / 특성 점수·무기·그림 비율: Claude 판단 초안(2026-11-03), 가까운 친척 카르카로돈토사우루스와 백과 그림 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ }
+]
