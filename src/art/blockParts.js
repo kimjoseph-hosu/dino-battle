@@ -89,13 +89,15 @@ export const tailChain = (xa, ya, xb, yb, hs, wk, paint, tip) => segChain([...hs
 
 // ── 얼굴(모든 동물 공통, 4.3) ──
 // 눈: 홍채(육식 노랑·초식 갈색) + 동공(육식은 세로로 찢어진 눈) + 흰 빛점 + 눈두덩. 육식은 눈두덩을 앞으로 내려 깔아 사납게, 초식은 위에 얹는다. bigeye 는 크게
+const tagEye = g => ((g.userData.eye = true), g);
 export function eyes(x, y, z, s, K) {
   s *= (K.F.includes('bigeye') ? 1.6 : 1) * 1.25;
   const iris = K.meat ? '#d9a21e' : '#6b4524', pw = K.meat ? s * 0.32 : s * 0.55;
   return both(sd => group(
-    box(x, y, sd * z, s, s, 0.3, iris),
-    box(x + s * 0.04, y, sd * (z + 0.17), pw, s * (K.meat ? 0.92 : 0.55), 0.04, EYE),
-    box(x + s * 0.24, y + s * 0.24, sd * (z + 0.2), s * 0.24, s * 0.24, 0.04, SPARK),
+    tagEye(piv(x, y, sd * z, [0, 0, 0], // 눈알 묶음(깜빡일 때 위아래로 납작해진다): 홍채 + 동공 + 빛점
+      box(0, 0, 0, s, s, 0.3, iris),
+      box(s * 0.04, 0, sd * 0.17, pw, s * (K.meat ? 0.92 : 0.55), 0.04, EYE),
+      box(s * 0.24, s * 0.24, sd * 0.2, s * 0.24, s * 0.24, 0.04, SPARK))),
     box(x - s * 0.08, y - s * 0.56, sd * (z - 0.02), s * 1.2, s * 0.14, 0.36, K.ridge), // 아래 눈꺼풀
     K.F.includes('bigeye') ? box(x, y, sd * (z - 0.05), s * 1.35, s * 1.35, 0.2, K.ridge) // 큰 눈 테두리(눈뼈 고리)
       : K.meat ? box(x - s * 0.1, y + s * 0.62, sd * (z - 0.04), s * 1.8, s * 0.42, 0.42, K.ridge, -0.32)
@@ -234,6 +236,11 @@ export function bodyDeco(K, top, R, W, sail = 0) {
   if (F.includes('bumps')) for (let i = 0; i < 10; i++) for (const k of [-2, -1, 0, 1, 2]) { // 골편: 등 위 작은 상자 격자, 줄마다 높이 다르게
     const t = 0.04 + i * 0.1 + (k % 2 ? 0.05 : 0), [x, y] = top(Math.min(0.98, t)), s = Math.max(0.55, R * 0.32);
     out.push(box(x, y + s * 0.25 - Math.abs(k) * R * 0.12, k * W * 0.2, s, s * (0.7 + (i % 2) * 0.35), s, K.osteo));
+  }
+  // 등 비늘 돌기: 비늘 피부인데 다른 등 장식이 없으면, 등뼈를 따라 작은 마름모 한 줄(악어 등처럼)
+  if (K.kind === 'scale' && !sail && !['plates', 'bumps', 'spikes', 'shell', 'mane', 'fur', 'feathers'].some(f => F.includes(f))) {
+    const s = Math.max(0.35, Math.min(0.75, R * 0.22)), n = 9;
+    for (let i = 0; i <= n; i++) { const [x, y] = top(i / n); out.push(box(x, y + s * 0.15, 0, s, s, s * 0.8, K.ridge, Math.PI / 4)); }
   }
   if (F.includes('hump')) { const [x, y] = top(0.8); out.push(box(x, y + R * 0.15, 0, R * 1.6, R * 0.7, W * 0.7, K.body)); }
   return out;

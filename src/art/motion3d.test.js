@@ -7,7 +7,7 @@ const cls = (...c) => ({ contains: x => c.includes(x) });
 
 for (const s of STATES) for (const t of [0, 0.37, 2.1]) {
   const P = targetPose(s, t, rig, { moving: true });
-  const nums = [P.y, P.pitch, P.hp, P.hy, P.jaw, P.wf, ...P.tp, ...P.ty, ...P.ls, ...P.lb];
+  const nums = [P.y, P.pitch, P.roll, P.blink, P.hp, P.hy, P.jaw, P.wf, ...P.tp, ...P.ty, ...P.ls, ...P.lb];
   assert(nums.every(Number.isFinite), `${s} 숫자 아님`);
   assert(nums.every(v => Math.abs(v) < 1.2), `${s} 각도가 너무 큼`);
   assert(P.tp.length === 4 && P.ls.length === 4);
@@ -29,4 +29,8 @@ assert.equal(stateOf(cls('tired', 'walking')).state, 'tired');
 assert.equal(stateOf(cls('walking')).o.moving, true);
 assert(Math.abs(targetPose('idle', 0.3, rig, { flying: true }).wf) > 0.3, '날면 날개를 크게 퍼덕인다');
 assert.equal(stateOf(cls('flying')).o.flying, true);
+assert(Array.from({ length: 80 }, (_, i) => targetPose('idle', i * 0.05, rig).blink).some(b => b === 1), '가끔 눈을 깜빡인다');
+assert(targetPose('idle', 1, rig).blink === 0 || targetPose('idle', 2, rig).blink === 0, '늘 감고 있지는 않다');
+assert(targetPose('hit', 0, rig).blink > 0.5, '맞으면 눈을 질끈 감는다');
+assert(Math.max(...[0, 0.2, 0.4].map(t => Math.abs(targetPose('idle', t, rig, { moving: true, step: t * 9 }).roll))) > 0.02, '걸으면 몸이 좌우로 출렁인다');
 console.log('motion3d ok');

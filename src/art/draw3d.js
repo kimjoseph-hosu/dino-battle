@@ -17,7 +17,8 @@ const V = THREE.Vector3;
 export function applyPose(rig, P) {
   const set = (o, x, y, z) => { const r = o.userData.rest; o.rotation.set(r.x + x, r.y + y, r.z + z); };
   rig.all.position.y = rig.all.userData.pos.y + P.y;
-  set(rig.all, 0, 0, P.pitch);
+  set(rig.all, P.roll ?? 0, 0, P.pitch);
+  rig.eyes?.forEach(e => (e.scale.y = 1 - 0.9 * Math.min(1, P.blink ?? 0))); // 눈 감기(눈알 묶음을 위아래로 납작하게)
   const nod = rig.nod ?? 1; // 등딱지 동물은 고개를 조금만
   set(rig.head, 0, P.hy * nod, P.hp * nod);
   set(rig.jaw, 0, 0, -P.jaw);
@@ -25,7 +26,7 @@ export function applyPose(rig, P) {
   rig.legs.forEach((l, i) => { set(l.g, 0, 0, P.ls[i] * (rig.swim ? 0.6 : 1)); if (l.knee) set(l.knee, 0, 0, -P.lb[i]); });
   rig.wings?.forEach(w => set(w, -w.userData.side * P.wf, 0, 0)); // 어깨를 축으로 바깥(+)·안으로
 }
-export const rigInfo = rig => ({ tail: rig.tail.length, legs: rig.legs, swim: rig.swim, fly: rig.fly });
+export const rigInfo = rig => ({ tail: rig.tail.length, legs: rig.legs, swim: rig.swim, fly: rig.fly, ph: rig.ph });
 
 // ── 빛과 카메라 ──
 // 참고 그림처럼 흰 스튜디오: 왼쪽 위 주광(그림자) + 약한 보조광 + 뒤쪽 윤곽광

@@ -1,27 +1,30 @@
 // 3D 동물의 부위별 동작: 대기·돌진·물기·맞음·지침. three.js 없이 숫자(각도, 라디안)만 계산한다.
 // 자세 P = { y 몸 오르내림(몸길이 1 기준), pitch 몸 앞뒤 기울기(+ 코가 위), hp·hy 머리 끄덕·도리(+ 코가 위·카메라 쪽),
-//           jaw 턱 벌림, tp·ty 꼬리 마디마다 위아래(+ 위)·좌우, ls 다리마다 앞뒤 휘두름(+ 앞), lb 다리마다 무릎 굽힘, wf 날개 퍼덕(+ 위) }
+//           roll 몸 좌우 출렁(걸을 때), blink 눈 감기(0 뜸 ~ 1 감음), jaw 턱 벌림, tp·ty 꼬리 마디마다 위아래(+ 위)·좌우, ls 다리마다 앞뒤 휘두름(+ 앞), lb 다리마다 무릎 굽힘, wf 날개 퍼덕(+ 위) }
 // rig: { tail: 마디 수, legs: [{ front, side(+1 카메라 쪽 / -1), ph? 박자 }], swim: 헤엄치는 몸 }
 
 export const STATES = ['idle', 'charge', 'bite', 'hit', 'tired'];
 
-export const restPose = rig => ({ y: 0, pitch: 0, hp: 0, hy: 0, jaw: 0, wf: 0, tp: Array(rig.tail).fill(0), ty: Array(rig.tail).fill(0), ls: rig.legs.map(() => 0), lb: rig.legs.map(() => 0) });
+export const restPose = rig => ({ y: 0, pitch: 0, roll: 0, blink: 0, hp: 0, hy: 0, jaw: 0, wf: 0, tp: Array(rig.tail).fill(0), ty: Array(rig.tail).fill(0), ls: rig.legs.map(() => 0), lb: rig.legs.map(() => 0) });
 
 // 다리 박자: 네발은 대각선 걸음(왼앞+오른뒤), 두발·지느러미는 좌우 번갈아, 다리가 많으면 ph(앞에서 뒤로 물결)
 const phase = (l, rig) => l.ph ?? (l.side > 0 ? 0 : Math.PI) + (l.front && rig.legs.length > 2 ? Math.PI : 0);
 const S = Math.sin;
+// 눈 깜빡임: 몇 초마다 한 번 짧게. ph 로 동물마다 때가 달라 둘이 같이 깜빡이지 않는다
+const blinkAt = (t, rig) => (((t + (rig.ph ?? 0)) % 3.7) < 0.14 ? 1 : 0);
 
 // t: 초, o: { moving 자리를 옮기는 중, step 걸음 위상(라디안, 이동 속도에 맞춰 쌓임), whip 꼬리로 치는 중 }
 const MOTIONS = {
   // 대기: 숨쉬기, 고개 살짝, 꼬리 천천히 흔들기. 헤엄치면 꼬리·지느러미가 크게, 걸으면 다리가 걷는다
   idle(P, t, rig, o) {
-    P.y = 0.004 * S(t * 1.6);
-    P.pitch = 0.012 * S(t * 0.9);
+    P.y = 0.006 * S(t * 1.4); // 숨쉬기: 몸이 천천히 오르내리고 가슴(앞)이 살짝 들린다
+    P.pitch = 0.016 * S(t * 1.4 + 0.6);
+    P.blink = blinkAt(t, rig);
     P.hp = 0.04 * S(t * 1.1 + 0.5);
     P.hy = 0.06 * S(t * 0.7);
     P.jaw = 0.05 + 0.03 * S(t * 1.3);
     P.wf = o.flying ? 0.55 * S(t * 5) : 0.04 * S(t * 1.2);
-    const amp = rig.swim ? 0.13 : 0.06, f = rig.swim ? 3 : 1.5;
+    const amp = rig.swim ? 0.13 : 0.09, f = rig.swim ? 3 : 1.3;
     P.ty = P.ty.map((_, i) => amp * (0.5 + i * 0.4) * S(t * f - i * 0.8));
     P.tp = P.tp.map((_, i) => 0.025 * S(t * f * 0.5 - i * 0.6));
     rig.legs.forEach((l, i) => {
@@ -30,10 +33,16 @@ const MOTIONS = {
       else if (rig.swim) P.ls[i] = 0.3 * S(t * 2.4 + p);
       else if (o.moving) { const g = o.step ?? t * 9; P.ls[i] = 0.45 * S(g + p); P.lb[i] = 0.35 * Math.max(0, S(g + p + 1.2)); }
     });
+    if (o.moving && !rig.swim && !o.flying) { // 걸을 때 무게감: 발을 디딜 때마다 몸이 내려앉고 좌우로 출렁
+      const g = o.step ?? t * 9;
+      P.y += 0.008 * Math.abs(S(g)) - 0.004;
+      P.roll = 0.035 * S(g);
+    }
   },
   // 돌진: 몸을 낮추고 머리를 앞으로, 꼬리는 곧게 뻗어 빠르게 떨고, 다리는 크게 내닫는다
   charge(P, t, rig, o) {
     P.y = 0.006 * S(t * 12);
+    P.roll = 0.03 * S(t * 12);
     P.pitch = -0.05;
     P.hp = -0.08;
     P.jaw = 0.14;
@@ -49,6 +58,7 @@ const MOTIONS = {
   // 물기: 턱을 크게 벌렸다 탁 닫기를 되풀이, 벌릴 때 머리를 젖힌다
   bite(P, t, rig) {
     const open = Math.pow(0.5 + 0.5 * S(t * 13), 0.7);
+    P.blink = 0.4 * open; // 물 때 눈을 찡그린다
     P.pitch = -0.03;
     P.hp = 0.12 * open - 0.05;
     P.jaw = 0.6 * open;
@@ -63,6 +73,7 @@ const MOTIONS = {
     P.pitch = 0.08;
     P.hp = 0.28;
     P.hy = -0.22 + shudder;
+    P.blink = 0.85; // 맞으면 눈을 질끈
     P.jaw = 0.22;
     P.wf = 0.45 + shudder;
     P.tp = P.tp.map(() => 0.12);
@@ -73,6 +84,7 @@ const MOTIONS = {
   // 지침: 고개를 떨구고 입을 벌린 채 헐떡, 몸이 처지고 꼬리는 늘어진다
   tired(P, t, rig) {
     const pant = S(t * 3.2);
+    P.blink = Math.max(0.55, blinkAt(t, rig)); // 지쳐서 눈이 반쯤 감긴다
     P.y = -0.012 + 0.005 * pant;
     P.pitch = -0.03;
     P.hp = -0.26 + 0.03 * pant;

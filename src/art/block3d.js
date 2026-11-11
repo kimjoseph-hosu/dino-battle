@@ -56,11 +56,13 @@ function biped(p, K) {
   // 다리: 넓적다리(엉덩이 관절) → 무릎 관절 → 정강이 → 발목 → 발 + 발톱
   const legs = both(sd => {
     const tw = R * 0.85 * lr, td = R * 0.7 * lr, z = sd * (W / 2 - td * 0.3), ky = H * 0.5, ay = H * 0.2, kx = X + 0.7, fl = Math.max(2, R * (bird ? 0.8 : 1.1)), fx = X + 0.4;
-    const foot = group(box(fx, 0.3, z, fl, 0.6, td * 0.9, K.limb), [-1, 0, 1].map(k => box(fx + fl / 2 + 0.18, 0.25, z + k * td * 0.3, 0.42, 0.45, 0.3, CLAW)),
+    const toe = k => fl * (k ? 0.5 : 0.68), tz = k => z + k * td * 0.34; // 발가락 셋: 가운데가 길다
+    const foot = group(box(fx - fl * 0.18, 0.32, z, fl * 0.64, 0.64, td * 0.9, K.limb), [-1, 0, 1].map(k => [box(fx + fl * 0.1 + toe(k) / 2, 0.24, tz(k), toe(k), 0.48, td * 0.26, K.limb), box(fx + fl * 0.1 + toe(k) + 0.18, 0.2, tz(k), 0.4, 0.4, td * 0.22, CLAW)]),
       bird ? box(fx - fl * 0.6, 0.2, z, fl * 0.4, 0.35, 0.3, K.limb) : null, // 뒤로 난 발가락
       F.includes('sickle_claw') ? piv(fx + fl * 0.15, 0.6, z, [0, 0, -0.5], box(0, 0.55, 0, 0.32, 1.1, 0.32, CLAW)) : null); // 들어 올린 낫 발톱
     const knee = J(kx, ky, box(kx - 0.2, (ky + ay) / 2, z, tw * 0.55, ky - ay + 0.4, td * 0.6, K.limb), box(X - 0.1, ay / 2 + 0.3, z, tw * 0.42, ay + 0.2, td * 0.5, K.limb), foot);
-    return { g: J(X, H + R * 0.3, box(X + 0.3, (H + R * 0.6 + ky) / 2, z, tw, H + R * 0.6 - ky, td, K.limb), knee), knee, side: sd, front: false };
+    const thigh = H + R * 0.6 - ky, muscle = box(X + 0.35, ky + thigh * 0.68, z + sd * td * 0.12, tw * 1.18, thigh * 0.5, td * 1.05, K.limb); // 허벅지 근육: 위쪽이 불룩
+    return { g: J(X, H + R * 0.3, box(X + 0.3, (H + R * 0.6 + ky) / 2, z, tw, thigh, td, K.limb), muscle, knee), knee, side: sd, front: false };
   });
   // 꼬리. 새는 짧은 꼬리 + 깃털 부채, 깃털 공룡은 꼬리 끝 깃털
   const tail = bird
@@ -89,7 +91,8 @@ function quadBody(p, K, wk) {
     const upper = bend ? box(x, top - w * 0.2, z + out / 2, w, Math.max(w, top - ky), Math.abs(out) + w, K.limb) // 옆으로 뻗은 윗다리(악어형)
       : box(x, (top + R * 0.5 + ky) / 2, z, w * (nimble ? 0.85 : 1), top + R * 0.5 - ky, w, K.limb);
     const skirt = F.includes('fur') ? [-1, 0, 1].map(k => box(x + k * w * 0.4, ky - 0.2 - ((k + 1) % 2) * 0.4, z, w * 0.5, 1.4 + ((k + 1) % 2) * 0.6, w * 1.25, K.dark)) : null; // 무릎 위 털 치마
-    return { g: J(x, top, upper, skirt, knee), knee, side: sd, front };
+    const haunch = !front && !bend && !F.includes('fur') ? box(x - w * 0.1, top - w * 0.1, z + sd * w * 0.08, w * 1.35, Math.max(w, (top - ky) * 0.55), w * 1.08, K.limb) : null; // 뒷다리 허벅지 근육
+    return { g: J(x, top, upper, haunch, skirt, knee), knee, side: sd, front };
   };
   const legs = [];
   for (const sd of [1, -1]) legs.push(leg(x1 - lw * 0.6 - 0.3, true, sd), leg(x0 + lw * 0.6 + 0.3, false, sd));
@@ -312,7 +315,7 @@ export function build(a) {
   const acc = accent ?? col(back, 0.8), kind = F.includes('feathers') ? 'feather' : KIND[a.archetype] ?? 'scale';
   const tex = skinTex(back, { pattern: p.pattern, mark: p.mark, markOp: p.markOp, kind, seed });
   const K = {
-    F, arch: a.archetype, meat: /이빨|송곳니|턱/.test((a.weapons ?? []).join(' ')) && !/부리/.test((a.weapons ?? []).join(' ')),
+    F, kind, arch: a.archetype, meat: /이빨|송곳니|턱/.test((a.weapons ?? []).join(' ')) && !/부리/.test((a.weapons ?? []).join(' ')),
     body: { tex, side: '#ffffff', top: '#d6d6d6', bot: belly }, // 등(위)은 짙게, 배(아래)는 밝게
     limb: { tex, side: '#dcdcdc', top: '#e4e4e4', bot: col(back, 0.7) },
     under: { top: belly, side: col(belly, 0.93), bot: col(belly, 0.85) },
@@ -324,6 +327,9 @@ export function build(a) {
   };
   const rig = make(p, K);
   shade(rig.root, K, back, belly);
+  rig.eyes = [];
+  rig.root.traverse(o => o.userData.eye && rig.eyes.push(o));
+  rig.ph = (seed % 1000) / 270; // 깜빡이는 때가 동물마다 다르게
   mergeBoxes(rig.root);
   rig.root.traverse(o => o.isMesh && (o.castShadow = o.receiveShadow = true));
   return rig;

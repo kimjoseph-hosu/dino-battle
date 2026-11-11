@@ -47,7 +47,7 @@ export const HUMANS = { teacher_m: 1.65, child_m: 1.1 };
 // 블록 3D(?art=block, PLAN_BLOCK3D): 한 눈금 = 몸길이의 1/UNIT. 큰 동물이든 작은 동물이든 블록 수가 비슷해서 디테일 양이 같다
 // BEVEL: 이 크기(블록) 이상인 상자는 모서리를 반 칸 깎아 두 상자로(0이면 끔), SLICE: 몸통을 이 길이마다 한 조각으로 썬다, TAIL: 수각류 꼬리 마디 수
 // SAT·LIGHT: 몸 색 채도·밝기 배율(1 = 백과 팔레트 그대로)
-export const BLOCK = { UNIT: 24, BEVEL: 1.2, SLICE: 1.4, TAIL: 8, SAT: 1.6, LIGHT: 1.15 };
+export const BLOCK = { UNIT: 24, BEVEL: 1.2, SLICE: 1.4, TAIL: 10, SAT: 1.6, LIGHT: 1.15 };
 // 3D 무대(?art=3d·block): 카메라가 내려다보는 각(도), 화각(도), 화면에 담는 여유(1 = 2D 화면과 같은 넓이), 싸우는 자리보다 뒤를 보는 정도(화면 높이 배),
 // 하늘 배경막을 세우는 거리·너비·높이(카메라 거리 배. 거리가 작을수록 하늘이 넓게 보이고 뒤쪽 땅은 덜 보인다)
 export const ARENA = { CAM_ELEV_DEG: 35, FOV: 38, FIT: 1.3, LOOK_BACK: 0.15, SKY_BACK: 0.32, SKY_W: 3.2, SKY_H: 0.4 };
