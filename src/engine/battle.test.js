@@ -63,6 +63,7 @@ assert.deepStrictEqual(eraRange('쥐라기 중기'), [174, 163]);
 assert(continents('미국과 캐나다 등 북아메리카의 숲').includes('북아메리카'));
 assert.strictEqual(continents('전 세계의 바다').length, 7);
 assert(whatIf(full('tyrannosaurus'), full('triceratops'), neun).met, '티라노와 트리케라톱스는 같은 시대·같은 곳');
+assert(!whatIf(full('mosasaurus'), full('titanoboa'), neun).met, '백악기 끝과 팔레오세는 맞닿기만 해서 함께 살지 않았다');
 const ts = whatIf(full('tyrannosaurus'), full('smilodon'), neun);
 assert(!ts.met && ts.lines[0].includes('6300만 년'), ts.lines);
 const mt = whatIf(full('mosasaurus'), full('tyrannosaurus'), neun);

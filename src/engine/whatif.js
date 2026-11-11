@@ -63,6 +63,7 @@ export function whatIf(a, b, josaNeun) {
   const habitatClash = WATER.includes(a.habitat) !== WATER.includes(b.habitat) && ![a.habitat, b.habitat].includes('amphibious');
   const lines = [];
   if (gap > 0) lines.push(`${josaNeun(a.name_ko)} ${a.era}, ${josaNeun(b.name_ko)} ${b.era}에 살았어요. ${fmtYears(gap)}이나 차이 나요!`);
+  else if (Math.min(as, bs) - Math.max(ae, be) <= 0) lines.push(`${josaNeun(a.name_ko)} ${a.era}, ${josaNeun(b.name_ko)} ${b.era}에 살았어요. 시대가 딱 맞닿아 있지만 함께 살지는 않았어요.`); // 한쪽이 사라질 때 다른 쪽이 나타남(백악기 끝 ↔ 팔레오세)
   if (!shared.length) lines.push(`${josaNeun(a.name_ko)} ${a.place}, ${josaNeun(b.name_ko)} ${b.place}에 살았어요.`);
   if (habitatClash) lines.push(`${josaNeun(a.name_ko)} ${HOME[a.habitat]}에서, ${josaNeun(b.name_ko)} ${HOME[b.habitat]}에서 살았어요.`);
   return { met: !lines.length, shared, lines };

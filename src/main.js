@@ -2,7 +2,7 @@
 import '@fontsource/black-han-sans';
 import '@fontsource/jua';
 import { animals, addAnimals } from './data.js';
-import { drawAnimal } from './art/index.js';
+import { drawAnimal, drawHuman, shapeTest } from './art/index.js';
 import { battle, mode } from './engine/battle.js';
 import { reasonLines, ga, neun, makeScript, withAiLines, weightLike, sizeLike } from './engine/story.js';
 import { narrate, loadAiAnimals } from './ai.js';
@@ -17,7 +17,7 @@ import { showStagePick } from './ui/stagepick.js';
 import { showDrawing } from './ui/drawing.js';
 import { showBlocks } from './ui/blockview.js';
 import { sfx, unlock, isMuted, setMuted, isMusicOn, setMusicOn } from './ui/sfx.js';
-import { STAGES, AI_WAIT_MS } from './config.js';
+import { STAGES, AI_WAIT_MS, HUMANS } from './config.js';
 import { makeBracket, nextMatch, roundName, shuffle } from './engine/bracket.js';
 import { showSize, showBracket, showMatchEnd, showChampion } from './ui/tournament.js';
 import { spinStage } from './ui/roulette.js';
@@ -213,6 +213,72 @@ function dexHtml(a) {
     + `</ul><p class="src">${a.book ? `📖 ${a.book} ${a.page}쪽` : a.origin ? '🤖 AI가 찾은 정보예요. 선생님과 함께 확인해요' : ''}</p></div>`;
 }
 
+// ── 공부 탭 꼭지들(백과에 자주 나오는 것) ──
+// 1) 공룡일까? 아이들이 공룡으로 많이 아는 동물 중 공룡이 아닌 것을 알려 준다
+const DINO = ['theropod', 'sauropod', 'ceratopsian', 'armored'];
+const NOT_DINO = {
+  glyptodon: '등딱지를 멘 포유류예요. 아르마딜로 친척이에요.', doedicurus: '등딱지를 멘 포유류예요. 아르마딜로 친척이에요.',
+  mosasaurus: '바다에 살던 커다란 도마뱀 친척이에요.', archelon: '아주 아주 큰 바다거북이에요.', basilosaurus: '고래예요. 아기에게 젖을 먹이는 포유류예요.',
+  megalodon: '아주 아주 큰 상어예요.', dunkleosteus: '갑옷을 입은 옛날 물고기예요.', pakicetus: '고래의 아주 먼 조상이에요.', ambulocetus: '걸어 다니던 고래 조상이에요.',
+  tiktaalik: '물고기가 땅으로 올라오던 때의 동물이에요.', megalania: '아주 큰 도마뱀이에요.', meganeura: '아주 큰 잠자리 친척이에요.',
+  dimetrodon: '등에 돛이 있지만 공룡보다 먼저 산 동물이에요. 포유류의 아주 먼 친척이에요.', gorgonops: '포유류의 아주 먼 친척이에요.', lystrosaurus: '포유류의 아주 먼 친척이에요.',
+};
+const NOT_DINO_BY = { pterosaur: '하늘을 날던 파충류, 익룡이에요.', marine_reptile: '바다에 살던 파충류예요.', fish: '물고기예요.', large_mammal: '털이 있고 젖을 먹이는 포유류예요.', sprawler: '악어 친척이에요.', snake: '아주 큰 뱀이에요.', arthropod: '곤충·게·새우와 같은 무리예요.' };
+const PLESIO = ['nothosaurus', 'pliosaurus', 'liopleurodon', 'elasmosaurus'], ICHTHYO = ['shonisaurus', 'shastasaurus', 'ophthalmosaurus'];
+function kindHtml(a) {
+  if (DINO.includes(a.archetype) && !NOT_DINO[a.id]) return '<p class="kind yes">🦖 진짜 공룡이에요!</p>';
+  if (a.archetype === 'bird') return '<p class="kind bird">🐦 새예요. 새는 공룡의 후손이라 “살아 있는 공룡”이라고도 해요!</p>';
+  const t = NOT_DINO[a.id] ?? (PLESIO.includes(a.id) ? '바다에 살던 파충류, 수장룡 무리예요.' : ICHTHYO.includes(a.id) ? '바다에 살던 파충류, 어룡이에요. 물고기처럼 생겼지만 공기로 숨을 쉬었어요.' : NOT_DINO_BY[a.archetype] ?? '공룡과 다른 동물이에요.');
+  return `<p class="kind no">❗ 공룡이 아니에요! ${t}</p>`;
+}
+// 2) 같은 때·같은 곳에 살던 이웃(데이터에서 자동으로). 백과 그림이 있는 동물 먼저
+function friendsHtml(a, skip) {
+  const list = animals.filter(b => !skip.includes(b) && b.id !== a.id && b.era && b.place && whatIf(a, b, neun).met).sort((x, y) => !!y.book - !!x.book).slice(0, 4);
+  if (!list.length) return '';
+  return `<div class="friends"><h3>🤝 ${a.name_ko}의 이웃</h3><p>같은 때, 같은 곳에 살았어요</p><div>${list.map(b => `<figure>${b.book ? `<img src="${import.meta.env.BASE_URL}book/${b.id}.jpg" alt="" onerror="this.remove()">` : ''}<figcaption>${b.name_ko}</figcaption></figure>`).join('')}</div></div>`;
+}
+// 3) 나와 크기 비교: 선생님·어린이·두 동물을 같은 눈금으로(그린 뒤 fitSvg)
+function sizeScene(A, B) {
+  let x = 0, s = drawHuman(HUMANS.teacher_m, '선생님');
+  x += HUMANS.teacher_m * 0.5;
+  s += `<g transform="translate(${x} 0)">${drawHuman(HUMANS.child_m, '어린이')}</g>`;
+  x += HUMANS.child_m * 0.5 + 0.5;
+  const fs = Math.max(A.length_m.avg, B.length_m.avg, 2) * 0.08;
+  for (const [i, a] of [A, B].entries()) {
+    const L = a.length_m.avg;
+    s += `<g transform="translate(${x} 0) scale(${L})">${drawAnimal(a)}</g><text x="${x + L / 2}" y="${fs * 1.4}" font-size="${fs}" text-anchor="middle" class="p${i + 1}">${a.name_ko}</text>`;
+    x += L + 0.6 + L * 0.1;
+  }
+  return s + `<line x1="-0.5" y1="0" x2="${x}" y2="0" class="ground"/>`;
+}
+// 5) 몸 구석구석: 무기·몸 지키기를 그림의 그 부위에 화살표로. 부위 자리는 그림 모양(shapeTest)에서 찾는다
+const PART_AT = [[/이빨|턱|송곳니|부리|물/, 'nose'], [/엄니|코/, 'snout'], [/뿔|프릴|볏|목 ?방패|머리|박치기/, 'head'], [/발톱|발|낫|차기/, 'foot'], [/꼬리|곤봉|가시 꼬리/, 'tail'], [/골판|돛|등|가시|날개|지느러미/, 'back']];
+function partsFill(svg, a) {
+  fitSvg(svg, drawAnimal(a));
+  const test = shapeTest(a, svg), pts = [];
+  for (let i = 0; i <= 80; i++) for (let j = 0; j <= 60; j++) if (test(i / 80, j / 50)) pts.push([i / 80, j / 50]);
+  const items = [...(a.weapons ?? []), ...(a.armor ?? [])].slice(0, 5);
+  if (!pts.length || !items.length) return;
+  const best = (f, P = pts) => P.reduce((b, p) => (f(p) > f(b) ? p : b), P[0]);
+  const top = best(p => p[1])[1], low = best(p => -p[1])[1], maxU = best(p => p[0])[0], minU = best(p => -p[0])[0], cy = (top + low) / 2;
+  const at = {
+    nose: best(p => p[0] - Math.abs(p[1] - cy) * 0.2), snout: best(p => p[0] - p[1] * 0.3),
+    head: best(p => p[1], pts.filter(p => p[0] > maxU - 0.18)), tail: best(p => -p[0]),
+    foot: best(p => -p[1] - Math.abs(p[0] - 0.55) * 0.3), back: best(p => p[1], pts.filter(p => Math.abs(p[0] - (minU + maxU) / 2) < 0.08)),
+    body: [(minU + maxU) / 2, cy],
+  };
+  const fs = 0.065 * Math.max(maxU - minU, top - low), used = []; // 키 큰 동물도 글씨가 같은 크기로 보이게
+  const labels = items.map((t, k) => {
+    const where = PART_AT.find(([re]) => re.test(t))?.[1] ?? 'body', [u, v] = at[where] ?? at.body;
+    const up = v >= cy || where === 'back' || where === 'head', n = used.filter(w => w === up).length;
+    used.push(up);
+    const ly = up ? top + fs * (1.6 + n * 1.6) : low - fs * (2 + n * 1.6), lx = Math.min(maxU - fs * 2, Math.max(minU + fs * 2, u + (n % 2 ? 1 : -1) * fs * 2.5));
+    return `<line x1="${u}" y1="${-v}" x2="${lx}" y2="${-ly + (up ? fs * 0.4 : -fs)}" class="pline"/><circle cx="${u}" cy="${-v}" r="${fs * 0.25}" class="pdot"/>`
+      + `<text x="${lx}" y="${-ly}" font-size="${fs}" text-anchor="middle" class="ptxt">${t}</text>`;
+  });
+  fitSvg(svg, drawAnimal(a) + labels.join(''), 0.04);
+}
+
 // 두 동물 나란히 비교(공부 탭): 몸길이·몸무게는 막대(큰 쪽이 꽉 참), 살았던 때·먹이는 글로
 function compareHtml(A, B) {
   const bar = (k, fmt) => { const m = Math.max(k(A), k(B)); return [A, B].map((a, i) => `<div class="cbar p${i + 1}"><i style="width:${Math.max(4, (k(a) / m) * 100)}%"></i><span>${a.name_ko} ${fmt(a)}</span></div>`).join(''); };
@@ -242,7 +308,9 @@ function result(A, B, res, votes) {
       <button class="tolearn">📒 두 공룡 더 알아보기 →</button>
     </div></div>
   <div class="learn rpane" data-p="learn" hidden>
-    <div class="lpair">${[A, B].map(a => `<div class="lcard">${bookPic(a)}${dexHtml(a)}</div>`).join('')}</div>
+    <div class="lpair">${[A, B].map(a => `<div class="lcard">${bookPic(a)}${kindHtml(a)}${dexHtml(a)}${friendsHtml(a, [A, B])}</div>`).join('')}</div>
+    <div class="lsec"><h2>🔍 몸 구석구석</h2><div class="lpair"><svg class="parts"></svg><svg class="parts"></svg></div></div>
+    <div class="lsec"><h2>🧍 나와 크기 비교</h2><svg class="lsize"></svg></div>
     ${compareHtml(A, B)}
     <div class="whyall"><h2>🤔 ${ga(W.name_ko)} 이긴 까닭</h2><ul class="reasons">${res.reasons.map((_, i) => reason(i)).join('')}</ul>
       ${res.upset ? `<p class="upset">🎲 이번에는 ${ga(W.name_ko)} 뒤집었어요! 다시 하면 결과가 바뀔 수도 있어요.</p>` : ''}</div>
@@ -251,7 +319,10 @@ function result(A, B, res, votes) {
       <div class="oddbar"><i style="width:${pA}%">${A.name_ko} ${pA}%</i><i style="width:${100 - pA}%">${B.name_ko} ${100 - pA}%</i></div></div>
   </div>`;
   fitSvg(app.querySelector('svg'), mini(W));
-  const show = t => { app.querySelectorAll('.rtab').forEach(b => b.classList.toggle('on', b.dataset.t === t)); app.querySelectorAll('.rpane').forEach(p => (p.hidden = p.dataset.p !== t)); scrollTo(0, 0); };
+  // 공부 탭 그림은 탭을 처음 열 때 그린다(숨긴 채로는 그림 크기를 잴 수 없다)
+  let drawn = false;
+  const drawLearn = () => { if (drawn) return; drawn = true; app.querySelectorAll('.parts').forEach((el, i) => partsFill(el, [A, B][i])); fitSvg(app.querySelector('.lsize'), sizeScene(A, B), 0.04); };
+  const show = t => { app.querySelectorAll('.rtab').forEach(b => b.classList.toggle('on', b.dataset.t === t)); app.querySelectorAll('.rpane').forEach(p => (p.hidden = p.dataset.p !== t)); if (t === 'learn') drawLearn(); scrollTo(0, 0); };
   app.querySelectorAll('.rtab').forEach(b => (b.onclick = () => show(b.dataset.t)));
   app.querySelector('.tolearn').onclick = () => show('learn');
   app.querySelector('.again').onclick = () => fight(A, B, votes);
