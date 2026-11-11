@@ -45,12 +45,13 @@ function biped(p, K) {
   });
   else if (bird) arms = both(sd => feathers(X + R * 0.7, by + R * 0.35, sd * (W / 2 + 0.1), R * 2.2, R * 0.75, K, 3)); // 접은 날개
   else {
-    const al = Math.max(p.arm * N, 1.4), fingers = p.hand === 'rex' ? 2 : 3, cl = F.includes('claws') ? 0.9 : 0.4;
+    // 손: rex 두 손가락, scythe 낫처럼 긴 발톱 셋(테리지노), thumb 큰 엄지 발톱(바리오닉스), wing 깃털 날개 팔(랍토르)
+    const al = Math.max(p.arm * N, 1.4), fingers = p.hand === 'rex' || p.hand === 'thumb' ? 2 : 3, cl = p.hand === 'scythe' ? 2.8 : p.hand === 'thumb' ? 1.5 : F.includes('claws') ? 0.9 : 0.4, aw = p.hand === 'scythe' ? 0.9 : 0.6, wingArm = p.hand === 'wing';
     arms = both(sd => {
       const z = sd * W * 0.44, sx = X + 5, sy = by - R * 0.35;
-      return group(box(sx, sy - al * 0.3, z, 0.6, al * 0.6, 0.6, K.limb), box(sx + al * 0.3, sy - al * 0.6, z, al * 0.6, 0.45, 0.5, K.limb),
+      return group(box(sx, sy - al * 0.3, z, aw, al * 0.6, aw, K.limb), box(sx + al * 0.3, sy - al * 0.6, z, al * 0.6, aw * 0.75, aw * 0.85, K.limb),
         Array.from({ length: fingers }, (_, i) => box(sx + al * 0.65, sy - al * 0.6 - cl * 0.55, z + (i - (fingers - 1) / 2) * 0.24, 0.24, cl, 0.18, CLAW)),
-        F.includes('feathers') ? feathers(sx + al * 0.3, sy - al * 0.6 - 0.4, z + sd * 0.15, al * 0.9, 0.55, K, 2) : null);
+        F.includes('feathers') ? feathers(sx + al * 0.3, sy - al * 0.6 - (wingArm ? 0.7 : 0.4), z + sd * 0.15, al * (wingArm ? 1.2 : 0.9), wingArm ? 1.1 : 0.55, K, wingArm ? 3 : 2) : null);
     });
   }
   // 다리: 넓적다리(엉덩이 관절) → 무릎 관절 → 정강이 → 발목 → 발 + 발톱
@@ -85,7 +86,8 @@ function quadBody(p, K, wk) {
     const w = lw * (front ? p.frontLeg ?? 1 : 1), top = yAt(x) - R * 0.3, z = sd * (W / 2 - w * 0.45), ky = top * 0.45, out = sd * w * 1.4 * bend, zf = z + out;
     const claws = front && F.includes('claws') ? [-1, 0, 1].map(k => piv(x + w * 0.4, 0.4, zf + k * w * 0.3, [0, 0, -2.2], box(0, 0.8, 0, 0.3, 1.6, 0.3, CLAW))) // 큰 앞발톱
       : [-1, 0, 1].map(k => box(x + w * 0.55 + 0.1, 0.22, zf + k * w * 0.33, bend ? 0.8 : 0.25, 0.42, w * 0.24, bend ? CLAW : K.nail));
-    const foot = group(box(x + 0.15, 0.3, zf, w * (nimble ? 1.3 : 1.1), 0.6, w * 1.1, K.limb), claws);
+    const thumb = front && p.thumb ? piv(x + w * 0.5, 1.1, zf + sd * w * 0.35, [0, 0, -0.5], box(0, 0.7, 0, 0.45, 1.4, 0.45, HORN), box(0, 1.45, 0, 0.25, 0.3, 0.25, '#ffffff')) : null; // 엄지 가시(이구아노돈)
+    const foot = group(box(x + 0.15, 0.3, zf, w * (nimble ? 1.3 : 1.1), 0.6, w * 1.1, K.limb), claws, thumb);
     const lower = box(x, (ky + 0.6) / 2, zf, w * (nimble ? 0.6 : 0.85), ky - 0.3, w * 0.85, K.limb);
     const knee = J(x, ky, lower, foot);
     const upper = bend ? box(x, top - w * 0.2, z + out / 2, w, Math.max(w, top - ky), Math.abs(out) + w, K.limb) // 옆으로 뻗은 윗다리(악어형)
@@ -295,7 +297,8 @@ const OVERRIDE = {
   brachiosaurus: { neck: [0.8, 0.85], snout: true, frontLeg: 1.2, bd: 0.1, legR: 0.026, nr: 0.034, b0: 0.33, b1: 0.62 }, // 하늘로 세운 목, 높은 콧등, 긴 앞다리, 큰 몸통
   ankylosaurus: { addF: ['spikes'], squamo: true }, // 옆구리 가시, 머리 뒤 모서리 뿔
   velociraptor: { bd: 0.065, hl: 0.13, neck: 1.3 }, // 너무 가늘어 도마뱀 같던 몸을 통통하게, 고개를 들어 새처럼
-  smilodon: { hip: 0.33, sh: 0.4, bd: 0.125, legR: 0.045, frontLeg: 1.2, hl: 0.2, dp: 0.95 }, // 등이 엉덩이 쪽으로 낮고, 굵은 앞다리·큰 머리(말처럼 보이지 않게)
+  iguanodon: { thumb: true }, // 앞발 엄지 가시
+  smilodon: { sabreK: 1.5, hip: 0.33, sh: 0.4, bd: 0.125, legR: 0.045, frontLeg: 1.2, hl: 0.2, dp: 0.95 }, // 등이 엉덩이 쪽으로 낮고, 굵은 앞다리·큰 머리(말처럼 보이지 않게)
   quetzalcoatlus: { bd: 0.09, wing: 0.6, dp: 0.4 }, // 몸을 키우고 날개 판은 줄이고, 부리는 굵게(실처럼 보이지 않게)
   mosasaurus: { bd: 0.07 }, // 통통한 바다 도마뱀
   megalodon: { bd: 0.105 }, // 더 묵직한 큰 상어

@@ -204,7 +204,7 @@ function headDeco(hx, hy, hl, hd, hw, K, p, ele = false) {
   if (F.includes('crest')) out.push(box(hx + hl * 0.5, top + hd * 0.18, 0, hl * 0.6, hd * 0.4, 0.3, K.accent)); // 머리 위 볏
   if (F.includes('crest2')) out.push(both(sd => box(hx + hl * 0.5, top + hd * 0.3, sd * 0.35, hl * 0.6, hd * 0.65, 0.2, K.accent, -0.12))); // 볏 두 장(딜로포사우루스)
   if (F.includes('cryo')) out.push(box(hx + hl * 0.32, top + hd * 0.3, 0, 0.5, hd * 0.6, hw * 0.9, K.accent)); // 가로 볏(크리올로포사우루스)
-  if (F.includes('sabre')) out.push(both(sd => chain(hx + hl * 0.8, my, sd * hw * 0.22, [0, 0, Math.PI], [{ len: hd * 0.45, w: 0.45 }, { len: hd * 0.4, w: 0.35, bend: -0.15 }], TOOTH))); // 칼 송곳니
+  if (F.includes('sabre')) out.push(both(sd => chain(hx + hl * 0.8, my, sd * hw * 0.22, [0, 0, Math.PI], [{ len: hd * 0.45 * (p.sabreK ?? 1), w: 0.45 }, { len: hd * 0.4 * (p.sabreK ?? 1), w: 0.35, bend: -0.15 }], TOOTH))); // 칼 송곳니
   if (F.includes('horn_nose')) out.push(horn(hx + hl * 0.92, my + hd * 0.55, 0, [0, 0, -0.25], hd * 1.3, 1.1), horn(hx + hl * 0.68, top - hd * 0.1, 0, [0, 0, -0.1], hd * 0.6, 0.8)); // 큰 코뿔
   if (F.includes('antlers')) { // 넓적한 사슴뿔(메갈로케로스)
     const ant = '#a08e70';
