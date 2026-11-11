@@ -4,6 +4,7 @@
 import * as THREE from 'three';
 import { animals } from '../data.js';
 import { build } from '../art/block3d.js';
+import { build as buildVoxel } from '../art/voxel3d.js';
 import { REPS } from '../art/shape3d.js';
 import { applyPose, rigInfo } from '../art/draw3d.js';
 import { targetPose, blend, restPose, STATES } from '../art/motion3d.js';
@@ -49,11 +50,13 @@ export function showBlocks(root) {
   const many = location.hash.match(/^#block=(all|reps)/)?.[1];
   if (many) return showGrid(root, many === 'all' ? animals : animals.filter(a => REPS.has(a.id)));
   const ids = location.hash.match(/^#block=([\w,]+)/)?.[1].split(',') ?? ['tyrannosaurus', 'triceratops', 'woolly_mammoth'];
-  const list = ids.map(id => animals.find(a => a.id === id)).filter(Boolean);
+  // &vox=64,96: 동물마다 지금 블록 옆에 고해상도 블록(칸 수별)을 나란히
+  const vox = location.hash.match(/&vox=([\d,]+)/)?.[1].split(',').map(Number) ?? [];
+  const list = ids.map(id => animals.find(a => a.id === id)).filter(Boolean).flatMap(a => [{ a, make: build, tag: '' }, ...vox.map(n => ({ a, make: b => { const t = performance.now(), r = buildVoxel(b, n); if (r) r.voxels.ms = Math.round(performance.now() - t); return r; }, tag: ` ${n}칸` }))]);
   root.innerHTML = `${CSS}<h1 style="padding:16px 16px 0">블록 3D 확인</h1>
-  <div class="bv">${list.map(a => `<figure><canvas></canvas><figcaption>${a.name_ko}<small></small></figcaption></figure>`).join('')}</div>`;
-  const views = list.map((a, i) => {
-    const rig = build(a), cv = root.querySelectorAll('.bv canvas')[i], label = cv.nextElementSibling.querySelector('small');
+  <div class="bv">${list.map(({ a, tag }) => `<figure><canvas></canvas><figcaption>${a.name_ko}${tag}<small></small></figcaption></figure>`).join('')}</div>`;
+  const views = list.map(({ a, make }, i) => {
+    const rig = make(a), cv = root.querySelectorAll('.bv canvas')[i], label = cv.nextElementSibling.querySelector('small');
     if (!rig) return (label.textContent = '블록 모델 없음'), null;
     const r = renderer(cv), scene = stage(), turn = new THREE.Group(), cam = new THREE.PerspectiveCamera(35, 4 / 3, 0.05, 20);
     rig.root.position.x = -0.5; // 몸 가운데를 축으로 돈다
@@ -75,7 +78,7 @@ export function showBlocks(root) {
       if (v.r.domElement.width !== w) v.r.setSize(w, h, false);
       v.turn.rotation.y = yaw ?? t * 0.5;
       applyPose(v.rig, blend(v.P, targetPose(state, t, v.info), dt));
-      v.label.textContent = KO[state];
+      v.label.textContent = KO[state] + (v.rig.voxels ? ` · 면 ${Math.round(v.rig.voxels.faces / 1000)}천 개 · 깎기 ${v.rig.voxels.ms}ms` : '');
       v.r.render(v.scene, v.cam);
     }
     requestAnimationFrame(tick);
