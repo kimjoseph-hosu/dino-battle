@@ -202,7 +202,7 @@ function headDeco(hx, hy, hl, hd, hw, K, p, ele = false) {
   if (p.squamo) out.push(both(sd => piv(hx + hl * 0.08, hy + hd * 0.35, sd * hw * 0.48, [sd * 0.9, 0, 1.9], box(0, 0.55, 0, 0.6, 1.1, 0.6, HORN))), both(sd => piv(hx + hl * 0.3, hy - hd * 0.2, sd * hw * 0.5, [sd * 1.2, 0, 2.4], box(0, 0.4, 0, 0.5, 0.8, 0.5, HORN)))); // 안킬로: 머리 뒤 모서리 뿔 + 볼 뿔
   if (F.includes('nosehorn')) out.push(horn(hx + hl * 0.78, my + hd * 0.6, 0, [0, 0, -0.2], hd * 0.55, 0.55)); // 코뿔(케라토사우루스)
   if (F.includes('crest')) out.push(box(hx + hl * 0.5, top + hd * 0.18, 0, hl * 0.6, hd * 0.4, 0.3, K.accent)); // 머리 위 볏
-  if (F.includes('crest2')) out.push(both(sd => box(hx + hl * 0.5, top + hd * 0.3, sd * 0.35, hl * 0.6, hd * 0.65, 0.2, K.accent, -0.12))); // 볏 두 장(딜로포사우루스)
+  if (F.includes('crest2')) { const k = p.crestK ?? 1; out.push(both(sd => box(hx + hl * 0.5, top + hd * 0.3 * k, sd * 0.35, hl * 0.6 * Math.sqrt(k), hd * 0.65 * k, 0.2, K.accent, -0.12))); } // 볏 두 장(딜로포사우루스)
   if (F.includes('cryo')) out.push(box(hx + hl * 0.32, top + hd * 0.3, 0, 0.5, hd * 0.6, hw * 0.9, K.accent)); // 가로 볏(크리올로포사우루스)
   if (F.includes('sabre')) out.push(both(sd => chain(hx + hl * 0.8, my, sd * hw * 0.22, [0, 0, Math.PI], [{ len: hd * 0.45 * (p.sabreK ?? 1), w: 0.45 }, { len: hd * 0.4 * (p.sabreK ?? 1), w: 0.35, bend: -0.15 }], TOOTH))); // 칼 송곳니
   if (F.includes('horn_nose')) out.push(horn(hx + hl * 0.92, my + hd * 0.55, 0, [0, 0, -0.25], hd * 1.3, 1.1), horn(hx + hl * 0.68, top - hd * 0.1, 0, [0, 0, -0.1], hd * 0.6, 0.8)); // 큰 코뿔
@@ -213,7 +213,8 @@ function headDeco(hx, hy, hl, hd, hw, K, p, ele = false) {
   if (ele || F.includes('ears')) { const ear = F.includes('ears') ? hd * 0.9 : hd * 0.45; out.push(both(sd => box(hx + hl * 0.12, hy + hd * 0.05, sd * (hw / 2 + 0.2), Math.max(1, ear * 0.7), ear, 0.35, K.dark))); }
   else if (K.arch === 'large_mammal' && !F.includes('antlers')) out.push(both(sd => box(hx + hl * 0.2, top + 0.3, sd * hw * 0.32, 0.8, F.includes('round_ears') ? 0.8 : 1.1, 0.45, K.dark)));
   if (F.includes('trunk')) { const Lt = (hy - hd * 0.15) * 0.8, w = hw * 0.42; out.push(chain(hx + hl * 0.85, hy - hd * 0.1, 0, [0, 0, Math.PI], [0, 0.05, 0.1, 0.25, 0.5].map((b, i) => ({ len: Lt / 5, w: w * (1 - i * 0.1), bend: b, c: i === 4 ? K.dark : undefined })), K.body)); }
-  if (F.includes('tusks')) out.push(both(sd => chain(hx + hl * 0.78, my + 0.3, sd * hw * 0.3, [0, -sd * 0.18, -2.6], [0, 0.5, 0.55, 0.6].map((b, i) => ({ len: hl * 0.33, w: 0.9 - i * 0.12, bend: b })), IVORY)));
+  if (F.includes('tusks')) out.push(both(sd => chain(hx + hl * 0.78, my + 0.3, sd * hw * 0.3, [0, -sd * 0.18, -2.6], [0, 0.5, 0.55, 0.6].map((b, i) => ({ len: hl * 0.33 * (p.tuskK ?? 1), w: (0.9 - i * 0.12) * Math.sqrt(p.tuskK ?? 1), bend: b })), IVORY)));
+  if (p.dome) out.push(box(hx + hl * 0.3, top + hd * 0.25, 0, hl * 0.35, hd * 0.35, hw * 0.6, K.head ?? K.body)); // 정수리 혹(매머드)
   return out;
 }
 
@@ -227,7 +228,7 @@ export function bodyDeco(K, top, R, W, sail = 0) {
   }
   if (F.includes('mane')) for (let i = 0; i < 11; i++) { const t = i / 10, [x, y] = top(t), L = R * (0.5 + 0.35 * Math.sin(Math.PI * t)); out.push(piv(x, y - 0.2, 0, [0, 0, 0.6], box(0, L / 2, 0, 0.35, L, 0.35, K.ridge))); }
   if (F.includes('plates')) for (let i = 0; i < 11; i++) { // 골판: 마름모 두 줄, 엇갈리게, 가운데가 크다
-    const t = -0.1 + i * 0.11, [x, y] = top(Math.max(0, Math.min(1, t))), sz = R * (0.55 + 0.8 * Math.sin(Math.PI * Math.max(0.1, Math.min(0.95, 0.15 + t * 0.75))));
+    const t = -0.1 + i * 0.11, [x, y] = top(Math.max(0, Math.min(1, t))), sz = (K.plateK ?? 1) * R * (0.55 + 0.8 * Math.sin(Math.PI * Math.max(0.1, Math.min(0.95, 0.15 + t * 0.75))));
     out.push(box(x, y + sz * 0.3, (i % 2 ? 1 : -1) * 0.35, sz * 0.75, sz * 0.75, 0.35, K.plate, Math.PI / 4));
   }
   if (F.includes('spikes')) for (let i = 0; i < 5; i++) for (const sd of [1, -1]) { // 옆구리 가시: 띄엄띄엄, 어깨 쪽이 길다

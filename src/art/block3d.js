@@ -301,13 +301,17 @@ const OVERRIDE = {
   ankylosaurus: { addF: ['spikes'], squamo: true }, // 옆구리 가시, 머리 뒤 모서리 뿔
   velociraptor: { bd: 0.065, hl: 0.13, neck: 1.3 }, // 너무 가늘어 도마뱀 같던 몸을 통통하게, 고개를 들어 새처럼
   iguanodon: { thumb: true },
+  giganotosaurus: { noF: ['mane'], hl: 0.15, dp: 0.62, ridges: true, bd: 0.105 }, // 갈기 대신 길고 낮은 머리·콧등 능선, 묵직한 몸(티라노와 다르게)
+  stegosaurus: { hl: 0.07, neck: [0.88, 0.08], hip: 0.29, plateK: 1.3 }, // 땅에 닿을 듯 낮은 작은 머리, 높게 솟은 엉덩이, 더 큰 골판
+  woolly_mammoth: { tuskK: 1.35, dome: true }, // 크게 휜 엄니, 정수리 혹
+  dilophosaurus: { crestK: 1.8 }, // 머리 위 볏 두 장을 크게
+  elasmosaurus: { bd: 0.075, fl: 1.8, neckL: 0.56, hl: 0.045 }, // 아주 긴 목·작은 머리, 넓적한 몸에 큰 지느러미발 넷
   therizinosaurus: { pot: true, neck: 3, hl: 0.055 }, // 불룩한 배, 길게 세운 목, 작은 머리
   quetzalcoatlus: { bd: 0.085 }, // 몸통을 키워 날개·목에 비해 너무 작지 않게 // 앞발 엄지 가시
   smilodon: { sabreK: 1.5, hip: 0.33, sh: 0.4, bd: 0.125, legR: 0.045, frontLeg: 1.2, hl: 0.2, dp: 0.95 }, // 등이 엉덩이 쪽으로 낮고, 굵은 앞다리·큰 머리(말처럼 보이지 않게)
   quetzalcoatlus: { bd: 0.09, wing: 0.6, dp: 0.4 }, // 몸을 키우고 날개 판은 줄이고, 부리는 굵게(실처럼 보이지 않게)
   mosasaurus: { bd: 0.07 }, // 통통한 바다 도마뱀
   megalodon: { bd: 0.105 }, // 더 묵직한 큰 상어
-  stegosaurus: {}, woolly_mammoth: {}, // 지금 모습으로 충분히 닮음(2026-11-05 확인)
 };
 const KIND = { large_mammal: 'fur', bird: 'feather', fish: 'smooth', marine_reptile: 'smooth', pterosaur: 'fur', arthropod: 'shell' };
 
@@ -318,9 +322,9 @@ const vivid = hex => { const c = new THREE.Color(hex), h = {}; c.getHSL(h); retu
 export function build(a) {
   const make = TEMPLATES[a.archetype];
   if (!make || !a.art?.palette) return null;
-  const { addF = [], ...ov } = OVERRIDE[a.id] ?? {};
+  const { addF = [], noF = [], ...ov } = OVERRIDE[a.id] ?? {};
   const L = LOOK[a.id]; // 종마다 고유한 색·무늬(blockLook.js). 없으면 백과 팔레트를 선명하게
-  const [back, belly, accent] = L ? [L[0], L[1], L[4] ?? (a.art.palette[2] && vivid(a.art.palette[2]))] : a.art.palette.map(vivid), F = [...(a.art.features ?? []), ...addF];
+  const [back, belly, accent] = L ? [L[0], L[1], L[4] ?? (a.art.palette[2] && vivid(a.art.palette[2]))] : a.art.palette.map(vivid), F = [...(a.art.features ?? []).filter(f => !noF.includes(f)), ...addF];
   const p = { ...ARCHETYPES[a.archetype].params, ...a.art.params, ...ov, ...a.art.block, ...(L && { pattern: L[2], mark: L[3], markOp: L[2] ? 0.8 : 0 }) };
   const seed = [...a.id].reduce((h, c) => Math.imul(h, 31) + c.charCodeAt(0) | 0, 7) >>> 0;
   let s = seed;
@@ -341,6 +345,7 @@ export function build(a) {
   const M = L?.[5] ?? {};
   K.head = M.head ? { tex: skinTex(M.head, { pattern: p.pattern, mark: p.mark, markOp: p.markOp, kind, seed }), side: '#ffffff', top: '#d6d6d6', bot: belly } : K.body;
   K.mask = M.mask;
+  K.plateK = p.plateK;
   K.dorsal = M.dorsal;
   if (M.tail) K.body = { ...K.body, ring: { top: col(M.tail, 0.85), side: M.tail, bot: col(M.tail, 0.75) } };
   const rig = make(p, K);
