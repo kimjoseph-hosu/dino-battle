@@ -192,6 +192,27 @@ button:disabled { opacity: .45; cursor: default; }
 .oddbar i { font-style: normal; display: flex; align-items: center; padding: 0 14px; white-space: nowrap; overflow: hidden; }
 .oddbar i:first-child { background: var(--p1); } .oddbar i:last-child { background: var(--p2); justify-content: flex-end; }
 .buttons { display: flex; gap: 16px; margin-top: 18px; }
+/* 결과 탭: 🏆 결과 / 📒 공룡 공부 */
+.rtabs { display: flex; gap: 12px; justify-content: center; margin-bottom: 8px; }
+.rtab { font-size: 30px; padding: 12px 34px; border-radius: 18px 18px 6px 6px; background: var(--panel2); color: var(--dim); box-shadow: none; }
+.rtab.on { background: linear-gradient(#f2c84b, #c9921f); color: #2a1d06; box-shadow: 0 5px 0 #7a5410; }
+.result.rpane { min-height: calc(100vh - 110px); }
+.rpane[hidden] { display: none !important; }
+.tolearn { margin-top: 16px; font-size: 28px; padding: 14px 28px; background: linear-gradient(#4f8fcf, #2a5f99); box-shadow: 0 6px 0 #173a60; }
+.learn { display: grid; gap: 22px; padding-bottom: 30px; }
+.learn .lpair { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.learn .lcard { display: grid; gap: 10px; align-content: start; }
+.learn .bookpic { display: block; height: 240px; max-width: 100%; margin: 0 auto; object-fit: contain; border-radius: 16px; background: #fff; box-shadow: 0 6px 18px #0008; }
+.learn h2 { font-size: 34px; color: var(--gold); margin: 0 0 10px; }
+.learn .dex li { font-size: 24px; grid-template-columns: 40px 150px 1fr; }
+.cmp, .whyall { background: var(--panel); border-radius: 20px; padding: 16px 24px; }
+.cmp h3 { font-size: 24px; margin: 12px 0 6px; color: var(--dim); font-weight: 400; }
+.cbar { position: relative; height: 44px; margin: 6px 0; background: #ffffff10; border-radius: 22px; overflow: hidden; }
+.cbar i { position: absolute; inset: 0 auto 0 0; border-radius: 22px; }
+.cbar.p1 i { background: var(--p1); } .cbar.p2 i { background: var(--p2); }
+.cbar span { position: relative; display: flex; align-items: center; height: 100%; padding: 0 18px; font-size: 24px; white-space: nowrap; text-shadow: 0 2px 4px #000a; }
+.ctxt { display: flex; gap: 24px; flex-wrap: wrap; margin: 0; font-size: 26px; }
+.ctxt .p1 { color: var(--p1); } .ctxt .p2 { color: var(--p2); }
 .buttons button { font-size: 30px; padding: 16px 30px; }
 .again { background: linear-gradient(#ff7a3d, #c2361a); box-shadow: 0 6px 0 #6d1a0a; }
 

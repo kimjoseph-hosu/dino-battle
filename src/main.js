@@ -213,31 +213,47 @@ function dexHtml(a) {
     + `</ul><p class="src">${a.book ? `📖 ${a.book} ${a.page}쪽` : a.origin ? '🤖 AI가 찾은 정보예요. 선생님과 함께 확인해요' : ''}</p></div>`;
 }
 
+// 두 동물 나란히 비교(공부 탭): 몸길이·몸무게는 막대(큰 쪽이 꽉 참), 살았던 때·먹이는 글로
+function compareHtml(A, B) {
+  const bar = (k, fmt) => { const m = Math.max(k(A), k(B)); return [A, B].map((a, i) => `<div class="cbar p${i + 1}"><i style="width:${Math.max(4, (k(a) / m) * 100)}%"></i><span>${a.name_ko} ${fmt(a)}</span></div>`).join(''); };
+  const txt = (f) => [A, B].map((a, i) => `<span class="p${i + 1}">${a.name_ko}: ${f(a) || '?'}</span>`).join('');
+  return `<div class="cmp"><h2>⚖️ 둘을 비교해요</h2>
+    <h3>📏 몸길이</h3>${bar(a => a.length_m.avg, a => sizeLike(a.length_m.avg))}
+    <h3>🏋️ 몸무게</h3>${bar(a => Math.sqrt(a.mass_kg.avg), a => (a.mass_kg.avg >= 1 ? weightLike(a.mass_kg.avg) : '아주 가벼워요'))}
+    <h3>⏳ 살았던 때</h3><p class="ctxt">${txt(a => a.era)}</p>
+    <h3>🍽️ 먹이</h3><p class="ctxt">${txt(a => a.diet)}</p></div>`;
+}
+const bookPic = a => (a.book ? `<img class="bookpic" src="${import.meta.env.BASE_URL}book/${a.id}.jpg" alt="${a.name_ko}" onerror="this.remove()">` : '');
+
+// 결과: 탭 둘 — 🏆 결과(누가 왜 이겼나, 예측, 다시 하기) / 📒 공룡 공부(두 동물 도감·비교·이긴 이유 전부·만약에·예상 승률). ←/→ 키로도 넘긴다
 function result(A, B, res, votes) {
   const [W, L] = res.winner === 0 ? [A, B] : [B, A];
   const pA = Math.round(res.P * 100); // 이 판과 같은 조건(사건 켬/끔)으로 미리 계산한 승률
   const lines = reasonLines(W, L, res.reasons, stage);
   const reason = i => `<li><span>${iconOf(res.reasons[i], stage)}</span>${lines[i]}</li>`;
-  app.innerHTML = `<div class="result">
-    <div class="left"><div class="podium"><span class="ribbon">${res.ko ? 'K.O. 승리!' : '승리!'}</span>${W.book ? `<img class="bookpic" src="${import.meta.env.BASE_URL}book/${W.id}.jpg" alt="${W.name_ko}">` : ''}<svg class="scene"></svg><b>${W.name_ko}</b></div></div>
+  app.innerHTML = `<nav class="rtabs"><button class="rtab on" data-t="win">🏆 결과</button><button class="rtab" data-t="learn">📒 공룡 공부</button></nav>
+  <div class="result rpane" data-p="win">
+    <div class="left"><div class="podium"><span class="ribbon">${res.ko ? 'K.O. 승리!' : '승리!'}</span>${bookPic(W)}<svg class="scene"></svg><b>${W.name_ko}</b></div></div>
     <div class="why">
       <h1>${ga(W.name_ko)} 이겼어요!</h1>
       <ul class="reasons top">${reason(0)}</ul>
       ${predictionHtml(A, B, res, votes)}
       <div class="buttons"><button class="again">🔁 같은 동물로 다시</button><button class="other">🦖 다른 동물 고르기</button></div>
-      <details class="more"><summary>📖 더 알아보기 (선생님)</summary>
-        ${lines.length > 1 ? `<ul class="reasons">${res.reasons.slice(1).map((_, i) => reason(i + 1)).join('')}</ul>` : ''}
-        ${res.upset ? `<p class="upset">🎲 이번에는 ${ga(W.name_ko)} 뒤집었어요! 다시 하면 결과가 바뀔 수도 있어요.</p>` : ''}
-        ${whatIfHtml(A, B)}
-        <div class="odds"><p>${STAGES[stage].emoji} ${STAGES[stage].name}에서 싸우기 전 예상</p>
-          <div class="oddbar"><i style="width:${pA}%">${A.name_ko} ${pA}%</i><i style="width:${100 - pA}%">${B.name_ko} ${100 - pA}%</i></div></div>
-        ${dexHtml(W)}
-      </details>
-    </div></div>`;
+      <button class="tolearn">📒 두 공룡 더 알아보기 →</button>
+    </div></div>
+  <div class="learn rpane" data-p="learn" hidden>
+    <div class="lpair">${[A, B].map(a => `<div class="lcard">${bookPic(a)}${dexHtml(a)}</div>`).join('')}</div>
+    ${compareHtml(A, B)}
+    <div class="whyall"><h2>🤔 ${ga(W.name_ko)} 이긴 까닭</h2><ul class="reasons">${res.reasons.map((_, i) => reason(i)).join('')}</ul>
+      ${res.upset ? `<p class="upset">🎲 이번에는 ${ga(W.name_ko)} 뒤집었어요! 다시 하면 결과가 바뀔 수도 있어요.</p>` : ''}</div>
+    ${whatIfHtml(A, B)}
+    <div class="odds"><p>${STAGES[stage].emoji} ${STAGES[stage].name}에서 싸우기 전 예상</p>
+      <div class="oddbar"><i style="width:${pA}%">${A.name_ko} ${pA}%</i><i style="width:${100 - pA}%">${B.name_ko} ${100 - pA}%</i></div></div>
+  </div>`;
   fitSvg(app.querySelector('svg'), mini(W));
-  // 백과 그림이 있으면 그것을 보여 주고(public/book/<id>.jpg, 백과 PDF에서 꺼냄), 없거나 못 불러오면 게임 그림
-  const pic = app.querySelector('.bookpic');
-  if (pic) pic.onerror = () => pic.remove();
+  const show = t => { app.querySelectorAll('.rtab').forEach(b => b.classList.toggle('on', b.dataset.t === t)); app.querySelectorAll('.rpane').forEach(p => (p.hidden = p.dataset.p !== t)); scrollTo(0, 0); };
+  app.querySelectorAll('.rtab').forEach(b => (b.onclick = () => show(b.dataset.t)));
+  app.querySelector('.tolearn').onclick = () => show('learn');
   app.querySelector('.again').onclick = () => fight(A, B, votes);
   app.querySelector('.other').onclick = () => pick([A, B]);
 }
@@ -245,7 +261,7 @@ function result(A, B, res, votes) {
 // AI로 찾아 둔 동물(서버 캐시)을 먼저 불러온다. 서버가 없으면 빈 목록
 addAnimals(await loadAiAnimals());
 
-// #block(=id,id…): 블록 3D 돌려 보기, #gallery: 그림 확인, #model=mosasaurus: 2D↔3D 비교, #templates: 3D 체형 틀, #fight=tyrannosaurus,triceratops(&s=jungle&m=tail): 바로 배틀, 무대·공격 움직임 고정(확인용)
+// #result=id,id: 결과 화면만, #block(=id,id…): 블록 3D 돌려 보기, #gallery: 그림 확인, #model=mosasaurus: 2D↔3D 비교, #templates: 3D 체형 틀, #fight=tyrannosaurus,triceratops(&s=jungle&m=tail): 바로 배틀, 무대·공격 움직임 고정(확인용)
 const fightIds = location.hash.match(/^#fight=(\w+),(\w+)/)?.slice(1).map(id => animals.find(a => a.id === id));
 const modelId = location.hash.match(/^#model=(\w+)/)?.[1];
 if (location.hash.startsWith('#block')) showBlocks(app);
@@ -253,13 +269,18 @@ else if (location.hash === '#gallery') showGallery(app);
 else if (location.hash === '#sounds') showSounds(app);
 else if (location.hash.startsWith('#templates')) showTemplates(app);
 else if (modelId) showModel(app, animals.find(a => a.id === modelId));
-else if (fightIds?.every(Boolean)) {
+else if (location.hash.startsWith('#result=')) { // #result=tyrannosaurus,triceratops: 배틀 없이 결과 화면만(확인용)
+  const [A, B] = location.hash.slice(8).split('&')[0].split(',').map(id => animals.find(a => a.id === id));
+  result(A, B, battle(A, B, stage, Math.random, true, { events }), null);
+  if (location.hash.includes('&learn')) app.querySelector('.rtab[data-t="learn"]').click(); // &learn: 공부 탭부터
+} else if (fightIds?.every(Boolean)) {
   stage = location.hash.match(/&s=(\w+)/)?.[1] ?? stage;
   fight(...fightIds, null, prepare(...fightIds, location.hash.match(/&m=(\w+)/)?.[1]));
 } else pick();
 
 // 키보드: Enter = 다음/시작, Esc = 뒤로 (교사가 키보드로 넘길 수 있게)
 document.addEventListener('keydown', e => {
+  if ((e.key === 'ArrowRight' || e.key === 'ArrowLeft') && app.querySelector('.rtabs')) return app.querySelector(`.rtab[data-t="${e.key === 'ArrowRight' ? 'learn' : 'win'}"]`).click(); // 결과 탭 넘기기
   const btn = app.querySelector(e.key === 'Enter' ? '.next:not(:disabled), .go:not(:disabled), .again' : e.key === 'Escape' ? '.back, .other' : null);
   if (btn) { e.preventDefault(); btn.click(); }
 });
