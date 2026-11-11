@@ -8,7 +8,7 @@ const PX = 32;
 
 const texCache = new Map();
 // back: 등 색, pattern: stripes | bands | spots | mottle | saddle, mark: 무늬 색, markOp: 무늬 진하기, kind: scale | fur | feather | smooth | shell
-export function skinTex(back, { pattern, mark, markOp = 0.55, kind = 'scale', seed = 1 } = {}) {
+export function skinTex(back, { pattern, mark, markOp = 0.65, kind = 'scale', seed = 1 } = {}) {
   const key = [back, pattern, mark, markOp, kind, seed].join('|');
   if (texCache.has(key)) return texCache.get(key);
   let s = seed >>> 0 || 1;
@@ -28,12 +28,12 @@ export function skinTex(back, { pattern, mark, markOp = 0.55, kind = 'scale', se
     px(x, y, '#' + tmp.getHexString());
   }
   // 무늬
-  const m = mark ?? '#' + base.clone().multiplyScalar(0.55).getHexString();
+  const m = mark ?? '#' + base.clone().multiplyScalar(0.5).getHexString();
   const blob = (cx, cy, r, a) => { for (let y = -r; y <= r; y++) for (let x = -r; x <= r; x++) if (x * x + y * y <= r * r + rnd() * r) px(cx + x, cy + y, m, a); };
   if (pattern === 'stripes') for (let k = 0; k < 4; k++) for (let y = 0; y < PX; y++) { const x0 = k * 8 + Math.round(Math.sin(y / 5 + k) * 1.5); px(x0, y, m, markOp); px(x0 + 1, y, m, markOp); }
   else if (pattern === 'bands') for (let k = 0; k < 2; k++) for (let y = 0; y < PX; y++) for (let x = 0; x < 6; x++) px(k * 16 + x, y, m, markOp);
   else if (pattern === 'spots') for (let i = 0; i < 9; i++) blob(Math.floor(rnd() * PX), Math.floor(rnd() * PX), 1 + Math.floor(rnd() * 2), markOp);
-  else if (pattern === 'mottle') for (let i = 0; i < 12; i++) blob(Math.floor(rnd() * PX), Math.floor(rnd() * PX), 1 + Math.floor(rnd() * 3), markOp * 0.6);
+  else if (pattern === 'mottle') for (let i = 0; i < 12; i++) blob(Math.floor(rnd() * PX), Math.floor(rnd() * PX), 1 + Math.floor(rnd() * 3), markOp * 0.9);
   else if (pattern === 'saddle') for (let k = 0; k < 2; k++) for (let y = 14; y < PX; y++) for (let x = 0; x < 10 - (y < 18 ? 18 - y : 0); x++) px(k * 16 + 3 + x, y, m, markOp);
   g.globalAlpha = 1;
   const t = new THREE.CanvasTexture(c);

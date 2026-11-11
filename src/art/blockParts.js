@@ -6,14 +6,14 @@ import { tiledBox } from './blockSkin.js';
 import { BLOCK } from '../config.js';
 
 export const N = BLOCK.UNIT, U = 1 / N;
-export const EYE = '#16120f', SPARK = '#ffffff', TOOTH = '#f3edd9', MOUTH = '#5a2f2c', CLAW = '#2b2620', HORN = '#e9dfc3', IVORY = '#f4ecd6';
+export const EYE = '#16120f', SPARK = '#ffffff', TOOTH = '#f3edd9', MOUTH = '#6e2427', TONGUE = '#b4545a', LIP = '#2a211b', NOSE = '#241b16', CLAW = '#2b2620', HORN = '#e9dfc3', IVORY = '#f4ecd6';
 export const col = (c, k = 1, to, t = 0) => { const x = new THREE.Color(c); if (to) x.lerp(new THREE.Color(to), t); return '#' + x.multiplyScalar(k).getHexString(); };
 export { group };
 
 // ── 상자 ──
 const GEO = new THREE.BoxGeometry(1, 1, 1);
 const mats = new Map();
-const mat = (c, map) => { const k = c + (map?.uuid ?? ''); return mats.get(k) ?? mats.set(k, new THREE.MeshStandardMaterial({ color: c, map: map ?? null, flatShading: true, roughness: 0.9 })).get(k); };
+const mat = (c, map) => { const k = c + (map?.uuid ?? ''); return mats.get(k) ?? mats.set(k, new THREE.MeshStandardMaterial({ color: c, map: map ?? null, flatShading: true, roughness: 0.9, vertexColors: true }) /* 꼭짓점 색 = 명암(block3d.js shade) */).get(k); };
 const glass = new Map();
 export const clear = (c, op = 0.45) => glass.get(c + op) ?? glass.set(c + op, new THREE.MeshStandardMaterial({ color: c, transparent: true, opacity: op, side: THREE.DoubleSide, roughness: 0.3 })).get(c + op);
 // paint: 색 하나 | { top, side, bot } 면마다 색 | { tex, top, side, bot } 무늬(tex)에 top·side 색을 곱하고 bot 은 무늬 없는 색 | 재질 하나
@@ -39,6 +39,7 @@ function cube(x, y, z, w, h, d, paint, rz, rx) {
   m.position.set(x * U, y * U, z * U);
   m.scale.set(w * U, h * U, d * U);
   m.rotation.set(rx, 0, rz);
+  m.userData.paint = paint; // 명암 칠할 때 몸·다리 구별
   return m;
 }
 export const both = f => [f(1), f(-1)]; // 몸 양쪽(z +, −)
@@ -87,23 +88,27 @@ export function segChain(pts, wk, paint, tip) {
 export const tailChain = (xa, ya, xb, yb, hs, wk, paint, tip) => segChain([...hs.map((h, i) => [xa + ((xb - xa) * i) / hs.length, ya + ((yb - ya) * i) / hs.length, 0, h]), [xb, yb, 0, 0]], wk, paint, tip);
 
 // ── 얼굴(모든 동물 공통, 4.3) ──
-// 눈: 검은 상자 + 흰 빛점 + 눈두덩. 육식은 눈두덩을 앞으로 내려 깔아 사납게, 초식은 위에 얹는다. bigeye 는 크게
+// 눈: 홍채(육식 노랑·초식 갈색) + 동공(육식은 세로로 찢어진 눈) + 흰 빛점 + 눈두덩. 육식은 눈두덩을 앞으로 내려 깔아 사납게, 초식은 위에 얹는다. bigeye 는 크게
 export function eyes(x, y, z, s, K) {
-  s *= K.F.includes('bigeye') ? 1.6 : 1;
+  s *= (K.F.includes('bigeye') ? 1.6 : 1) * 1.25;
+  const iris = K.meat ? '#d9a21e' : '#6b4524', pw = K.meat ? s * 0.32 : s * 0.55;
   return both(sd => group(
-    box(x, y, sd * z, s, s, 0.3, EYE),
-    box(x + s * 0.22, y + s * 0.22, sd * (z + 0.16), s * 0.36, s * 0.36, 0.04, SPARK),
+    box(x, y, sd * z, s, s, 0.3, iris),
+    box(x + s * 0.04, y, sd * (z + 0.17), pw, s * (K.meat ? 0.92 : 0.55), 0.04, EYE),
+    box(x + s * 0.24, y + s * 0.24, sd * (z + 0.2), s * 0.24, s * 0.24, 0.04, SPARK),
+    box(x - s * 0.08, y - s * 0.56, sd * (z - 0.02), s * 1.2, s * 0.14, 0.36, K.ridge), // 아래 눈꺼풀
     K.F.includes('bigeye') ? box(x, y, sd * (z - 0.05), s * 1.35, s * 1.35, 0.2, K.ridge) // 큰 눈 테두리(눈뼈 고리)
       : K.meat ? box(x - s * 0.1, y + s * 0.62, sd * (z - 0.04), s * 1.8, s * 0.42, 0.42, K.ridge, -0.32)
         : box(x, y + s * 0.72, sd * (z - 0.08), s * 1.2, s * 0.28, 0.34, K.ridge)));
 }
-// 이빨 줄: x0 → x1, 높이 y(위턱이면 아래로), 옆면 z
+// 이빨 줄: x0 → x1, 높이 y(위턱이면 아래로), 옆면 z. 긴 이빨·짧은 이빨이 번갈아
 export function teeth(x0, x1, y, z, down, s = 0.34) {
   const out = [];
-  for (let x = x0; x <= x1; x += s * 1.9) out.push(...both(sd => box(x, y + (down ? -s * 0.6 : s * 0.6), sd * z, s, s * 1.3, s, TOOTH)));
+  let i = 0;
+  for (let x = x0; x <= x1; x += s * 1.7, i++) { const h = s * (i % 2 ? 1.05 : 1.55); out.push(...both(sd => box(x, y + (down ? -h / 2 : h / 2), sd * z, s, h, s, TOOTH))); }
   return out;
 }
-export const nostrils = (x, y, z, K) => both(sd => box(x, y, sd * z, 0.32, 0.12, 0.3, K.ridge));
+export const nostrils = (x, y, z, K) => both(sd => box(x, y, sd * z, 0.4, 0.2, 0.32, NOSE));
 
 // ── 머리 ──
 // type: thero | rex | beak | beakHook | beakTooth | cerato | mammal | sauro | small | croc | lizard | mosa | ptero
@@ -125,14 +130,17 @@ export function head(type, hx, hy, hl, hd, hw, K, p = {}) {
   if (type === 'sauro' && p.snout) out.push(box(hx + hl * 0.45, hy + hd * 0.55, 0, hl * 0.35, hd * 0.35, hw * 0.6, K.body)); // 브라키오사우루스 높은 콧등
   if (type === 'croc' || type === 'mosa') out.push(box(hx + hl * 0.18, hy + hd * 0.52, 0, hl * 0.2, hd * 0.25, hw * 0.75, K.body)); // 위로 솟은 눈두덩
   out.push(box(hx + hl * 0.55, my + 0.12, 0, hl * 0.85, 0.3, hw * sw * 0.8, MOUTH)); // 입 안(벌리면 보인다)
-  if (toothy) out.push(teeth(hx + hl * (back * 0.6), hx + hl * 0.95, my, (hw * sw) / 2 - 0.12, true, Math.min(0.34, hd * 0.14)));
+  out.push(box(hx + hl * (back * 0.6 + (1 - back * 0.6) / 2), my + 0.05, 0, hl * (1 - back * 0.6), 0.14, hw * sw + 0.06, LIP)); // 입선(다문 입에도 보이는 어두운 줄)
+  const ts = Math.min(0.48, hd * 0.17);
+  if (toothy) out.push(teeth(hx + hl * (back * 0.6), hx + hl * 0.95, my, (hw * sw) / 2 - 0.1, true, ts));
   const ex = hx + hl * (type === 'croc' ? 0.18 : type === 'ptero' ? 0.1 : back * 0.5), ey = hy + hd * (type === 'croc' || type === 'mosa' ? 0.5 : 0.25);
   out.push(eyes(ex, ey, hw / 2, Math.max(0.45, Math.min(1.1, hd * 0.22)), K));
   if (!beak) out.push(nostrils(hx + hl * 0.96, my + hd * sn - 0.04, Math.max(0.2, hw * sw * 0.25), K));
   // 아래턱
   const jw = hw * sw * 0.9, jh = Math.max(0.4, hd * (type === 'croc' || type === 'mosa' ? 0.28 : 0.3));
   jawParts.push(box(hx + hl * 0.52, my - jh / 2, 0, hl * 0.92, jh, jw, beak ? K.beak : K.under));
-  if (toothy) jawParts.push(teeth(hx + hl * (back * 0.6), hx + hl * 0.92, my, jw / 2 - 0.12, false, Math.min(0.34, hd * 0.14)));
+  jawParts.push(box(hx + hl * 0.5, my + 0.08, 0, hl * 0.6, 0.16, jw * 0.45, TONGUE)); // 혀
+  if (toothy) jawParts.push(teeth(hx + hl * (back * 0.6) + ts, hx + hl * 0.92, my, jw / 2 - 0.1, false, ts * 0.85));
   out.push(headDeco(hx, hy, hl, hd, hw, K, p));
   return { parts: out, jaw: J(hx + hl * 0.08, my, jawParts) };
 }

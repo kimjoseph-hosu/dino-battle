@@ -3,7 +3,7 @@
 // motion3d.js(동작)·draw3d.js(찍기)·arena3d.js(무대)를 고치지 않고 그대로 쓴다.
 // 디테일 4겹: 체형 틀 12개(여기) + 특징 부품·얼굴(blockParts.js) + 픽셀 무늬(blockSkin.js) + 인기 동물 손질(OVERRIDE)
 // 블록 눈금: x 꼬리끝 0 → 코끝 N(=BLOCK.UNIT), y 땅 0에서 위, z 카메라 쪽
-import { N, col, group, box, both, J, piv, chain, segChain, tailChain, slab, taper, eyes, head, bodyDeco, tailTip, feathers, fin, clear, CLAW, EYE, HORN } from './blockParts.js';
+import { N, col, group, box, both, J, piv, chain, segChain, tailChain, slab, taper, eyes, head, bodyDeco, tailTip, feathers, fin, clear, CLAW, EYE, HORN, SPARK } from './blockParts.js';
 import * as THREE from 'three';
 import { BLOCK } from '../config.js';
 import { skinTex, TEX_BLOCKS } from './blockSkin.js';
@@ -317,9 +317,34 @@ export function build(a) {
     rnd: () => (s = (Math.imul(s, 1664525) + 1013904223) >>> 0) / 4294967296,
   };
   const rig = make(p, K);
+  shade(rig.root, K, back, belly);
   mergeBoxes(rig.root);
   rig.root.traverse(o => o.isMesh && (o.castShadow = o.receiveShadow = true));
   return rig;
+}
+
+// 명암(꼭짓점 색, 재질 색·무늬에 곱해진다). 동물을 만들 때 한 번만 칠한다
+// - 몸 옆면: 위(등)는 짙게 → 아래는 배 색 쪽으로 밝게. 다리 옆면: 발 쪽으로 어둡게
+// - 다른 상자 속에 묻힌 꼭짓점은 어둡게: 다리·목·꼬리가 몸에 붙는 곳, 이빨 뿌리가 그늘진다(구석 그림자)
+function shade(root, K, back, belly) {
+  root.updateMatrixWorld(true);
+  const boxes = [];
+  root.traverse(o => o.isMesh && o.geometry.attributes.position.count === 24 && boxes.push(o));
+  const inv = boxes.map(b => b.matrixWorld.clone().invert()), v = new THREE.Vector3(), q = new THREE.Vector3();
+  const B = new THREE.Color(back), L = new THREE.Color(belly), ratio = [L.r / B.r, L.g / B.g, L.b / B.b].map(r => 1 + (Math.min(r, 3) - 1) * 0.5);
+  const inside = (p, self) => { let n = 0; for (let j = 0; j < boxes.length; j++) if (j !== self && (q.copy(p).applyMatrix4(inv[j]), Math.abs(q.x) < 0.49 && Math.abs(q.y) < 0.49 && Math.abs(q.z) < 0.49)) n++; return n; };
+  boxes.forEach((b, i) => {
+    const g = (b.geometry = b.geometry.clone()), pos = g.attributes.position, nor = g.attributes.normal, col = new Float32Array(72), paint = b.userData.paint;
+    for (let k = 0; k < 24; k++) {
+      const t = pos.getY(k) + 0.5, side = Math.abs(nor.getY(k)) < 0.5;
+      let c = [1, 1, 1];
+      if (side && paint === K.body) c = ratio.map(r => r + (0.82 - r) * t);
+      else if (side && paint === K.limb) c = [1, 1, 1].map(() => 0.72 + 0.28 * t);
+      const ao = paint === SPARK ? 0 : inside(v.fromBufferAttribute(pos, k).applyMatrix4(b.matrixWorld), i);
+      c.forEach((x, j) => (col[k * 3 + j] = x * (ao ? 0.55 : 1)));
+    }
+    g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  });
 }
 
 // 같은 마디(같이 움직이는 묶음) 안에서 같은 재질인 상자들을 한 덩어리로 합친다. 동물 한 마리에 상자가 수백 개라 그대로 그리면 느리다.
@@ -336,13 +361,14 @@ function mergeBoxes(root) {
     }
     for (const list of sets.values()) {
       if (list.length < 2) continue;
-      const P = [], Nm = [], UV = [], faces = [[], [], [], [], [], []];
+      const P = [], Nm = [], UV = [], CO = [], faces = [[], [], [], [], [], []];
       list.forEach((m, i) => {
         m.updateMatrix();
         const g = m.geometry.clone().applyMatrix4(m.matrix), idx = g.index.array;
         P.push(...g.attributes.position.array);
         Nm.push(...g.attributes.normal.array);
         UV.push(...g.attributes.uv.array);
+        CO.push(...(g.attributes.color?.array ?? new Float32Array(72).fill(1)));
         for (let f = 0; f < 6; f++) for (let k = 0; k < 6; k++) faces[f].push(idx[f * 6 + k] + i * 24);
         g.dispose();
       });
@@ -356,6 +382,7 @@ function mergeBoxes(root) {
         [UV[v * 2], UV[v * 2 + 1]] = nx > 0.5 ? [z * k, y * k] : ny > 0.5 ? [x * k, z * k] : [x * k, y * k];
       }
       geo.setAttribute('uv', new THREE.Float32BufferAttribute(UV, 2));
+      geo.setAttribute('color', new THREE.Float32BufferAttribute(CO, 3));
       geo.setIndex(faces.flat());
       if (Array.isArray(list[0].material)) faces.forEach((_, f) => geo.addGroup(f * 6 * list.length, 6 * list.length, f));
       list.forEach(m => par.remove(m));

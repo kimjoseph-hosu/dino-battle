@@ -60,6 +60,12 @@ export function showBlocks(root) {
     turn.add(rig.root);
     scene.add(turn);
     frame(cam, rig.root);
+    if (/&face/.test(location.hash)) { // &face: 얼굴을 비스듬히 가까이(얼굴 디테일 확인)
+      turn.updateMatrixWorld(true);
+      const c = new THREE.Box3().setFromObject(rig.head.children[0]).getCenter(new THREE.Vector3()), r = new THREE.Box3().setFromObject(rig.root).getSize(new THREE.Vector3()).x * 0.22;
+      cam.position.set(c.x + r * 1.5, c.y + r * 0.5, c.z + r * 2.2);
+      cam.lookAt(c.x + r * 0.15, c.y, c.z);
+    }
     const info = rigInfo(rig);
     return { r, scene, cam, turn, rig, info, label, P: restPose(info) };
   }).filter(Boolean);
@@ -73,7 +79,7 @@ export function showBlocks(root) {
     for (const v of views) {
       const { clientWidth: w, clientHeight: h } = v.r.domElement;
       if (v.r.domElement.width !== w) v.r.setSize(w, h, false);
-      v.turn.rotation.y = yaw ?? t * 0.5;
+      v.turn.rotation.y = /&face/.test(location.hash) ? 0 : yaw ?? t * 0.5;
       applyPose(v.rig, blend(v.P, targetPose(state, t, v.info), dt));
       v.label.textContent = KO[state];
       v.r.render(v.scene, v.cam);
