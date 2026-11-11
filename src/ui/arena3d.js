@@ -72,17 +72,21 @@ function gradient(top, bottom) {
   t.colorSpace = THREE.SRGBColorSpace;
   return t;
 }
-// 땅: 두 색 줄무늬 + 점점이 픽셀(마인크래프트처럼 또렷하게)
-function groundTex([a, b], rnd) {
-  const N = 16, c = Object.assign(document.createElement('canvas'), { width: N, height: N }), g = c.getContext('2d');
+// 땅: 두 색 줄무늬 + 밝고 어두운 얼룩 + 점점이 픽셀(마인크래프트처럼 또렷하게). dots: 작은 꽃·조약돌 픽셀 색들
+function groundTex([a, b], rnd, dots = []) {
+  const N = 32, c = Object.assign(document.createElement('canvas'), { width: N, height: N }), g = c.getContext('2d'), A = new THREE.Color(a), B = new THREE.Color(b), t0 = new THREE.Color();
+  const blobs = Array.from({ length: 6 }, () => [rnd() * N, rnd() * N, 3 + rnd() * 5, rnd() < 0.5 ? 0.88 : 1.1]);
   for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
-    g.fillStyle = (y >> 2) % 2 ? a : b;
-    if (rnd() < 0.12) g.fillStyle = new THREE.Color(g.fillStyle).multiplyScalar(0.9 + rnd() * 0.2).getStyle();
+    t0.copy((y >> 2) % 2 ? A : B);
+    for (const [bx, by, r, k] of blobs) { const dx = Math.min(Math.abs(x - bx), N - Math.abs(x - bx)), dy = Math.min(Math.abs(y - by), N - Math.abs(y - by)); if (dx * dx + dy * dy < r * r) t0.multiplyScalar(k); } // 이음새 없이 반복되는 큰 얼룩
+    if (rnd() < 0.18) t0.multiplyScalar(0.86 + rnd() * 0.28);
+    g.fillStyle = t0.getStyle();
     g.fillRect(x, y, 1, 1);
   }
+  for (const d of dots) for (let i = 0; i < 3; i++) { g.fillStyle = d; g.fillRect(Math.floor(rnd() * N), Math.floor(rnd() * N), 1, 1); }
   const t = new THREE.CanvasTexture(c);
   Object.assign(t, { magFilter: THREE.NearestFilter, minFilter: THREE.NearestFilter, wrapS: THREE.RepeatWrapping, wrapT: THREE.RepeatWrapping, colorSpace: THREE.SRGBColorSpace });
-  t.repeat.set(80, 80);
+  t.repeat.set(40, 40);
   return t;
 }
 
@@ -110,6 +114,7 @@ function skyCurtain(look, stage, rnd) {
       g.fillRect(x, H - h - (1 - k) * 3, 4, h + 8);
     }
   });
+  landmark(g, stage, W, H, look);
   const t = new THREE.CanvasTexture(c);
   Object.assign(t, { magFilter: THREE.NearestFilter, colorSpace: THREE.SRGBColorSpace });
   const sky = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: t, fog: false }));
@@ -120,6 +125,24 @@ function skyCurtain(look, stage, rnd) {
   clouds.position.z = 0.01;
   sky.add(clouds);
   return sky;
+}
+
+// 하늘막의 먼 경치 하나(무대마다): 초원은 연기 나는 화산, 정글은 절벽 폭포, 물가는 눈 덮인 산, 물속은 바위 아치. 계단 픽셀로
+function landmark(g, stage, W, H, look) {
+  const px = (x, y, w, h, c) => { g.fillStyle = c; g.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); };
+  const cx = W * 0.62, base = H - 4;
+  if (stage === 'grassland') {
+    for (let k = 0; k < 9; k++) px(cx - 22 + k * 2.2, base - k * 3, 44 - k * 4.4, 3, k > 6 ? '#8a6a5a' : '#7f8c8c'); // 화산
+    px(cx - 3, base - 27, 6, 2, '#e0603a'); // 꼭대기 용암
+    [[0, 0, 6], [2, -4, 7], [-1, -8, 8], [3, -12, 7], [1, -16, 6]].forEach(([dx, dy, w]) => px(cx - w / 2 + dx, base - 31 + dy, w, 4, '#c8c8c8d0')); // 연기
+  } else if (stage === 'jungle') {
+    px(cx - 16, base - 30, 32, 30, '#5f7a5a'); px(cx - 16, base - 32, 32, 3, '#3e6a34'); // 절벽 + 위 숲
+    px(cx - 3, base - 30, 6, 30, '#dff4ff'); px(cx - 1, base - 30, 2, 30, '#ffffff'); px(cx - 6, base - 3, 12, 3, '#f4fbff'); // 폭포 + 물보라
+  } else if (stage === 'waterside') {
+    [[-30, 18], [0, 26], [26, 20]].forEach(([dx, h]) => { for (let k = 0; k < h; k += 2) px(cx + dx - (h - k) * 0.9, base - k, (h - k) * 1.8, 2, k > h - 7 ? '#f4f6f8' : look.hills[0]); }); // 눈 덮인 산 셋
+  } else if (stage === 'underwater') {
+    px(cx - 18, base - 22, 6, 22, '#2a6a84'); px(cx + 12, base - 22, 6, 22, '#2a6a84'); px(cx - 18, base - 26, 36, 6, '#2a6a84'); // 바위 아치
+  }
 }
 
 // ── 무대 장식 ──
@@ -134,15 +157,28 @@ function trees(rnd, n, { zMin = -2.4 * V, zMax = -0.8 * V, big = 1, leaf = ['#4f
   const trunk = [], leaves = leaf.map(() => []);
   for (let i = 0; i < n; i++) {
     const [x, z] = spot(rnd, zMin, zMax, 14 * V, 4 * V), h = (0.7 + rnd() * 0.8) * V * big, s = (0.45 + rnd() * 0.35) * V * big;
-    trunk.push([x, h / 2, z, 0.1 * V * big, h, 0.1 * V * big]);
-    leaves[i % leaf.length].push([x, h, z, s, s * 0.8, s], [x + s * 0.3, h - s * 0.35, z + s * 0.2, s * 0.6, s * 0.5, s * 0.6]);
+    trunk.push([x, h / 2, z, 0.12 * V * big, h, 0.12 * V * big], [x, 0.04 * V * big, z, 0.22 * V * big, 0.08 * V * big, 0.22 * V * big]); // 줄기 + 뿌리 밑동
+    const L = leaves[i % leaf.length];
+    if (i % 4 === 3) for (let k = 0; k < 4; k++) L.push([x, h * 0.55 + k * s * 0.42, z, s * (1 - k * 0.22), s * 0.4, s * (1 - k * 0.22)]); // 뾰족한 침엽수(층층이 좁아진다)
+    else L.push([x, h, z, s, s * 0.7, s], [x + s * 0.3, h - s * 0.35, z + s * 0.2, s * 0.65, s * 0.5, s * 0.65], [x - s * 0.25, h + s * 0.45, z - s * 0.1, s * 0.6, s * 0.45, s * 0.6]); // 둥근 나무(잎 덩어리 셋)
   }
   return [boxes(trunk, '#7a5634'), ...leaves.map((l, i) => boxes(l, leaf[i]))];
 }
 // 흔들리는 장식: 상자 목록을 userData.sway 에 남겨 두면 stagelife.js 가 매 프레임 흔든다(끝 두 값: 마디 번호, 밑동 기준 기울기 세기)
 const swaying = m => ((m.userData.sway = m.userData.list), m);
 const tufts = (rnd, n, color, h = 0.05) => swaying(boxes(Array.from({ length: n }, () => { const [x, z] = spot(rnd, -8 * V, 5 * V, 9 * V); return [x, h * V / 2, z, 0.022 * V, h * V * (0.6 + rnd() * 0.8), 0.04 * V, rnd() * 3, 0, 1]; }), color));
-const rocks = (rnd, n, color = '#9a978c') => boxes(Array.from({ length: n }, () => { const [x, z] = spot(rnd, -10 * V, 5 * V, 10 * V, 2.5 * V), s = (0.08 + rnd() * 0.25) * V; return [x, s * 0.35, z, s, s * 0.7, s * 0.9, rnd() * 3]; }), color);
+// 바위: 큰 돌 + 옆에 작은 돌. moss 가 있으면 위에 이끼 덮개
+function rocks(rnd, n, color = '#9a978c', moss) {
+  const st = [], top = [];
+  for (let i = 0; i < n; i++) {
+    const [x, z] = spot(rnd, -10 * V, 5 * V, 10 * V, 2.5 * V), s = (0.08 + rnd() * 0.25) * V, r = rnd() * 3;
+    st.push([x, s * 0.35, z, s, s * 0.7, s * 0.9, r], [x + s * 0.6, s * 0.15, z + s * 0.3, s * 0.45, s * 0.3, s * 0.4, r + 1]);
+    if (moss) top.push([x, s * 0.72, z, s * 0.85, s * 0.08, s * 0.75, r]);
+  }
+  return [boxes(st, color), moss && boxes(top, moss)].filter(Boolean);
+}
+// 뒤쪽 언덕: 땅색 큰 상자를 계단처럼 쌓아 평평한 땅을 깬다
+const terraces = (rnd, colors) => colors.map((c, k) => boxes(Array.from({ length: 14 }, () => { const x = (rnd() * 2 - 1) * 18 * V, z = -(3.5 + k * 2 + rnd() * 2) * V, w = (2 + rnd() * 3) * V, h = (0.25 + k * 0.35 + rnd() * 0.4) * V; return [x, h / 2, z, w, h, (1.5 + rnd()) * V]; }), c));
 // 낮은 덤불(상자 두세 개 뭉치)과 꽃: 내려다보는 화면에서 싸우는 자리 바로 뒤를 채운다
 function bushes(rnd, n, colors, size = 1) {
   const lists = colors.map(() => []);
@@ -169,19 +205,21 @@ function kelp(rnd, n) {
   }
   return [boxes(stalks, '#2f7d4a'), boxes(tops, '#4aa060')].map((m, i) => ((m.userData.sway = i ? tops : stalks), m));
 }
-const coral = rnd => ['#e0776b', '#f0a95a', '#c873b0'].map(c => boxes(Array.from({ length: 12 }, () => { const [x, z] = spot(rnd, -5 * V, -1.2 * V, 10 * V, 2.5 * V), s = (0.1 + rnd() * 0.2) * V; return [x, s / 2, z, s * 0.7, s, s * 0.7, rnd()]; }), c));
+// 산호: 덩어리 산호 + 가지 산호(줄기에서 가지가 위로 갈라진다)
+const coral = rnd => ['#e0776b', '#f0a95a', '#c873b0', '#f2e0a0'].map(c => boxes(Array.from({ length: 14 }, () => { const [x, z] = spot(rnd, -5 * V, -1.2 * V, 10 * V, 2.5 * V), s = (0.1 + rnd() * 0.2) * V; return [x, s / 2, z, s * 0.7, s, s * 0.7, rnd()]; }).flatMap((b, i) => i % 2 ? [b] : [b, [b[0] - b[3] * 0.5, b[4] * 1.3, b[2], b[3] * 0.25, b[4] * 0.9, b[3] * 0.25], [b[0] + b[3] * 0.45, b[4] * 1.2, b[2], b[3] * 0.25, b[4] * 0.7, b[3] * 0.25]]), c));
 
 function decor(stage, rnd) {
-  if (stage === 'jungle') return [...trees(rnd, 70, { big: 1.4, leaf: ['#2f6f2a', '#3f8433', '#265c22'] }), ferns(rnd, 60), ...bushes(rnd, 50, ['#2e6b28', '#3d8030'], 1.4), tufts(rnd, 500, '#3b7428', 0.12), rocks(rnd, 15, '#77786a')];
+  if (stage === 'jungle') return [...trees(rnd, 70, { big: 1.4, leaf: ['#2f6f2a', '#3f8433', '#265c22'] }), ferns(rnd, 60), ...bushes(rnd, 50, ['#2e6b28', '#3d8030'], 1.4), tufts(rnd, 500, '#3b7428', 0.12), ...rocks(rnd, 15, '#77786a', '#4a7a32'), ...terraces(rnd, ['#3f7a2e', '#356a28'])];
   if (stage === 'waterside') {
     const water = new THREE.Mesh(new THREE.PlaneGeometry(60 * V, 30 * V), new THREE.MeshStandardMaterial({ color: '#5cb8e6', transparent: true, opacity: 0.45, roughness: 0.2 }));
     water.rotation.x = -Math.PI / 2;
     water.position.set(0, 0.015 * V, 13.9 * V); // 앞쪽은 얕은 물, 싸우는 자리 바로 뒤부터 모래 둑
     water.receiveShadow = true;
-    return [water, ...trees(rnd, 25, { zMin: -2.6 * V, zMax: -1.6 * V }), swaying(boxes(Array.from({ length: 160 }, () => { const [x, z] = spot(rnd, -1.6 * V, -1.25 * V, 12 * V); return [x, 0.12 * V, z, 0.03 * V, (0.15 + rnd() * 0.2) * V, 0.03 * V, 0, 0, 1]; }), '#7f9a48')), rocks(rnd, 25), ...bushes(rnd, 20, ['#6f9a44', '#83a94e'])];
+    const pads = boxes(Array.from({ length: 30 }, () => [(rnd() * 2 - 1) * 12 * V, 0.02 * V, (1.5 + rnd() * 4) * V, (0.12 + rnd() * 0.1) * V, 0.01 * V, (0.12 + rnd() * 0.1) * V, rnd() * 3]), '#5f9a3a'); // 물 위 연잎
+    return [water, pads, ...terraces(rnd, ['#cbb98a', '#a9b88a']), ...trees(rnd, 25, { zMin: -2.6 * V, zMax: -1.6 * V }), swaying(boxes(Array.from({ length: 160 }, () => { const [x, z] = spot(rnd, -1.6 * V, -1.25 * V, 12 * V); return [x, 0.12 * V, z, 0.03 * V, (0.15 + rnd() * 0.2) * V, 0.03 * V, 0, 0, 1]; }), '#7f9a48')), ...rocks(rnd, 25), ...bushes(rnd, 20, ['#6f9a44', '#83a94e'])];
   }
-  if (stage === 'underwater') return [...kelp(rnd, 60), ...coral(rnd), rocks(rnd, 30, '#6f7f80')];
-  return [...trees(rnd, 30), ...bushes(rnd, 35, ['#5f9a3a', '#4f8a32', '#6fae44']), ...flowers(rnd, 60), tufts(rnd, 700, '#6a9e3c'), rocks(rnd, 25)];
+  if (stage === 'underwater') return [...kelp(rnd, 60), ...coral(rnd), ...rocks(rnd, 30, '#6f7f80', '#4a8a6a')];
+  return [...trees(rnd, 30), ...bushes(rnd, 35, ['#5f9a3a', '#4f8a32', '#6fae44']), ...flowers(rnd, 60), tufts(rnd, 700, '#6a9e3c'), ...rocks(rnd, 25, '#9a978c', '#6a9e3c'), ...terraces(rnd, ['#8fbf58', '#7fae4c'])];
 }
 
 // 클로즈업 카메라: 머리(head)를 코가 향한 쪽(side ±1)으로 yaw 도 돌려 비스듬히, 눈높이보다 살짝 위에서. 거리는 머리 크기(size)에 비례
@@ -301,7 +339,7 @@ export function arena3d(arena, f, stage) {
   sun.shadow.bias = -0.0005;
   sun.shadow.normalBias = 0.02 * V; // 맞닿은 상자 경계의 그림자 줄 막기
   scene.add(sun, sun.target);
-  const ground = new THREE.Mesh(new THREE.PlaneGeometry(80 * V, 80 * V), new THREE.MeshStandardMaterial({ map: groundTex(look.ground, rnd), roughness: 1 }));
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(80 * V, 80 * V), new THREE.MeshStandardMaterial({ map: groundTex(look.ground, rnd, { grassland: ['#f3d34a', '#ffffff', '#8a8478'], jungle: ['#2a4a1e', '#5a4a30'], waterside: ['#f0e4c0', '#9a8a6a'], underwater: ['#e0d4b0', '#9aa8a0'] }[stage]), roughness: 1 }));
   ground.rotation.x = -Math.PI / 2;
   ground.receiveShadow = true;
   const sky = skyCurtain(look, stage, rnd);
