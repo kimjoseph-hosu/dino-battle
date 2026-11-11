@@ -7,7 +7,7 @@ export const TEX_BLOCKS = 8; // 그림 한 장이 덮는 블록 수
 const PX = 32;
 
 const texCache = new Map();
-// back: 등 색, pattern: stripes | tiger | bands | spots | speckle | mottle | blotch | saddle, mark: 무늬 색, markOp: 무늬 진하기, kind: scale | fur | feather | smooth | shell
+// kind 에 back(등 큰 비늘 판)·belly(배 가로 줄 비늘)도 있다. back: 등 색, pattern: stripes | tiger | bands | spots | speckle | mottle | blotch | saddle, mark: 무늬 색, markOp: 무늬 진하기, kind: scale | fur | feather | smooth | shell
 export function skinTex(back, { pattern, mark, markOp = 0.65, kind = 'scale', seed = 1 } = {}) {
   const key = [back, pattern, mark, markOp, kind, seed].join('|');
   if (texCache.has(key)) return texCache.get(key);
@@ -23,6 +23,8 @@ export function skinTex(back, { pattern, mark, markOp = 0.65, kind = 'scale', se
     else if (kind === 'feather') k = (y % 4 === 3 ? 0.82 : 1) * (0.95 + rnd() * 0.08) * ((x + (Math.floor(y / 4) % 2) * 2) % 4 === 0 ? 0.9 : 1); // 깃털 줄
     else if (kind === 'shell') k = (x % 8 === 0 || y % 8 === 0 ? 0.72 : 0.96 + rnd() * 0.08); // 등딱지 판
     else if (kind === 'smooth') k = 0.97 + rnd() * 0.05;
+    else if (kind === 'back') k = (x % 4 === 0 || y % 4 === 0 ? 0.8 : (x % 4 === 2 && y % 4 === 2 ? 1.12 : 1.02)) * (0.95 + rnd() * 0.08); // 등: 블록 하나에 큰 비늘 판 하나(테두리 어둡고 가운데 볼록)
+    else if (kind === 'belly') k = x % 4 === 3 ? 0.84 : 0.97 + rnd() * 0.05; // 배: 몸을 가로지르는 줄 비늘
     else k = ((x + y * 3) % 5 === 0 ? 0.86 : 0.94 + rnd() * 0.1); // 비늘 점
     tmp.copy(base).multiplyScalar(k);
     px(x, y, '#' + tmp.getHexString());

@@ -343,9 +343,9 @@ export function build(a) {
   const tex = skinTex(back, { pattern: p.pattern, mark: p.mark, markOp: p.markOp, kind, seed });
   const K = {
     F, kind, arch: a.archetype, meat: /이빨|송곳니|턱/.test((a.weapons ?? []).join(' ')) && !/부리/.test((a.weapons ?? []).join(' ')),
-    body: { tex, side: '#ffffff', top: '#d6d6d6', bot: belly }, // 등(위)은 짙게, 배(아래)는 밝게
+    body: { tex, topTex: kind === 'scale' ? skinTex(back, { pattern: p.pattern, mark: p.mark, markOp: p.markOp, kind: 'back', seed }) : undefined, side: '#ffffff', top: '#d6d6d6', bot: belly }, // 등(위)은 짙게 + 큰 비늘 판, 배(아래)는 밝게
     limb: { tex, side: '#dcdcdc', top: '#e4e4e4', bot: col(back, 0.7) },
-    under: { top: belly, side: col(belly, 0.93), bot: col(belly, 0.85) },
+    under: kind === 'scale' ? { tex: skinTex(belly, { kind: 'belly', seed }), top: '#ffffff', side: '#eeeeee', bot: '#d9d9d9' } : { top: belly, side: col(belly, 0.93), bot: col(belly, 0.85) }, // 비늘 동물은 배에 가로 줄 비늘
     shell: { tex: skinTex(acc, { kind: 'shell', seed }), side: '#ffffff', top: '#e0e0e0', bot: col(acc, 0.7) },
     frill: { top: col(acc, 0.85), side: acc, bot: col(acc, 0.7) }, frillIn: col(acc, 1.15, belly, 0.3),
     accent: acc, plate: acc, feather: col(back, 0.92), membrane: col(back, 1, belly, 0.35),

@@ -21,7 +21,7 @@ export const clear = (c, op = 0.45) => glass.get(c + op) ?? glass.set(c + op, ne
 function faces(p) {
   if (p.isMaterial) return p;
   if (typeof p === 'string') return mat(p);
-  const side = mat(p.side, p.tex), top = mat(p.top, p.tex), bot = mat(p.bot);
+  const side = mat(p.side, p.tex), top = mat(p.top, p.topTex ?? p.tex), bot = mat(p.bot, p.botTex); // topTex: 등 윗면만 다른 결(큰 비늘 판), botTex: 배 밑면 결
   return [side, side, top, bot, side, side];
 }
 // 상자: 가운데 (x, y, z), 크기 (w, h, d). rz·rx 로 돌릴 수 있다.
