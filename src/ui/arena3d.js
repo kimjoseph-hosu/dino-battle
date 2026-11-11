@@ -255,6 +255,47 @@ function flat(a) {
   return { root: m };
 }
 
+// 공격마다 다른 부딪힘 효과(블록 조각). 카메라는 그대로(차분하게)
+// ground 짓밟기·들이받기: 땅에 금이 쩍(어두운 띠가 사방으로) + 흙먼지 고리 / tail 꼬리치기: 휘두른 궤적 / bite 물기: 위아래 이빨 자국이 탁 닫힌다 / kick 발차기: 흙이 위로
+export function impactFx(scene, look) {
+  const MAX = 120, o = new THREE.Object3D(), crack = new THREE.Color(look.ground[0]).multiplyScalar(0.45);
+  const mk = (m, n) => { const x = new THREE.InstancedMesh(GEO, m, n); x.frustumCulled = false; scene.add(x); return x; };
+  const solid = mk(new THREE.MeshLambertMaterial(), MAX), glow = mk(new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.85, depthWrite: false }), MAX);
+  const bits = [], c = new THREE.Color();
+  const add = (mesh, b) => bits.push({ mesh, age: 0, ...b });
+  return {
+    spawn(kind, at, s, dir = 1) {
+      if (kind === 'ground') {
+        for (let k = 0; k < 7; k++) { const a = (k / 7) * Math.PI * 2 + Math.random() * 0.4, L = s * (1.2 + Math.random()); add(solid, { p: new THREE.Vector3(at.x + Math.cos(a) * L * 0.5, 0.004 * s, at.z + Math.sin(a) * L * 0.5), sc: [L, 0.01 * s, s * 0.12], ry: -a, life: 1.6, color: crack, grow: 0.15 }); }
+        for (let k = 0; k < 16; k++) { const a = (k / 16) * Math.PI * 2; add(solid, { p: new THREE.Vector3(at.x, s * 0.1, at.z), v: new THREE.Vector3(Math.cos(a) * s * 3, s * 0.6, Math.sin(a) * s * 3), sc: [s * 0.2, s * 0.2, s * 0.2], life: 0.7, color: new THREE.Color(look.ground[1]).lerp(new THREE.Color('#c8b48a'), 0.5), shrink: true }); }
+      } else if (kind === 'tail') {
+        for (let k = 0; k < 9; k++) { const a = -0.9 + k * 0.22; add(glow, { p: new THREE.Vector3(at.x - dir * Math.cos(a) * s * 1.4, at.y + Math.sin(a) * s * 1.2, at.z + s * 0.3), sc: [s * 0.35, s * 0.08, s * 0.08], rz: a + Math.PI / 2, life: 0.35 + k * 0.03, color: new THREE.Color('#ffffff'), shrink: true }); }
+      } else if (kind === 'bite') {
+        for (const up of [1, -1]) for (let k = 0; k < 5; k++) add(glow, { p: new THREE.Vector3(at.x + (k - 2) * s * 0.28, at.y + up * s * 0.55, at.z + s * 0.3), v: new THREE.Vector3(0, -up * s * 3, 0), stop: at.y + up * s * 0.12, sc: [s * 0.14, s * 0.3, s * 0.14], life: 0.45, color: new THREE.Color('#fffbe8'), shrink: true });
+      } else if (kind === 'kick') {
+        for (let k = 0; k < 12; k++) add(solid, { p: new THREE.Vector3(at.x, s * 0.1, at.z), v: new THREE.Vector3((Math.random() - 0.5) * s * 3, s * (3 + Math.random() * 3), (Math.random() - 0.5) * s * 2), g: s * 12, sc: [s * 0.18, s * 0.18, s * 0.18], life: 0.8, color: new THREE.Color(look.ground[1]).multiplyScalar(0.8), shrink: true });
+      }
+      while (bits.length > MAX) bits.shift();
+    },
+    update(dt) {
+      const n = new Map([[solid, 0], [glow, 0]]);
+      for (let i = bits.length - 1; i >= 0; i--) {
+        const b = bits[i];
+        if ((b.age += dt) > b.life) { bits.splice(i, 1); continue; }
+        if (b.v) { if (b.g) b.v.y -= b.g * dt; b.p.addScaledVector(b.v, dt); if (b.stop != null && Math.sign(b.v.y) * (b.p.y - b.stop) > 0) { b.p.y = b.stop; b.v.set(0, 0, 0); } }
+        const k = b.shrink ? 1 - b.age / b.life : Math.min(1, 1 + (b.grow ?? 0) * b.age);
+        o.position.copy(b.p); o.rotation.set(0, b.ry ?? 0, b.rz ?? 0); o.scale.set(b.sc[0] * k, b.sc[1] * (b.shrink ? k : 1), b.sc[2] * k); o.updateMatrix();
+        const i2 = n.get(b.mesh);
+        b.mesh.setMatrixAt(i2, o.matrix);
+        b.mesh.setColorAt(i2, c.copy(b.color).lerp(look.ground0 ??= new THREE.Color(look.ground[0]), b.shrink ? 0 : Math.max(0, b.age / b.life - 0.5) * 2)); // 땅 금은 반쯤 지나면 땅색으로 흐려진다
+        n.set(b.mesh, i2 + 1);
+      }
+      for (const [m, k] of n) { m.count = k; m.instanceMatrix.needsUpdate = true; if (m.instanceColor) m.instanceColor.needsUpdate = true; }
+    },
+  };
+}
+const HIT_KIND = { stomp: 'ground', ram: 'ground', toss: 'ground', tail: 'tail', bite: 'bite', shake: 'bite', roll: 'bite', pounce: 'bite', kick: 'kick' };
+
 // v 가 상대 u 의 얼굴을 보려면 고개를 얼마나 돌려야 하나: [도리(+ 몸 왼쪽=카메라 쪽), 끄덕(+ 위)] 라디안. 몸 좌표(코 +x, 위 +y)에서 잰다
 const lk = new THREE.Vector3(), lk2 = new THREE.Vector3(), lkM = new THREE.Matrix4();
 export function lookAt(v, u) {
@@ -372,7 +413,7 @@ export function arena3d(arena, f, stage) {
     sun.shadow.normalBias = 0.002 * V;
   }
   const life = stageLife(stage, scene, rnd, V); // 무대의 작은 생물·물방울 등(stagelife.js)
-  const steps = stage === 'underwater' ? null : footsteps(scene, look);
+  const steps = stage === 'underwater' ? null : footsteps(scene, look), hits = impactFx(scene, look);
 
   // 효과(먼지·불꽃·할퀸 자국·K.O. 별): battle.js 가 .fx 에 그리는 2D 조각을 매 프레임 블록 조각으로 옮긴다
   const fxEl = arena.querySelector('.fx'), FX_MAX = 160, fxMesh = new THREE.InstancedMesh(GEO, new THREE.MeshBasicMaterial(), FX_MAX), o = new THREE.Object3D(), tint = new THREE.Color();
@@ -493,6 +534,10 @@ export function arena3d(arena, f, stage) {
     // 세게 부딪힌 순간: 먼지 조각이 한꺼번에 여럿 생긴다 → 그 자리를 무대 생물에게 알린다
     const impact = fxEl.children.length - (v0.fx ?? 0) >= 5 && lastFx ? lastFx.clone() : null;
     v0.fx = fxEl.children.length;
+    if (impact) { // 누가 무슨 공격으로 쳤나(공격자 .pos 에 m-종류 표시가 남아 있다)
+      const att = views.find(u => [...u.F.pos.classList].some(c => c.startsWith('m-'))), m = att && [...att.F.pos.classList].find(c => c.startsWith('m-')).slice(2), kind = HIT_KIND[m];
+      if (kind && !(kind !== 'bite' && kind !== 'tail' && stage === 'underwater')) hits.spawn(kind, impact, Math.min(...views.map(u => u.F.L)) * 0.12, att.side);
+    }
     // K.O. 순간에는 무대 생물이 잠깐 거의 멈춘다(그 순간을 강조)
     const ko = arena.querySelector('.boom')?.classList.contains('ko');
     v0.koAt = ko ? v0.koAt ?? t : null;
@@ -500,6 +545,7 @@ export function arena3d(arena, f, stage) {
     v0.lt = (v0.lt ?? t) + dt * slow;
     life?.update(v0.lt, dt * slow, { target, d, visH: 2 * d * Math.tan((ARENA.FOV * Math.PI) / 360), aspect: w / h, impact, movers: views.map(v => v.mover) });
     steps?.update(dt);
+    hits.update(dt);
     fxMesh.count = n;
     fxMesh.instanceMatrix.needsUpdate = true;
     if (fxMesh.instanceColor) fxMesh.instanceColor.needsUpdate = true;

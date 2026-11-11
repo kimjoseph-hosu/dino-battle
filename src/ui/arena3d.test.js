@@ -40,3 +40,15 @@ test('lookAt: 상대 얼굴 쪽으로 고개(위·아래·카메라 쪽), 등 �
   assert.ok(up > 0.3 && down < 0 && side > 0.3, '큰 상대는 올려다보고, 작은 상대는 내려다보고, 옆이면 돌아본다');
   assert.deepStrictEqual(lookAt(v, at(-2, 0.5, 0)), [0, 0]);
 });
+
+test('impactFx: 공격 종류마다 조각이 생기고, 시간이 지나면 사라진다', async () => {
+  const { impactFx } = await import('./arena3d.js');
+  for (const kind of ['ground', 'tail', 'bite', 'kick']) {
+    const scene = new THREE.Scene(), fx = impactFx(scene, { ground: ['#94c75c', '#a6d26a'] });
+    fx.spawn(kind, new THREE.Vector3(0, 1, 0), 1, 1);
+    fx.update(0.05);
+    assert.ok(scene.children.reduce((n, m) => n + m.count, 0) > 0, kind);
+    fx.update(3);
+    assert.strictEqual(scene.children.reduce((n, m) => n + m.count, 0), 0, kind + ' 사라짐');
+  }
+});
