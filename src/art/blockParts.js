@@ -201,9 +201,10 @@ function headDeco(hx, hy, hl, hd, hw, K, p, ele = false) {
   if (p.ridges) out.push(both(sd => box(hx + hl * 0.68, hy + hd * 0.32, sd * 0.32, hl * 0.42, 0.35, 0.22, K.ridge))); // 알로사우루스: 콧등 두 줄 능선
   if (p.squamo) out.push(both(sd => piv(hx + hl * 0.08, hy + hd * 0.35, sd * hw * 0.48, [sd * 0.9, 0, 1.9], box(0, 0.55, 0, 0.6, 1.1, 0.6, HORN))), both(sd => piv(hx + hl * 0.3, hy - hd * 0.2, sd * hw * 0.5, [sd * 1.2, 0, 2.4], box(0, 0.4, 0, 0.5, 0.8, 0.5, HORN)))); // 안킬로: 머리 뒤 모서리 뿔 + 볼 뿔
   if (F.includes('nosehorn')) out.push(horn(hx + hl * 0.78, my + hd * 0.6, 0, [0, 0, -0.2], hd * 0.55, 0.55)); // 코뿔(케라토사우루스)
-  if (F.includes('crest')) out.push(box(hx + hl * 0.5, top + hd * 0.18, 0, hl * 0.6, hd * 0.4, 0.3, K.accent)); // 머리 위 볏
+  if (F.includes('crest')) { const k = p.crestK ?? 1; out.push(box(hx + hl * 0.5, top + hd * 0.18 * k, 0, hl * 0.65, hd * 0.4 * k, 0.3, K.accent)); } // 머리 위 볏
   if (F.includes('crest2')) { const k = p.crestK ?? 1; out.push(both(sd => box(hx + hl * 0.5, top + hd * 0.3 * k, sd * 0.35, hl * 0.6 * Math.sqrt(k), hd * 0.65 * k, 0.2, K.accent, -0.12))); } // 볏 두 장(딜로포사우루스)
-  if (F.includes('cryo')) out.push(box(hx + hl * 0.32, top + hd * 0.3, 0, 0.5, hd * 0.6, hw * 0.9, K.accent)); // 가로 볏(크리올로포사우루스)
+  if (F.includes('cryo')) { const k = p.crestK ?? 1; out.push(box(hx + hl * 0.32, top + hd * 0.3 * k, 0, 0.5, hd * 0.6 * k, hw * 0.9 * Math.sqrt(k), K.accent)); } // 가로 볏(크리올로포사우루스)
+  if (p.bulla) out.push(box(hx + hl * 0.93, hy + hd * 0.15, 0, hl * 0.12, hd * 0.55, hw * 0.55, K.ridge)); // 코끝 혹(사르코수쿠스)
   if (F.includes('sabre')) out.push(both(sd => chain(hx + hl * 0.8, my, sd * hw * 0.22, [0, 0, Math.PI], [{ len: hd * 0.45 * (p.sabreK ?? 1), w: 0.45 }, { len: hd * 0.4 * (p.sabreK ?? 1), w: 0.35, bend: -0.15 }], TOOTH))); // 칼 송곳니
   if (F.includes('horn_nose')) out.push(horn(hx + hl * 0.92, my + hd * 0.55, 0, [0, 0, -0.25], hd * 1.3, 1.1), horn(hx + hl * 0.68, top - hd * 0.1, 0, [0, 0, -0.1], hd * 0.6, 0.8)); // 큰 코뿔
   if (F.includes('antlers')) { // 넓적한 사슴뿔(메갈로케로스)

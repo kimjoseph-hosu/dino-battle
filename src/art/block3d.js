@@ -114,7 +114,7 @@ function quad(p, K) {
   let hx = nx - hl * 0.1, hd = Math.max(1, hl * p.dp * 0.45), hw = Math.max(1, Math.min(Q.W * 0.6, hd * 1.1));
   if (type === 'cerato') [hx, hd, hw] = [nx - hl * 0.25, hl * p.dp * 0.55, Q.W * 0.62];
   if (type === 'mammal') { hx = nx - hl * 0.15; hd = hl * p.dp * 0.6; hw = Math.min(Q.W * 0.75, hd * 0.9); }
-  if (type === 'croc') { hd = Math.max(1, hl * p.dp * 0.4); hw = Math.max(1.2, hl * 0.32); }
+  if (type === 'croc') { hd = Math.max(1, hl * p.dp * 0.4) * (p.hdK ?? 1); hw = Math.max(1.2, hl * 0.32) * (p.hwK ?? 1); } // hwK 넓적한 주둥이, hdK 깊은 머리
   const hd0 = head(type, hx, ny, hl, hd, hw, K, p);
   const sx = Q.x1 - 0.5, sy = Q.yAt(Q.x1) + Q.R * 0.3, nr = Math.max(1, (p.nr ?? 0.05) * N * 2.4);
   const neck = neckBoxes(sx + 0.5, sy, hx + 0.6, ny, type === 'cerato' ? Q.R * 1.5 : K.arch === 'sauropod' ? Q.R * 1.4 : Math.max(nr, Q.R * 0.9), Math.max(nr * 0.8, hd * (K.arch === 'sauropod' ? 1 : 0.8)), Q.W * 0.6, K.body, K.arch === 'sauropod' ? Q.R * 0.6 : 0);
@@ -301,6 +301,17 @@ const OVERRIDE = {
   ankylosaurus: { addF: ['spikes'], squamo: true }, // 옆구리 가시, 머리 뒤 모서리 뿔
   velociraptor: { bd: 0.065, hl: 0.13, neck: 1.3 }, // 너무 가늘어 도마뱀 같던 몸을 통통하게, 고개를 들어 새처럼
   iguanodon: { thumb: true },
+  // 비슷해 보이던 악어류·작은 수각류·볏 공룡 구별(2026-11-11)
+  deinosuchus: { hwK: 1.5, hl: 0.17 }, // 넓적하고 뭉툭한 주둥이
+  sarcosuchus: { hwK: 0.75, hl: 0.26, bulla: true }, // 아주 길고 가는 주둥이 + 코끝 혹
+  purussaurus: { hwK: 1.25, hdK: 1.5, hl: 0.22 }, // 깊고 거대한 머리
+  coelophysis: { neck: 2, bd: 0.038, tl: 0.22 }, // 길게 세운 가는 목, 날씬한 몸
+  compsognathus: { arm: 0.05, neck: 1.6 }, // 아주 작은 팔, 세운 목
+  troodon: { arm: 0.18 }, // 깃털 날개 팔을 크게
+  herrerasaurus: { hl: 0.13, dp: 0.5, bd: 0.066 }, // 길고 낮은 머리
+  dimetrodon: { sail: 0.3 }, // 더 높은 돛
+  cryolophosaurus: { crestK: 1.8 }, // 머리 위 가로 볏을 크게
+  monolophosaurus: { crestK: 1.6 }, // 머리 위 세로 볏을 크게
   giganotosaurus: { noF: ['mane'], hl: 0.15, dp: 0.62, ridges: true, bd: 0.105 }, // 갈기 대신 길고 낮은 머리·콧등 능선, 묵직한 몸(티라노와 다르게)
   stegosaurus: { hl: 0.07, neck: [0.88, 0.08], hip: 0.29, plateK: 1.3 }, // 땅에 닿을 듯 낮은 작은 머리, 높게 솟은 엉덩이, 더 큰 골판
   woolly_mammoth: { tuskK: 1.35, dome: true }, // 크게 휜 엄니, 정수리 혹
