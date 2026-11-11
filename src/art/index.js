@@ -5,7 +5,7 @@ import * as d3 from './draw3d.js';
 import { maskAt } from './photo.js';
 
 const want = new URLSearchParams(location.search).get('art') ?? 'block'; // 기본은 블록 3D. ?art=2d 로 2D
-export const ART = want === '3d' || want === 'block' ? want : '2d';
+export const ART = want === '3d' || want === 'block' || want === 'real' ? want : '2d'; // real: 매끈한 모델 + 사진 같은 빛(PLAN_REAL3D)
 export const drawHuman = d2.drawHuman;
 export const drawAnimal = a => (ART !== '2d' && !a.drawing && d3.drawAnimal(a)) || d2.drawAnimal(a);
 // 배틀: 3D 동물은 사진을 살아 움직이는 3D로 바꾼다(2D는 CSS 애니메이션이 이미 움직인다)

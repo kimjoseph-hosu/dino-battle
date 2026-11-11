@@ -5,8 +5,33 @@
 import * as THREE from 'three';
 import { buildModel, applyPose, rigInfo } from '../art/draw3d.js';
 import { restPose, targetPose, blend, stateOf } from '../art/motion3d.js';
-import { ARENA, CLOSE } from '../config.js';
+import { ARENA, CLOSE, REAL } from '../config.js';
 import { stageLife } from './stagelife.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { GTAOPass } from 'three/examples/jsm/postprocessing/GTAOPass.js';
+import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { VignetteShader } from 'three/examples/jsm/shaders/VignetteShader.js';
+
+const Q = new URLSearchParams(location.search), IS_REAL = Q.get('art') === 'real', LOW = Q.get('q') === 'low';
+
+// 실사: 하늘(위)·지평선·땅(아래) 색 공 + 밝은 해를 환경 지도로 구워 몸에 은은한 하늘빛·땅빛 반사가 비치게(그림 파일 없이)
+function skyEnv(renderer, look, sunDir) {
+  const s = new THREE.Scene(), g = new THREE.SphereGeometry(1, 32, 16), p = g.attributes.position, col = [];
+  const top = new THREE.Color(look.top), hor = new THREE.Color(look.horizon), gr = new THREE.Color(look.ground[0]).multiplyScalar(0.5), c = new THREE.Color();
+  for (let i = 0; i < p.count; i++) {
+    const y = p.getY(i);
+    (y >= 0 ? c.copy(hor).lerp(top, Math.sqrt(y)) : c.copy(hor).lerp(gr, Math.min(1, -y * 4))).toArray(col, i * 3);
+  }
+  g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  const sun = new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 8), new THREE.MeshBasicMaterial({ color: new THREE.Color('#fff2da').multiplyScalar(40) }));
+  sun.position.copy(sunDir).multiplyScalar(0.8);
+  s.add(new THREE.Mesh(g, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide })), sun);
+  const pm = new THREE.PMREMGenerator(renderer), tex = pm.fromScene(s, 0, 0.1, 10).texture;
+  pm.dispose();
+  return tex;
+}
 
 const V = 10; // 배틀 세계에서 큰 쪽 몸길이(battle.js 의 S). 무대 장식 크기는 이것에 맞춘다
 const LOOKS = {
@@ -226,6 +251,21 @@ export function arena3d(arena, f, stage) {
   ground.receiveShadow = true;
   const sky = skyCurtain(look, stage, rnd);
   scene.add(ground, sky, ...decor(stage, rnd));
+  // 실사: 낮은 해 + 환경광 + 톤 매핑, 후처리(구석 그림자 AO → 색 → 비네트)
+  const sunEl = (REAL.SUN_ELEV * Math.PI) / 180, yw = (REAL.SUN_YAW * Math.PI) / 180;
+  const sunDir = new THREE.Vector3(Math.sin(yw) * Math.cos(sunEl), Math.sin(sunEl), Math.cos(yw) * Math.cos(sunEl)); // 왼쪽 옆(조금 카메라 쪽)에서 비춰 몸의 굴곡이 그림자로 드러난다
+  let composer, ao;
+  if (IS_REAL) {
+    renderer.toneMapping = THREE.NeutralToneMapping; // 밝은 곳만 부드럽게 눌러 주고 색은 그대로(ACES 는 피부색이 회색으로 바랜다)
+    renderer.toneMappingExposure = REAL.EXPOSURE;
+    scene.environment = skyEnv(renderer, look, sunDir);
+    scene.environmentIntensity = REAL.ENV;
+    scene.children.find(o => o.isHemisphereLight).intensity = REAL.HEMI;
+    sun.intensity = REAL.SUN;
+    sun.shadow.mapSize.set(4096, 4096);
+    sun.shadow.radius = 3;
+    sun.shadow.normalBias = 0.002 * V;
+  }
   const life = stageLife(stage, scene, rnd, V); // 무대의 작은 생물·물방울 등(stagelife.js)
 
   // 효과(먼지·불꽃·할퀸 자국·K.O. 별): battle.js 가 .fx 에 그리는 2D 조각을 매 프레임 블록 조각으로 옮긴다
@@ -234,6 +274,15 @@ export function arena3d(arena, f, stage) {
   fxMesh.castShadow = true;
   scene.add(fxMesh);
   const cam = new THREE.PerspectiveCamera(ARENA.FOV, 1, 0.1, 2000 * V);
+  if (IS_REAL && !LOW) {
+    composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 4 }));
+    composer.addPass(new RenderPass(scene, cam));
+    if (REAL.AO) composer.addPass((ao = new GTAOPass(scene, cam, 1, 1)));
+    composer.addPass(new OutputPass());
+    const vig = new ShaderPass(VignetteShader);
+    vig.uniforms.darkness.value = REAL.VIGNETTE;
+    composer.addPass(vig);
+  }
   const views = f.map(F => {
     const rig = F.a.drawing ? flat(F.a) : buildModel(F.a);
     if (!rig) return null;
@@ -253,13 +302,15 @@ export function arena3d(arena, f, stage) {
 
   const elev = (ARENA.CAM_ELEV_DEG * Math.PI) / 180, ax = new THREE.Vector3(), ay = new THREE.Vector3(), az = new THREE.Vector3();
   let last = 0, cu = null, last3 = null;
+  // ?fps: 왼쪽 아래에 1초마다 화면 수(전자칠판에서 30 이상이면 괜찮다)
+  const fpsEl = Q.has('fps') ? arena.appendChild(Object.assign(document.createElement('div'), { style: 'position:absolute;left:8px;bottom:8px;z-index:9;color:#fff;background:#0008;padding:2px 8px;border-radius:6px;font:16px monospace' })) : null;
   const v0 = {};
   const tick = now => {
     if (!arena.isConnected) return renderer.dispose();
     const t = now / 1000, dt = Math.min(0.1, last ? t - last : 0);
     last = t;
     const w = cv.clientWidth, h = cv.clientHeight;
-    if (cv.width !== Math.round(w * renderer.getPixelRatio())) { renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); }
+    if (cv.width !== Math.round(w * renderer.getPixelRatio())) { renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); composer?.setPixelRatio(renderer.getPixelRatio()); composer?.setSize(w, h); }
     // 2D 카메라가 보는 가운데와 높이(세계 단위). SVG 는 y가 아래로라 뒤집는다
     const toWorld = camEl.getCTM().inverse(), c = new DOMPoint(svg.clientWidth / 2, svg.clientHeight / 2).matrixTransform(toWorld);
     const visH = svg.clientHeight * Math.hypot(toWorld.a, toWorld.b), d = (visH / 2 / Math.tan((ARENA.FOV * Math.PI) / 360)) * ARENA.FIT;
@@ -270,9 +321,11 @@ export function arena3d(arena, f, stage) {
     sky.position.set(target.x, (ARENA.SKY_H / 2) * d, target.z - ARENA.SKY_BACK * d);
     scene.fog.near = d * 0.9;
     scene.fog.far = d + (stage === 'underwater' ? 4 : 45) * V * look.fog * Math.max(1, visH / (3 * V));
-    sun.position.set(target.x - 0.6 * d, 1.2 * d, 0.8 * d);
+    if (IS_REAL) sun.position.copy(sunDir).multiplyScalar(2 * d).add(target);
+    else sun.position.set(target.x - 0.6 * d, 1.2 * d, 0.8 * d);
     sun.target.position.copy(target);
-    Object.assign(sun.shadow.camera, { left: -visH, right: visH, top: visH, bottom: -visH, near: 0.1, far: 4 * d });
+    const sh = IS_REAL ? 1.6 * visH : visH; // 해가 낮으면 그림자가 길어 더 넓게 담는다
+    Object.assign(sun.shadow.camera, { left: -sh, right: sh, top: sh, bottom: -sh, near: 0.1, far: 4 * d });
     sun.shadow.camera.updateProjectionMatrix();
     for (const v of views) {
       // 몸 좌표(u 꼬리→코, v 위) → SVG 세계(x, 아래로 y) 행렬을 3D(위로 y)로.
@@ -338,7 +391,12 @@ export function arena3d(arena, f, stage) {
     fxMesh.count = n;
     fxMesh.instanceMatrix.needsUpdate = true;
     if (fxMesh.instanceColor) fxMesh.instanceColor.needsUpdate = true;
-    renderer.render(scene, cam);
+    if (ao) { // 구석 그림자 반경은 지금 화면 크기에 맞춘다(작은 동물 클로즈업도 같은 느낌)
+      const r = REAL.AO_RADIUS * camP.distanceTo(camQ);
+      if (Math.abs(r - (v0.aoR ?? 0)) > r * 0.05) ao.updateGtaoMaterial({ radius: (v0.aoR = r), thickness: r * 2, scale: REAL.AO });
+    }
+    composer ? composer.render(dt) : renderer.render(scene, cam);
+    if (fpsEl && (v0.fn = (v0.fn ?? 0) + 1) && now - (v0.ft ??= now) > 1000) { fpsEl.textContent = `${Math.round((v0.fn * 1000) / (now - v0.ft))} fps`; v0.fn = 0; v0.ft = now; }
     requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);

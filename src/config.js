@@ -52,6 +52,9 @@ export const BLOCK = { UNIT: 24, BEVEL: 1.2, SLICE: 1.4, TAIL: 8 };
 export const ARENA = { CAM_ELEV_DEG: 35, FOV: 38, FIT: 1.3, LOOK_BACK: 0.15, SKY_BACK: 0.32, SKY_W: 3.2, SKY_H: 0.4 };
 // 등장 포효 클로즈업: 얼굴을 비스듬히 보는 각(도, 0 = 정면), 카메라 높이(도, 눈높이보다 살짝 위), 거리(머리 크기 배. 작으면 얼굴만 꽉 차서 무서울 수 있다). CLOSE_MS: 다가가고 빠지는 시간
 export const CLOSE = { YAW: 45, ELEV: 5, DIST: 6 };
+// 실사 3D(?art=real, PLAN_REAL3D): 해 높이·방향(도. 낮을수록 그림자가 길고 근육·비늘이 도드라진다), 해·하늘빛·환경광 세기, 노출,
+// AO 구석 그림자 세기(0 끔)·반경(화면 높이 배), 비네트(화면 가장자리 어둡게). ?q=low 면 후처리를 끈다(느린 컴퓨터)
+export const REAL = { SUN_ELEV: 22, SUN_YAW: -70, SUN: 3.4, HEMI: 0.2, ENV: 0.55, EXPOSURE: 1.0, AO: 1, AO_RADIUS: 0.03, VIGNETTE: 1.1 };
 // 무대 생물(stagelife.js): 물속의 물고기 떼 수, 물방울 최대 수, 바닥에서 물방울이 나오는 곳 수, 빛줄기 수, 해파리 수
 export const UNDERWATER = { FISH: 14, BUBBLES: 140, VENTS: 6, RAYS: 5, JELLY: 2 };
 // 무대 생물(stagelife.js) 개수: 물가·정글·초원
