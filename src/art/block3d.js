@@ -26,7 +26,8 @@ function biped(p, K) {
   const by = H + R * 0.55; // 몸통 가운데 높이
   const torso = bird
     ? [box(X + R * 0.3, by, 0, R * 2.6, R * 2, W, K.body), box(X + R * 1.3, by + R * 0.25, 0, R * 1.2, R * 1.6, W * 0.9, K.body), box(X + R * 0.3, by - R * 0.95, 0, R * 2, R * 0.4, W * 0.85, K.under)]
-    : [slab(X - 2.4, X + 5.7, t => [by - R * 0.12 * t, R * 2 * (0.78 + 0.25 * Math.sin(Math.PI * Math.min(1, t * 1.15))), W * (0.82 + 0.18 * Math.sin(Math.PI * t))], K.body), box(X + 1.6, by - R * 0.95, 0, 4.5, R * 0.5, W * 0.8, K.under)];
+    : [slab(X - 2.4, X + 5.7, t => [by - R * 0.12 * t, R * 2 * (0.78 + 0.25 * Math.sin(Math.PI * Math.min(1, t * 1.15))), W * (0.82 + 0.18 * Math.sin(Math.PI * t))], K.body), box(X + 1.6, by - R * 0.95, 0, 4.5, R * 0.5, W * 0.8, K.under),
+      p.pot ? [box(X + 1.2, by - R * 0.85, 0, 5.2, R * 1.1, W * 1.08, K.body), box(X + 1.2, by - R * 1.45, 0, 4.2, R * 0.4, W * 0.9, K.under)] : null]; // 불룩한 배(테리지노)
   const type = p.skull === 'rex' ? 'rex' : p.head && p.head !== 'thero' ? p.head : bird ? 'beakHook' : 'thero';
   const hl = p.hl * N, hd = hl * p.dp * (type === 'rex' ? 0.95 : 0.8), hw = Math.max(R * (bird ? 0.7 : 1.1), hd * 0.9), hx = N - hl, hy = by + R * 0.9 * (p.neck ?? 1);
   const n0 = [X + (bird ? R * 1.5 : 5.2), by + R * 0.2], n1 = [hx + 0.4, hy - hd * 0.15];
@@ -174,7 +175,8 @@ function fish(p, K) {
     plate ? null : Array.from({ length: 5 }, (_, i) => both(sd => box(x0 + hl * (0.4 + i * 0.12), my + 0.2, sd * (hw * 0.33), 0.3, 0.45, 0.3, '#f3edd9'))));
   if (!plate) parts.push(Array.from({ length: 6 }, (_, i) => both(sd => box(x0 + hl * (0.35 + i * 0.11), my - 0.2, sd * (hw * 0.28), 0.3, 0.5, 0.3, '#f3edd9'))));
   const headJ = J(x0, y, parts, jaw);
-  const legs = [...both(sd => flipper(0.72 * N, y - R * 0.6, W * 0.45, R * 2.2, R * 1.1, K.limb, sd, true, 2.3)), ...both(sd => flipper(0.38 * N, y - R * 0.6, W * 0.4, R * 1.2, R * 0.8, K.limb, sd, false, 2.3))];
+  // 가슴지느러미는 몸에 붙여 뒤·아래로 비스듬히, 배지느러미는 작게(몸에서 떨어져 보이지 않게)
+  const legs = [...both(sd => flipper(0.7 * N, y - R * 0.75, W * 0.32, R * 1.6, R * 0.9, K.limb, sd, true, 2.55)), ...both(sd => flipper(0.4 * N, y - R * 0.75, W * 0.25, R * 0.75, R * 0.5, K.limb, sd, false, 2.6))];
   const deco = F.includes('dorsal') ? [fin(0.6 * N, y + R * 0.95, R * 2.2, R * 1.8, K.body, 0.5), fin(0.33 * N, y + R * 0.6, R * 0.7, R * 0.7, K.body, 0.5)] : null;
   const all = J(0.55 * N, y, body, tail[0], headJ, legs.map(l => l.g), deco);
   return { root: group(all), all, head: headJ, jaw, tail, legs, wings: [], swim: true };
@@ -184,7 +186,7 @@ function fish(p, K) {
 function ptero(p, K) {
   const R = p.bd * N, H = p.h * N, nx = p.neck[0] * N, ny = p.neck[1] * N, hl = p.hl * N, hd = Math.max(0.8, hl * p.dp * 0.5), span = (p.wing ?? 0.5) * N, crest = p.crest ?? 0;
   const by = H + R * 0.3;
-  const torso = [box(0.2 * N, by, 0, R * 2.4, R * 1.8, R * 1.6, K.body), box(0.27 * N, by + R * 0.3, 0, R * 1.2, R * 1.5, R * 1.4, K.body)];
+  const torso = [box(0.2 * N, by, 0, R * 2.8, R * 2, R * 1.9, K.body), box(0.27 * N, by + R * 0.35, 0, R * 1.4, R * 1.7, R * 1.6, K.body)];
   const hx = nx - hl * 0.05, hd0 = head('ptero', hx, ny, hl, hd, Math.max(0.8, R * 0.8), K, p);
   if (crest) hd0.parts.push(piv(hx + hl * 0.12, ny + hd * 0.4, 0, [0, 0, 0.7], box(0, (hl * p.dp * (0.4 + 1.2 * crest)) / 2, 0, hl * 0.22, hl * p.dp * (0.4 + 1.2 * crest), 0.25, K.accent)));
   const neck = neckBoxes(0.28 * N, by + R * 0.6, hx + 0.4, ny, R * 0.75, R * 0.5, R * 0.7, K.body);
@@ -192,8 +194,9 @@ function ptero(p, K) {
   // 날개: 어깨에서 바깥(z)으로, 앞쪽 팔뼈 + 뒤로 늘어진 막 세 칸(바깥일수록 좁다)
   const wings = both(sd => {
     const sx = 0.28 * N, sy = by + R * 0.6, z0 = R * 0.7;
-    const j = J(sx, sy, box(sx, sy + 0.15, sd * (z0 + span * 0.45), 0.6, 0.45, span * 0.9, K.limb),
-      [0.45, 0.3, 0.15].map((len, i) => box(sx - (span * len) / 2 - 0.2, sy, sd * (z0 + span * (0.18 + i * 0.32)), span * len, 0.22, span * 0.34, K.membrane)));
+    // 막은 바깥으로 갈수록 짧아지는 띠 6장을 빈틈없이 붙여 한 장처럼(띄엄띄엄 조각나 보이지 않게)
+    const n = 6, j = J(sx, sy, box(sx + 0.1, sy + 0.2, sd * (z0 + span * 0.47), 0.75, 0.6, span * 0.95, K.limb), box(sx - 0.3, sy + 0.2, sd * (z0 + span * 0.97), 1.6, 0.4, 0.5, K.limb),
+      Array.from({ length: n }, (_, i) => { const len = span * (0.5 - 0.38 * (i / (n - 1))) + 0.4; return box(sx - len / 2 + 0.1, sy, sd * (z0 + (span * (i + 0.5)) / n), len, 0.32, span / n + 0.06, K.membrane); }));
     j.userData.side = sd;
     return j;
   });
@@ -297,7 +300,9 @@ const OVERRIDE = {
   brachiosaurus: { neck: [0.8, 0.85], snout: true, frontLeg: 1.2, bd: 0.1, legR: 0.026, nr: 0.034, b0: 0.33, b1: 0.62 }, // 하늘로 세운 목, 높은 콧등, 긴 앞다리, 큰 몸통
   ankylosaurus: { addF: ['spikes'], squamo: true }, // 옆구리 가시, 머리 뒤 모서리 뿔
   velociraptor: { bd: 0.065, hl: 0.13, neck: 1.3 }, // 너무 가늘어 도마뱀 같던 몸을 통통하게, 고개를 들어 새처럼
-  iguanodon: { thumb: true }, // 앞발 엄지 가시
+  iguanodon: { thumb: true },
+  therizinosaurus: { pot: true, neck: 3, hl: 0.055 }, // 불룩한 배, 길게 세운 목, 작은 머리
+  quetzalcoatlus: { bd: 0.085 }, // 몸통을 키워 날개·목에 비해 너무 작지 않게 // 앞발 엄지 가시
   smilodon: { sabreK: 1.5, hip: 0.33, sh: 0.4, bd: 0.125, legR: 0.045, frontLeg: 1.2, hl: 0.2, dp: 0.95 }, // 등이 엉덩이 쪽으로 낮고, 굵은 앞다리·큰 머리(말처럼 보이지 않게)
   quetzalcoatlus: { bd: 0.09, wing: 0.6, dp: 0.4 }, // 몸을 키우고 날개 판은 줄이고, 부리는 굵게(실처럼 보이지 않게)
   mosasaurus: { bd: 0.07 }, // 통통한 바다 도마뱀

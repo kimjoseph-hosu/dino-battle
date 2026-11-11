@@ -267,4 +267,5 @@ export function tailTip(K, x, y, tr) {
 // 깃털 판(팔·꼬리): (x, y, z) 가운데, 길이 L, 층판 n장이 조금씩 겹쳐 내려간다
 export const feathers = (x, y, z, L, h, K, n = 3) => Array.from({ length: n }, (_, i) => box(x - i * L * 0.12, y - i * h * 0.35, z, L * (1 - i * 0.15), h, 0.2, i % 2 ? K.dark : K.feather));
 // 지느러미(등지느러미·꼬리지느러미 날개): (x, y) 밑동, 높이 h, 너비 w, 뒤로 rz 만큼 기울인 계단 판
-export const fin = (x, y, h, w, paint, rz = 0.5, z = 0) => piv(x, y, z, [0, 0, rz], [0, 1, 2].map(i => box(-w * 0.15 * i, (h * (i + 0.5)) / 3, 0, w * (1 - i * 0.28), h / 3 + 0.1, 0.3, paint)));
+// 층 5장이 위로 갈수록 좁아지고 뒤로 밀려 한 장의 지느러미처럼 이어진다(층이 적으면 조각조각 떨어져 보인다)
+export const fin = (x, y, h, w, paint, rz = 0.5, z = 0) => piv(x, y, z, [0, 0, rz], [0, 1, 2, 3, 4].map(i => box(-w * 0.09 * i, (h * (i + 0.5)) / 5, 0, w * (1 - i * 0.17), h / 5 + 0.15, 0.4, paint)));
