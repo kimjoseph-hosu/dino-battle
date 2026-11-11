@@ -217,6 +217,61 @@ function flat(a) {
   return { root: m };
 }
 
+// 발자국·흙먼지: 걷거나 달릴 때 발을 디딜 때마다 발밑에 흙 블록이 튀고, 큰 동물은 발자국이 잠깐 남았다 사라진다
+// (물속은 없음. 헤엄·나는 동물도 없음). 다리 앞뒤 휘두름(ls)이 앞으로 가장 나갔다 돌아서는 순간을 "디딤"으로 본다
+export function footsteps(scene, look) {
+  const DUST = 90, PRINT = 40, o = new THREE.Object3D(), c = new THREE.Color(), ground = new THREE.Color(look.ground[0]), dark = ground.clone().multiplyScalar(0.55), dustC = new THREE.Color(look.ground[1]).lerp(new THREE.Color('#c8b48a'), 0.5);
+  const dust = new THREE.InstancedMesh(GEO, mat(dustC.getStyle()), DUST), print = new THREE.InstancedMesh(GEO, new THREE.MeshLambertMaterial({ polygonOffset: true, polygonOffsetFactor: -2 }), PRINT);
+  dust.frustumCulled = print.frustumCulled = false;
+  print.receiveShadow = true;
+  scene.add(dust, print);
+  const puffs = [], prints = [], tmp = new THREE.Vector3();
+  return {
+    // v: 무대의 동물 하나, moving: 걷거나 달리는 중
+    step(v, moving) {
+      const ls = v.P.ls, prev = (v.lsPrev ??= ls.slice()), up = (v.lsUp ??= ls.map(() => false));
+      ls.forEach((x, i) => {
+        const rising = x > prev[i] + 1e-4, falling = x < prev[i] - 1e-4;
+        if (moving && up[i] && falling) { // 앞으로 내딛던 발이 돌아서는 순간 = 땅을 디딤
+          v.rig.legs[i].g.getWorldPosition(tmp);
+          const L = v.F.L, s = L * 0.045;
+          for (let k = 0; k < 4; k++) puffs.push({ p: new THREE.Vector3(tmp.x + (Math.random() - 0.5) * s * 2, s * 0.4, tmp.z + (Math.random() - 0.5) * s * 2), v: new THREE.Vector3((Math.random() - 0.5) * s * 4, s * (2 + Math.random() * 2), (Math.random() - 0.5) * s * 3), age: 0, life: 0.6, size: s * (0.5 + Math.random() * 0.5) });
+          if (L > 2.5) prints.push({ x: tmp.x + v.side * s, z: tmp.z, age: 0, life: 4, w: s * 2.2, d: s * 1.6 }); // 큰 동물만 발자국
+        }
+        if (rising) up[i] = true; else if (falling) up[i] = false;
+        prev[i] = x;
+      });
+      while (puffs.length > DUST) puffs.shift();
+      while (prints.length > PRINT) prints.shift();
+    },
+    update(dt) {
+      let n = 0;
+      for (let i = puffs.length - 1; i >= 0; i--) {
+        const q = puffs[i];
+        if ((q.age += dt) > q.life) { puffs.splice(i, 1); continue; }
+        q.v.y -= q.size * 12 * dt;
+        q.p.addScaledVector(q.v, dt);
+        const k = q.size * (1 - q.age / q.life);
+        o.position.copy(q.p); o.rotation.set(q.age * 3, q.age * 2, 0); o.scale.setScalar(k); o.updateMatrix();
+        dust.setMatrixAt(n++, o.matrix);
+      }
+      dust.count = n;
+      dust.instanceMatrix.needsUpdate = true;
+      n = 0;
+      for (let i = prints.length - 1; i >= 0; i--) {
+        const q = prints[i];
+        if ((q.age += dt) > q.life) { prints.splice(i, 1); continue; }
+        o.position.set(q.x, 0.004 * q.w, q.z); o.rotation.set(0, 0, 0); o.scale.set(q.w, 0.01 * q.w, q.d); o.updateMatrix();
+        print.setMatrixAt(n, o.matrix);
+        print.setColorAt(n++, c.copy(dark).lerp(ground, Math.max(0, (q.age / q.life - 0.5) * 2))); // 반쯤 지나면 땅색으로 흐려진다
+      }
+      print.count = n;
+      print.instanceMatrix.needsUpdate = true;
+      if (print.instanceColor) print.instanceColor.needsUpdate = true;
+    },
+  };
+}
+
 // arena: .arena 요소, f: battle.js 의 싸우는 둘(F.a, F.pos, F.pose), stage: 무대 이름. 반환값이 없으면 3D를 못 써서 2D 그대로
 export function arena3d(arena, f, stage) {
   let renderer;
@@ -267,6 +322,7 @@ export function arena3d(arena, f, stage) {
     sun.shadow.normalBias = 0.002 * V;
   }
   const life = stageLife(stage, scene, rnd, V); // 무대의 작은 생물·물방울 등(stagelife.js)
+  const steps = stage === 'underwater' ? null : footsteps(scene, look);
 
   // 효과(먼지·불꽃·할퀸 자국·K.O. 별): battle.js 가 .fx 에 그리는 2D 조각을 매 프레임 블록 조각으로 옮긴다
   const fxEl = arena.querySelector('.fx'), FX_MAX = 160, fxMesh = new THREE.InstancedMesh(GEO, new THREE.MeshBasicMaterial(), FX_MAX), o = new THREE.Object3D(), tint = new THREE.Color();
@@ -346,6 +402,7 @@ export function arena3d(arena, f, stage) {
       const { state, o } = stateOf(v.F.pos.classList);
       o.step = v.step = (v.step ?? 0) + dt * (+v.F.pos.dataset.gait || 9);
       applyPose(v.rig, blend(v.P, targetPose(state, t, v.info, o), dt));
+      if (steps && !v.info.swim && !o.flying && !v.F.y) { v.holder.updateMatrixWorld(true); steps.step(v, o.moving || state === 'charge'); }
     }
     // 카메라: 평소엔 2D 카메라를 따른 넓은 화면. 클로즈업 중엔 그때 있던 자리에서 목표(얼굴 또는 넓은 화면)로 천천히 옮겨 간다
     let camP = wideP, camQ = target;
@@ -388,6 +445,7 @@ export function arena3d(arena, f, stage) {
     const slow = v0.koAt != null && t - v0.koAt < 1.6 ? 0.08 : 1;
     v0.lt = (v0.lt ?? t) + dt * slow;
     life?.update(v0.lt, dt * slow, { target, d, visH: 2 * d * Math.tan((ARENA.FOV * Math.PI) / 360), aspect: w / h, impact, movers: views.map(v => v.mover) });
+    steps?.update(dt);
     fxMesh.count = n;
     fxMesh.instanceMatrix.needsUpdate = true;
     if (fxMesh.instanceColor) fxMesh.instanceColor.needsUpdate = true;

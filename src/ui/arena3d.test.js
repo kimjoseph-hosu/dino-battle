@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import * as THREE from 'three';
 import { CLOSE } from '../config.js';
 globalThis.location ??= { search: '', hash: '' }; // 3D 모델 모듈이 주소(?art=)를 읽는다
-const { closeCam } = await import('./arena3d.js');
+const { closeCam, footsteps } = await import('./arena3d.js');
 
 test('closeCam', () => {
   const head = new THREE.Vector3(2, 3, 0);
@@ -17,4 +17,18 @@ test('closeCam', () => {
     assert.ok(off.y > 0 && off.y < off.length() * 0.2, '눈높이보다 살짝 위');
   }
   assert.ok(Math.abs(closeCam(head, 1, 1, 0).pos.x - head.x) < 1e-9, '아이 그림은 정면');
+});
+
+test('footsteps: 걸으면 발을 디딜 때 흙먼지, 큰 동물은 발자국. 서 있으면 없음', () => {
+  const run = (moving, L) => {
+    const scene = new THREE.Scene(), fs = footsteps(scene, { ground: ['#94c75c', '#a6d26a'] }), [dust, print] = scene.children;
+    const v = { P: { ls: [0, 0] }, rig: { legs: [{ g: new THREE.Object3D() }, { g: new THREE.Object3D() }] }, F: { L }, side: 1 };
+    for (let k = 0; k < 40; k++) { v.P.ls = [Math.sin(k * 0.3), Math.sin(k * 0.3 + Math.PI)]; fs.step(v, moving); }
+    fs.update(0.05);
+    return [dust.count, print.count];
+  };
+  const [d, p] = run(true, 5);
+  assert.ok(d > 0 && p > 0, '흙먼지와 발자국');
+  assert.ok(run(true, 1)[1] === 0, '작은 동물은 발자국 없음');
+  assert.deepStrictEqual(run(false, 5), [0, 0], '서 있으면 없음');
 });
