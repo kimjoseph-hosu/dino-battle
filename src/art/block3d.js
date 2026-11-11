@@ -8,6 +8,7 @@ import * as THREE from 'three';
 import { BLOCK } from '../config.js';
 import { skinTex, TEX_BLOCKS } from './blockSkin.js';
 import { ARCHETYPES } from './draw.js';
+import { LOOK } from './blockLook.js';
 
 const lerp = (a, b, t) => a + (b - a) * t;
 // 목: 어깨 (x0, y0) → 머리 뒤 (x1, y1)를 n마디 상자로. 굵기 th0 → th1, arc 만큼 위로 휜다(용각류)
@@ -303,7 +304,9 @@ export function build(a) {
   const make = TEMPLATES[a.archetype];
   if (!make || !a.art?.palette) return null;
   const { addF = [], ...ov } = OVERRIDE[a.id] ?? {};
-  const [back, belly, accent] = a.art.palette.map(vivid), F = [...(a.art.features ?? []), ...addF], p = { ...ARCHETYPES[a.archetype].params, ...a.art.params, ...ov, ...a.art.block };
+  const L = LOOK[a.id]; // 종마다 고유한 색·무늬(blockLook.js). 없으면 백과 팔레트를 선명하게
+  const [back, belly, accent] = L ? [L[0], L[1], L[4] ?? (a.art.palette[2] && vivid(a.art.palette[2]))] : a.art.palette.map(vivid), F = [...(a.art.features ?? []), ...addF];
+  const p = { ...ARCHETYPES[a.archetype].params, ...a.art.params, ...ov, ...a.art.block, ...(L && { pattern: L[2], mark: L[3], markOp: L[2] ? 0.8 : 0 }) };
   const seed = [...a.id].reduce((h, c) => Math.imul(h, 31) + c.charCodeAt(0) | 0, 7) >>> 0;
   let s = seed;
   const acc = accent ?? col(back, 0.8), kind = F.includes('feathers') ? 'feather' : KIND[a.archetype] ?? 'scale';

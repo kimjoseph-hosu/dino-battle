@@ -7,7 +7,7 @@ export const TEX_BLOCKS = 8; // 그림 한 장이 덮는 블록 수
 const PX = 32;
 
 const texCache = new Map();
-// back: 등 색, pattern: stripes | bands | spots | mottle | saddle, mark: 무늬 색, markOp: 무늬 진하기, kind: scale | fur | feather | smooth | shell
+// back: 등 색, pattern: stripes | tiger | bands | spots | speckle | mottle | blotch | saddle, mark: 무늬 색, markOp: 무늬 진하기, kind: scale | fur | feather | smooth | shell
 export function skinTex(back, { pattern, mark, markOp = 0.65, kind = 'scale', seed = 1 } = {}) {
   const key = [back, pattern, mark, markOp, kind, seed].join('|');
   if (texCache.has(key)) return texCache.get(key);
@@ -34,6 +34,9 @@ export function skinTex(back, { pattern, mark, markOp = 0.65, kind = 'scale', se
   else if (pattern === 'bands') for (let k = 0; k < 2; k++) for (let y = 0; y < PX; y++) for (let x = 0; x < 6; x++) px(k * 16 + x, y, m, markOp);
   else if (pattern === 'spots') for (let i = 0; i < 9; i++) blob(Math.floor(rnd() * PX), Math.floor(rnd() * PX), 1 + Math.floor(rnd() * 2), markOp);
   else if (pattern === 'mottle') for (let i = 0; i < 12; i++) blob(Math.floor(rnd() * PX), Math.floor(rnd() * PX), 1 + Math.floor(rnd() * 3), markOp * 0.9);
+  else if (pattern === 'tiger') for (let k = 0; k < 4; k++) for (let y = 0; y < PX; y++) { const x0 = k * 8 + Math.round(Math.sin(y / 4 + k * 2) * 2), w = 2 + (Math.sin(y / 3 + k) > 0.3 ? 1 : 0); for (let x = 0; x < w; x++) px(x0 + x, y, m, markOp); } // 굵고 구불구불한 줄
+  else if (pattern === 'speckle') for (let i = 0; i < 60; i++) px(Math.floor(rnd() * PX), Math.floor(rnd() * PX), m, markOp); // 잔점
+  else if (pattern === 'blotch') for (let i = 0; i < 5; i++) { const cx = Math.floor(rnd() * PX), cy = Math.floor(rnd() * PX); for (let j = 0; j < 4; j++) blob(cx + Math.floor(rnd() * 6) - 3, cy + Math.floor(rnd() * 6) - 3, 2 + Math.floor(rnd() * 2), markOp); } // 큰 얼룩(작은 얼룩 여럿을 뭉쳐 들쭉날쭉하게)
   else if (pattern === 'saddle') for (let k = 0; k < 2; k++) for (let y = 14; y < PX; y++) for (let x = 0; x < 10 - (y < 18 ? 18 - y : 0); x++) px(k * 16 + 3 + x, y, m, markOp);
   g.globalAlpha = 1;
   const t = new THREE.CanvasTexture(c);
