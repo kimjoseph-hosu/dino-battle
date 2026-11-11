@@ -295,19 +295,22 @@ const OVERRIDE = {
 };
 const KIND = { large_mammal: 'fur', bird: 'feather', fish: 'smooth', marine_reptile: 'smooth', pterosaur: 'fur', arthropod: 'shell' };
 
+// 백과 팔레트는 흙빛이라 블록으로 칠하면 칙칙하다: 채도·밝기를 올린다(BLOCK.SAT·LIGHT)
+const vivid = hex => { const c = new THREE.Color(hex), h = {}; c.getHSL(h); return '#' + c.setHSL(h.h, Math.min(1, h.s * BLOCK.SAT), Math.min(0.85, h.l * BLOCK.LIGHT)).getHexString(); };
+
 // 동물 카드 → rig: 체형 틀(archetype) + 비율(art.params) + 색(art.palette [등, 배, 강조]) + 특징(art.features) + 무늬(params.pattern·mark)
 export function build(a) {
   const make = TEMPLATES[a.archetype];
   if (!make || !a.art?.palette) return null;
   const { addF = [], ...ov } = OVERRIDE[a.id] ?? {};
-  const [back, belly, accent] = a.art.palette, F = [...(a.art.features ?? []), ...addF], p = { ...ARCHETYPES[a.archetype].params, ...a.art.params, ...ov, ...a.art.block };
+  const [back, belly, accent] = a.art.palette.map(vivid), F = [...(a.art.features ?? []), ...addF], p = { ...ARCHETYPES[a.archetype].params, ...a.art.params, ...ov, ...a.art.block };
   const seed = [...a.id].reduce((h, c) => Math.imul(h, 31) + c.charCodeAt(0) | 0, 7) >>> 0;
   let s = seed;
   const acc = accent ?? col(back, 0.8), kind = F.includes('feathers') ? 'feather' : KIND[a.archetype] ?? 'scale';
   const tex = skinTex(back, { pattern: p.pattern, mark: p.mark, markOp: p.markOp, kind, seed });
   const K = {
     F, arch: a.archetype, meat: /이빨|송곳니|턱/.test((a.weapons ?? []).join(' ')) && !/부리/.test((a.weapons ?? []).join(' ')),
-    body: { tex, side: '#ffffff', top: '#c8c8c8', bot: belly }, // 등(위)은 짙게, 배(아래)는 밝게
+    body: { tex, side: '#ffffff', top: '#d6d6d6', bot: belly }, // 등(위)은 짙게, 배(아래)는 밝게
     limb: { tex, side: '#dcdcdc', top: '#e4e4e4', bot: col(back, 0.7) },
     under: { top: belly, side: col(belly, 0.93), bot: col(belly, 0.85) },
     shell: { tex: skinTex(acc, { kind: 'shell', seed }), side: '#ffffff', top: '#e0e0e0', bot: col(acc, 0.7) },
