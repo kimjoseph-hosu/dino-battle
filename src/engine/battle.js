@@ -98,12 +98,13 @@ export function battle(a, b, stage, rng = Math.random, withP = true, opts = {}) 
       break;
     }
     // 빠른 쪽이 먼저 공격(속도 차이만큼 유리한 주사위)
-    const first = rng() < 0.5 + 0.06 * (a.stats.speed - b.stats.speed) ? 0 : 1;
+    const sp = F.map(x => x.stats.speed + (stay(wx, x, stage).fast ?? 0));
+    const first = rng() < 0.5 + 0.06 * (sp[0] - sp[1]) ? 0 : 1;
     const attacks = [], dealt = [0, 0];
     for (const i of [first, 1 - first]) {
       if (hp.some(h => h <= 0)) break;
       // 날씨가 결과를 바꿨으면(날씨가 없었다면 반대였으면) wx 표시 → 화면에 말풍선
-      const j = 1 - i, u = rng(), hit = u < hitChance(F[i], F[j], stage, rounds.length, wx), dmg = hit ? damage(F[i], F[j], stage, rng) : 0;
+      const j = 1 - i, u = rng(), hit = u < hitChance(F[i], F[j], stage, rounds.length, wx), dmg = hit ? Math.min(BATTLE.DMG_MAX, Math.round(damage(F[i], F[j], stage, rng) * (stay(wx, F[i], stage).power ?? 1))) : 0;
       const turned = wx && hit !== u < hitChance(F[i], F[j], stage, rounds.length);
       if (turned) wxHelp[hit ? i : j]++;
       hp[j] = Math.max(0, hp[j] - dmg);

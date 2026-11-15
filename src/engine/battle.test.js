@@ -93,6 +93,8 @@ console.log('sizeLike ok', sizeLike(30), sizeLike(1.65), sizeLike(5), sizeLike(0
   assert(EVENTS.meteor.hit(A.trilobite, 'grassland')[0] > EVENTS.meteor.hit(A.tyrannosaurus, 'grassland')[0], '운석: 작은 동물이 덜 잃음');
   assert(EVENTS.rain.hit(A.quetzalcoatlus)[0] < EVENTS.rain.hit(A.tyrannosaurus)[0], '소나기: 나는 동물이 더 잃음');
   assert(EVENTS.cold.hit(A.woolly_mammoth)[0] > EVENTS.cold.hit(A.trilobite)[0], '추위: 털 있는 매머드가 버팀');
+  const fw = EVENTS.flood.stay(A.spinosaurus), fs = EVENTS.flood.stay(A.velociraptor);
+  assert(fw.fast > 0 && fw.power > 1 && fs.fast < 0, '홍수: 물 동물은 빠르고 세짐, 작은 땅 동물은 느려짐');
   const r = seeded(9);
   let byEv = 0, meteors = 0, at5 = 0, wxSeen = 0, wxTurn = 0, wxReason = 0, wxLong = 0, wxShown = 0;
   for (const st of ['grassland', 'jungle', 'waterside', 'underwater']) for (let i = 0; i < 200; i++) {
