@@ -7,6 +7,7 @@ import { animate } from 'motion';
 import { TIMING, BOING } from '../config.js';
 import { STAGE_ART } from './stage.js';
 import { EVENTS } from '../engine/events.js';
+import { mode } from '../engine/battle.js';
 import { sfx, matOf, isMusicOn, setStageSound } from './sfx.js';
 import * as music from './music.js';
 
@@ -32,10 +33,14 @@ const MOTIONS = {
   shake: { wind: BITE_WIND, hit: F => [{ dx: 0.04 * F.L, r: -10 }], jaw: true, dive: true, shake: true },
   ram: { wind: RAM_WIND, hit: F => [{ dx: 0.06 * F.L, r: -8 }], dive: true },
   toss: { wind: RAM_WIND, hit: F => [{ dx: 0.04 * F.L, r: -10 }], dive: true, toss: true },
-  stomp: { wind: F => ({ dx: -0.05 * F.L, dy: 0.1 * F.h, r: 40 }), hit: () => [{ r: -6 }], ground: true },
+  stomp: { wind: F => ({ dx: -0.05 * F.L, dy: 0.1 * F.h, r: F.a.archetype === 'human' ? 8 : 40 }), hit: () => [{ r: -6 }], ground: true }, // 사람은 일어서지 않고 한 발만 든다
   pounce: { wind: F => ({ dx: -0.08 * F.L, r: -4, sy: 0.85 }), hit: F => [{ dy: 0.35 * F.h, r: 10 }, { dx: 0.03 * F.L, r: -6 }], jaw: true, dive: true },
   kick: { wind: F => ({ dx: -0.05 * F.L, r: -4, sy: 0.88 }), hit: F => [{ dy: 0.3 * F.h, r: 18 }, { dy: 0.12 * F.h, r: 26 }] },
   slash: { wind: F => ({ r: 16, dy: 0.04 * F.h }), hit: F => [{ dx: 0.05 * F.L, r: -8 }], dive: true, claws: true },
+  punch: { wind: F => ({ dx: -0.1 * F.L, r: 5 }), hit: F => [{ dx: 0.12 * F.L, r: -6 }], punch: true }, // 사람 주먹(원투): 뒤로 당겼다 쭉. 약하게 맞아도 별빛이 보인다
+  hook: { wind: F => ({ dx: -0.08 * F.L, r: 8 }), hit: F => [{ dx: 0.1 * F.L, r: -10 }], punch: true }, // 훅: 옆으로 크게 휘두른다
+  roundkick: { wind: F => ({ dx: -0.06 * F.L, r: 3 }), hit: F => [{ dx: 0.1 * F.L, r: -3 }], punch: true }, // 태권도 돌려차기: 다리를 들고 몸을 돌려 찬다(별빛·큰 글자)
+  upper: { wind: F => ({ dx: -0.06 * F.L, r: -4, sy: 0.9 }), hit: F => [{ dx: 0.08 * F.L, dy: 0.12 * F.h, r: 8 }], punch: true }, // 어퍼컷: 웅크렸다 위로 솟구친다
   tail: { wind: () => ({ sx: -1, r: -4 }), hit: () => [{ sx: -1, r: 6 }], tail: true },
   roll: { wind: BITE_WIND, hit: F => [{ dx: 0.04 * F.L, r: -6, sy: -1, dy: F.h }], jaw: true, dive: true },
 };
@@ -339,7 +344,7 @@ export async function playBattle(root, A, B, res, stage, script, modes) {
     }
 
     // 부딪힘
-    pop($('.boom'), power ? act.boom : '툭!', 800);
+    pop($('.boom'), power || M.punch ? act.boom : '툭!', 800);
     sfx.impact(act.motion, power, Att.a.mass_kg.avg, matOf(Def.a));
     if (power && art.water) art.bubbles ? sfx.bubbles() : sfx.splash();
     shake([0, 5, 10][power]);
@@ -348,7 +353,7 @@ export async function playBattle(root, A, B, res, stage, script, modes) {
     boing(Def, power);
     boing(Att, 0); // 때린 쪽도 반동으로 살짝
     // 별빛은 아주 강한 한 방(K.O. 또는 데미지 40 이상)에만 작게 한 번(확대된 화면을 하얗게 덮지 않게)
-    if (power === 2 || act.dmg >= 40) spark(hitX, hitY, 0.22 * minH);
+    if (power === 2 || act.dmg >= 40 || M.punch) spark(hitX, hitY, (M.punch && power < 2 ? 0.3 : 0.22) * minH);
     puff(hitX, hitY, (power ? 0.35 : 0.2) * minH);
     if (M.ground && !Def.y) puff(hitX, 0, 0.3 * minH, 10, art.kick);
     if (M.claws) claws(hitX, hitY, 0.5 * minH, Att.dir);
@@ -422,6 +427,8 @@ export async function playBattle(root, A, B, res, stage, script, modes) {
       music.danger(f.some(F => F.hp <= 30));
       await wait(E * 0.3);
     }
+    // 물가에 홍수: 걷던 헤엄 동물(선생님·물가 공룡)이 헤엄치기 시작한다(물 위라 뜨지는 않는다)
+    if (ev.id === 'flood') f.forEach(F => { if (F.mode === 'ground' && mode(F.a, stage, 'flood') === 'swim') { F.mode = 'swim'; F.pos.classList.add('swimming'); } });
     if (meteor) w.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 1200, fill: 'forwards' }).finished.then(() => w.remove());
     else w.animate([{ opacity: 1 }, { opacity: 0.8 }], { duration: 1000, fill: 'forwards' });
   }

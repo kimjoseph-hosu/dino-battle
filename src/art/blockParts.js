@@ -215,6 +215,12 @@ function headDeco(hx, hy, hl, hd, hw, K, p, ele = false) {
   else if (K.arch === 'large_mammal' && !F.includes('antlers')) out.push(both(sd => box(hx + hl * 0.2, top + 0.3, sd * hw * 0.32, 0.8, F.includes('round_ears') ? 0.8 : 1.1, 0.45, K.dark)));
   if (F.includes('trunk')) { const Lt = (hy - hd * 0.15) * 0.8, w = hw * 0.42; out.push(chain(hx + hl * 0.85, hy - hd * 0.1, 0, [0, 0, Math.PI], [0, 0.05, 0.1, 0.25, 0.5].map((b, i) => ({ len: Lt / 5, w: w * (1 - i * 0.1), bend: b, c: i === 4 ? K.dark : undefined })), K.body)); }
   if (F.includes('tusks')) out.push(both(sd => chain(hx + hl * 0.78, my + 0.3, sd * hw * 0.3, [0, -sd * 0.18, -2.6], [0, 0.5, 0.55, 0.6].map((b, i) => ({ len: hl * 0.33 * (p.tuskK ?? 1), w: (0.9 - i * 0.12) * Math.sqrt(p.tuskK ?? 1), bend: b })), IVORY)));
+  if (F.includes('pachy')) { // 박치기 머리(파키케팔로사우루스): 높고 둥근 두꺼운 머리뼈 + 둘레에 작은 뼈 돌기, 콧등 혹
+    const dx = hx + hl * 0.32, base = top - hd * 0.05, dw = hw * 1.05;
+    out.push(box(dx, base + hd * 0.22, 0, hl * 0.62, hd * 0.5, dw, K.osteo), box(dx, base + hd * 0.55, 0, hl * 0.48, hd * 0.25, dw * 0.82, K.osteo), box(dx, base + hd * 0.72, 0, hl * 0.3, hd * 0.12, dw * 0.55, K.osteo));
+    for (let i = 0; i < 5; i++) out.push(both(sd => box(hx + hl * (0.02 + i * 0.13), base + hd * 0.02 - Math.abs(i - 1.5) * 0.08, sd * dw * 0.55, 0.45, 0.55, 0.45, K.ridge, 0, Math.PI / 4))); // 옆 뼈 돌기 줄
+    out.push([0, 1, 2].map(i => box(hx - 0.15, base + hd * (0.05 + i * 0.22), (i - 1) * dw * 0.32, 0.6, 0.6, 0.6, K.ridge, Math.PI / 4)), [0.62, 0.74, 0.86].map(u => box(hx + hl * u, hy + hd * 0.4, 0, 0.45, 0.4, 0.5, K.ridge))); // 뒤통수 돌기, 콧등 혹
+  }
   if (p.dome) out.push(box(hx + hl * 0.3, top + hd * 0.25, 0, hl * 0.35, hd * 0.35, hw * 0.6, K.head ?? K.body)); // 정수리 혹(매머드)
   return out;
 }

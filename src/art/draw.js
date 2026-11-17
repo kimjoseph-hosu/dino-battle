@@ -737,6 +737,21 @@ function snake(p, c) {
   return `<g class="tail snake">${chain}</g>` + reptileHead(0.88, r * 3.5, 0.12, 0.45, c, { feats: c.feats, teeth: false });
 }
 
+// 사람(옆모습, 키 1). 몸길이 대신 키가 1이라 가로는 가운데(x 0.5) 둘레만 쓴다. params: shirt 윗옷, pants 바지, hair 머리카락 색, 피부는 palette[0]
+function person(p, c) {
+  const skin = c.back, sh = p.shirt ?? '#2a2a2e', pa = p.pants ?? '#2a2a2e', hr = p.hair ?? '#1b1410', x = 0.5, far = k => shade(k, -0.25);
+  const leg = (dx, k) => path(tube([[x + dx, 0.52, 0.05], [x + dx + 0.01, 0.31, 0.045]]), k(pa)) + path(tube([[x + dx + 0.01, 0.32, 0.036], [x + dx, 0.05, 0.03]]), k(skin))
+    + `<ellipse cx="${f(x + dx + 0.03)}" cy="-0.025" rx="0.055" ry="0.025" fill="${k('#e8e8e8')}"/>`;
+  const arm = (dx, k) => path(tube([[x + dx, 0.79, 0.04], [x + dx + 0.04, 0.64, 0.035], [x + dx + 0.09, 0.56, 0.03]]), k(skin)) + `<circle cx="${f(x + dx + 0.1)}" cy="-0.55" r="0.035" fill="${k(skin)}"/>`;
+  return leg(-0.02, far) + arm(-0.03, far)
+    + path(tube([[x, 0.48, 0.09], [x + 0.005, 0.66, 0.1], [x, 0.8, 0.115]]), sh) // 윗옷
+    + path(tube([[x + 0.005, 0.8, 0.035], [x + 0.01, 0.86, 0.035]]), skin) // 목
+    + `<circle cx="${f(x + 0.015)}" cy="-0.905" r="0.07" fill="${skin}"/>`
+    + `<path d="M${f(x - 0.058)},-0.9A0.072,0.072 0 0 1 ${f(x + 0.085)},-0.925L${f(x + 0.06)},-0.95L${f(x - 0.03)},-0.89Z" fill="${hr}"/>` // 머리카락
+    + `<circle cx="${f(x + 0.06)}" cy="-0.91" r="0.009" fill="#1a1410"/>` // 눈
+    + leg(0.02, k => k) + arm(0.03, k => k);
+}
+
 // 원형 = 그리는 함수 + 기본 비율. 동물 카드의 art.params가 덮어쓴다.
 export const ARCHETYPES = {
   theropod: { draw: biped, params: { h: 0.32, bd: 0.085, hl: 0.12, dp: 0.7, arm: 0.05, head: 'thero' } },
@@ -751,6 +766,7 @@ export const ARCHETYPES = {
   pterosaur: { draw: ptero, params: { h: 0.25, bd: 0.07, neck: [0.6, 0.6], hl: 0.38, dp: 0.35, wing: 0.55 } },
   arthropod: { draw: arthropod, params: { kind: 'trilobite' } },
   snake: { draw: snake, params: { r: 0.04 } },
+  human: { draw: person, params: {} },
 };
 
 let uid = 0;

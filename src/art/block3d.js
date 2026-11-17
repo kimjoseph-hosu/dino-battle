@@ -162,7 +162,7 @@ function fish(p, K) {
   const body = [slab(0.32 * N, 0.83 * N, t => { const h = R * (1.5 + 0.55 * Math.sin(Math.PI * Math.pow(t, 0.8))); return [y + R * 0.06, h, W * (h / (2 * R))]; }, K.body)];
   body.push(box(0.6 * N, y - R * 0.8, 0, 0.32 * N, R * 0.4, W * 0.8, K.under));
   const tail = segChain([[0.32 * N, y, 0, R * 1.4], [0.2 * N, y, 0, R * 0.8], [0.1 * N, y, 0, R * 0.4], [0.04 * N, y, 0, 0]], 0.7, K.body, fluke(0.05 * N, y, R, p.flukeUp ?? 1, p.flukeDown ?? 0.8, K.body));
-  const x0 = N - hl * 1.1, hd = R * 1.8, hw = W * 0.85, my = y - R * 0.45;
+  const x0 = N - hl * 1.1, hd = R * 1.8, hw = W * 0.85, my = y - R * 0.45, gape = F.includes('gape'), under = F.includes('underbite');
   const parts = [
     box(x0 + hl * 0.4, y + R * 0.08, 0, hl * 0.8, hd, hw, plate ? K.dark : K.body),
     box(x0 + hl * 0.92, y + R * 0.2, 0, hl * 0.32, hd * 0.6, hw * 0.6, plate ? K.dark : K.body), // 뭉툭한 주둥이
@@ -171,9 +171,14 @@ function fish(p, K) {
     plate ? box(x0 + hl * 1.0, my - 0.2, 0, 0.5, 0.9, hw * 0.4, '#f3edd9') // 칼날 턱뼈
       : [0, 1, 2, 3].map(i => both(sd => box(x0 - i * 0.7, y, sd * W * 0.46, 0.2, R * 1.1, 0.1, K.ridge))), // 아가미 틈
   ];
-  const jaw = J(x0 + hl * 0.2, my, box(x0 + hl * 0.6, my - R * 0.25, 0, hl * 0.8, R * 0.5, hw * 0.75, K.under),
-    plate ? null : Array.from({ length: 5 }, (_, i) => both(sd => box(x0 + hl * (0.4 + i * 0.12), my + 0.2, sd * (hw * 0.33), 0.3, 0.45, 0.3, '#f3edd9'))));
-  if (!plate) parts.push(Array.from({ length: 6 }, (_, i) => both(sd => box(x0 + hl * (0.35 + i * 0.11), my - 0.2, sd * (hw * 0.28), 0.3, 0.5, 0.3, '#f3edd9'))));
+  // gape: 늘 크게 벌린 입(걸러 먹는 리드시크티스) — 아래턱을 내리고 입 안에 빗살(아가미 갈퀴), 이빨 없음
+  // underbite: 불독처럼 튀어나와 위로 들린 아래턱 + 위로 솟은 큰 송곳니(크시팍티누스)
+  const jy = gape ? my - R * 0.75 : my;
+  if (gape) parts.push(box(x0 + hl * 0.62, my - R * 0.38, 0, hl * 0.75, R * 0.8, hw * 0.7, '#3a1d1c'), Array.from({ length: 5 }, (_, i) => box(x0 + hl * (0.35 + i * 0.1), my - R * 0.38, 0, 0.15, R * 0.7, hw * 0.6, '#e6dccb')));
+  const jaw = J(x0 + hl * 0.2, my, box(x0 + hl * 0.6, jy - R * 0.25, 0, hl * 0.8, R * 0.5, hw * 0.75, K.under),
+    under ? [box(x0 + hl * 1.02, jy + R * 0.05, 0, hl * 0.22, R * 0.75, hw * 0.62, K.under), both(sd => box(x0 + hl * 1.04, jy + R * 0.6, sd * hw * 0.2, 0.4, R * 0.7, 0.4, '#f3edd9'))] : null,
+    plate || gape ? null : Array.from({ length: 5 }, (_, i) => both(sd => box(x0 + hl * (0.4 + i * 0.12), jy + 0.2, sd * (hw * 0.33), 0.3, under ? 0.8 : 0.45, 0.3, '#f3edd9'))));
+  if (!plate && !gape) parts.push(Array.from({ length: 6 }, (_, i) => both(sd => box(x0 + hl * (0.35 + i * 0.11), my - 0.2, sd * (hw * 0.28), 0.3, 0.5, 0.3, '#f3edd9'))));
   const headJ = J(x0, y, parts, jaw);
   // 가슴지느러미는 몸에 붙여 뒤·아래로 비스듬히, 배지느러미는 작게(몸에서 떨어져 보이지 않게)
   const legs = [...both(sd => flipper(0.7 * N, y - R * 0.75, W * 0.32, R * 1.6, R * 0.9, K.limb, sd, true, 2.55)), ...both(sd => flipper(0.4 * N, y - R * 0.75, W * 0.25, R * 0.75, R * 0.5, K.limb, sd, false, 2.6))];
@@ -287,7 +292,58 @@ function snake(p, K) {
   return { root: group(all), all, head: headJ, jaw: hd0.jaw, tail: body, legs: [], wings: [] };
 }
 
-const TEMPLATES = { theropod: biped, bird: biped, sauropod: quad, ceratopsian: quad, armored: quad, large_mammal: quad, sprawler: quad, fish, marine_reptile: marine, pterosaur: ptero, arthropod, snake };
+// ── 사람(김요셉 선생님). 키가 N(=몸길이 1)이고 +x 쪽을 본다. params: skin 피부, shirt 윗옷(민소매), pants 반바지, hair 머리카락, gloves 복싱 장갑
+// 팔은 앞다리(front)로 넣어 motion3d 가 그대로 휘두른다: 걸으면 다리와 엇갈려 흔들고, slash 는 주먹을 번갈아 뻗고, pounce 는 두 팔을 앞으로.
+// 팔꿈치는 굽힌 채 고정(주먹이 턱 앞에 오는 복싱 자세), 어깨에서만 돈다
+export const ELBOW = 2.25; // 사람 팔꿈치가 쉴 때 굽은 각(라디안)
+function human(p, K) {
+  const X = N / 2, skin = p.skin ?? '#e2b48c', shirt = p.shirt ?? '#1f1f22', pants = p.pants ?? '#26262a', hair = p.hair ?? '#1b1410', glove = p.gloves ?? '#c8282c';
+  const SK = { top: col(skin, 1.06), side: skin, bot: col(skin, 0.8) }, SH = { top: col(shirt, 1.3), side: shirt, bot: col(shirt, 0.8) }, PA = { top: col(pants, 1.3), side: pants, bot: col(pants, 0.8) };
+  const hip = N * 0.5, sh = N * 0.76, nk = N * 0.85; // 엉덩이·어깨·목 높이
+  // 다리: 엉덩이 관절 → 허벅지(반바지) → 무릎 관절 → 정강이 → 운동화
+  const legs = both(sd => {
+    const z = sd * 1.15, ky = N * 0.28;
+    const shoe = group(box(X + 0.55, 0.5, z, 3.2, 1, 1.6, '#ececec'), box(X + 0.55, 0.12, z, 3.3, 0.25, 1.7, '#3a3a3a'), box(X + 1.7, 0.75, z, 0.9, 0.5, 1.5, '#d8d8d8'));
+    const knee = J(X, ky, box(X, (ky + 0.9) / 2 + 0.2, z, 1.75, ky - 0.6, 1.65, SK), box(X + 0.2, ky - 1.6, z, 2.1, 2.3, 1.9, SK), shoe); // 정강이 + 종아리 근육
+    return { g: J(X, hip, box(X, (hip + ky) / 2 - 0.3, z, 2.9, hip - ky + 0.6, 2.4, PA), knee), knee, side: sd, front: false };
+  });
+  // 팔: 어깨 관절. 윗팔은 아래로 조금 앞, 아래팔은 앞위로 접혀 장갑이 가슴·턱 앞에
+  const arms = both(sd => {
+    const z = sd * 3.3, ua = 4.4, fa = 3.9;
+    // 팔꿈치 관절: 쉴 때는 ELBOW 만큼 굽힌 복싱 자세, motion3d 의 lb 만큼 편다(lb = ELBOW 면 쭉 편 팔)
+    const elbow = J(0, -ua, box(0, -ua - fa / 2, 0, 1.45, fa, 1.45, SK), box(0, -ua - fa - 0.6, 0, 1.9, 1.9, 1.9, glove), box(0, -ua - fa + 0.35, 0, 1.5, 0.5, 1.5, '#f0f0f0')); // 아래팔 + 장갑(손목 흰 띠)
+    elbow.rotation.z = ELBOW;
+    elbow.userData.rest = elbow.rotation.clone();
+    const upper = piv(X, sh, z, [0, 0, 0.35], box(0, -ua / 2, 0, 1.75, ua, 1.75, SK), box(0.45, -ua * 0.48, 0, 1.15, ua * 0.55, 1.55, col(skin, 0.97)), box(-0.4, -ua * 0.45, 0, 1.0, ua * 0.5, 1.5, SK), elbow); // 윗팔 + 알통 + 삼두
+    const delt = box(X, sh + 0.25, z * 0.97, 2.4, 2.1, 2.0, SK); // 어깨 근육(헬스 5년)
+    return { g: J(X, sh, delt, upper), knee: elbow, side: sd, front: true };
+  });
+  // 몸통: 반바지 허리 + 민소매(가슴이 넓은 역삼각형) + 드러난 어깨
+  const torso = [
+    box(X, hip + 0.6, 0, 2.6, 2.2, 4.0, PA),
+    box(X, hip + 2.6, 0, 2.5, 2.4, 3.7, SH), box(X + 0.05, hip + 4.7, 0, 2.8, 2.2, 4.6, SH), box(X + 0.2, sh - 0.6, 0, 3.2, 2.3, 5.4, SH), // 넓은 가슴(역삼각형)
+    box(X + 1.62, sh - 0.9, 0, 0.3, 1.4, 3.8, col(shirt, 1.15)), box(X + 1.7, sh - 0.9, 0, 0.2, 1.4, 0.25, col(shirt, 0.7)), // 가슴 근육 선 + 가운데 홈
+    both(sd => box(X, sh - 0.15, sd * 2.15, 2.3, 0.9, 1.3, SK)), // 민소매 어깨선 사이로 보이는 살
+    both(sd => box(X - 0.15, sh + 0.55, sd * 1.35, 1.9, 1.1, 1.5, SK)), // 승모근(목과 어깨 사이)
+  ];
+  // 머리: 목 관절 안에 목·얼굴·머리카락·귀·눈·코, 아래턱(입)
+  const hx = X + 0.35, hy = nk + 2.1;
+  const eye = sd => { const g = piv(hx + 1.62, hy + 0.35, sd * 0.68, [0, 0, 0], box(0, 0, 0, 0.12, 0.5, 0.62, '#ffffff'), box(0.05, 0, sd * 0.05, 0.1, 0.42, 0.32, '#1a1410'), box(0.08, 0.1, sd * 0.12, 0.06, 0.14, 0.14, SPARK)); g.userData.eye = true; return g; };
+  const headParts = [
+    box(X + 0.15, nk + 0.1, 0, 1.9, 1.6, 2.1, SK), // 굵은 목
+    box(hx, hy, 0, 3.2, 3.5, 2.9, SK), // 얼굴
+    box(hx - 0.25, hy + 1.85, 0, 3.4, 0.9, 3.1, hair), box(hx - 1.35, hy + 0.7, 0, 0.8, 2.5, 3.1, hair), box(hx + 1.35, hy + 1.6, 0, 0.6, 0.6, 2.4, hair), // 짧은 검은 머리(앞머리)
+    both(sd => box(hx - 0.2, hy + 0.1, sd * 1.55, 0.8, 1.1, 0.35, col(skin, 0.92))), // 귀
+    both(eye), both(sd => box(hx + 1.62, hy + 0.85, sd * 0.68, 0.15, 0.2, 0.75, hair)), // 눈·눈썹
+    box(hx + 1.75, hy - 0.25, 0, 0.5, 0.8, 0.55, col(skin, 0.95)), // 코
+  ];
+  const jaw = J(hx + 1.0, hy - 0.95, box(hx + 1.62, hy - 0.95, 0, 0.12, 0.18, 1.0, '#6e2427'), box(hx + 0.3, hy - 1.6, 0, 2.6, 0.8, 2.3, SK)); // 입 + 턱
+  const headJ = J(X + 0.15, nk - 0.4, headParts, jaw);
+  const all = J(X, hip, torso, headJ, arms.map(a => a.g), legs.map(l => l.g));
+  return { root: group(all), all, head: headJ, jaw, tail: [], legs: [...arms, ...legs], wings: [], upright: true };
+}
+
+const TEMPLATES = { theropod: biped, bird: biped, sauropod: quad, ceratopsian: quad, armored: quad, large_mammal: quad, sprawler: quad, fish, marine_reptile: marine, pterosaur: ptero, arthropod, snake, human };
 // 인기 동물 손질(PLAN_BLOCK3D 4.5): 블록 전용 비율·특징을 덮어써서 더 그 동물답게. 데이터 파일의 art.block 이 있으면 그것이 우선
 const OVERRIDE = {
   tyrannosaurus: { hl: 0.16, dp: 0.95, arm: 0.035, leg: 1.4, bossy: true }, // 아주 크고 깊은 머리(눈 뒤 혹·콧등 돌기), 굵은 다리, 손가락 둘 달린 작은 앞발
@@ -323,8 +379,11 @@ const OVERRIDE = {
   quetzalcoatlus: { bd: 0.09, wing: 0.6, dp: 0.4 }, // 몸을 키우고 날개 판은 줄이고, 부리는 굵게(실처럼 보이지 않게)
   mosasaurus: { bd: 0.07 }, // 통통한 바다 도마뱀
   megalodon: { bd: 0.105 }, // 더 묵직한 큰 상어
+  // 고대동물백과 3(2026-11-17)
+  columbian_mammoth: { tuskK: 1.8, dome: true, bd: 0.165 }, // 털매머드보다 길고 둥글게 휜 엄니, 정수리 혹, 털 없이 더 큰 몸
+  ampelosaurus: { plateK: 0.4 }, // 등의 뼈 판은 작고 낮게(골편 + 작은 판 한 줄)
 };
-const KIND = { large_mammal: 'fur', bird: 'feather', fish: 'smooth', marine_reptile: 'smooth', pterosaur: 'fur', arthropod: 'shell' };
+const KIND = { human: 'smooth', large_mammal: 'fur', bird: 'feather', fish: 'smooth', marine_reptile: 'smooth', pterosaur: 'fur', arthropod: 'shell' };
 
 // 백과 팔레트는 흙빛이라 블록으로 칠하면 칙칙하다: 채도·밝기를 올린다(BLOCK.SAT·LIGHT)
 const vivid = hex => { const c = new THREE.Color(hex), h = {}; c.getHSL(h); return '#' + c.setHSL(h.h, Math.min(1, h.s * BLOCK.SAT), Math.min(0.85, h.l * BLOCK.LIGHT)).getHexString(); };

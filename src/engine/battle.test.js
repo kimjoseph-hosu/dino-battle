@@ -131,3 +131,58 @@ console.log('sizeLike ok', sizeLike(30), sizeLike(1.65), sizeLike(5), sizeLike(0
   assert(shift.reduce((s, v) => s + v, 0) / shift.length < 0.12, `사건 켬/끔 승률 차이 ${shift.map(v => v.toFixed(2))}`);
   console.log('events ok', { byEvent: byEv, meteor5: `${meteors}/${at5}`, wxTurn: `${wxTurn}/${wxSeen}`, wxShown: `${wxShown}/${wxLong}`, wxReason, shift: shift.map(v => v.toFixed(2)).join(' ') }, '티라노 vs 삼엽충(초원) 사건 끔/켬', winProb(A.tyrannosaurus, A.trilobite, 'grassland'), winProb(A.tyrannosaurus, A.trilobite, 'grassland', ev));
 }
+
+// ── 수수께끼 보스: 보스가 될 동물마다 힌트가 넉넉하고 글이 깨지지 않는다. 후보는 보스를 포함한 서로 다른 넷 ──
+{
+  const { bossHints, bossPool, suspects } = await import('./riddle.js');
+  const bk = Object.fromEntries(books.map(b => [b.name_ko.split('(')[0], b])), all = cards.map(c => ({ ...bk[c.name_ko], ...c }));
+  const P = bossPool(all);
+  assert(P.length >= 20, `보스 후보 ${P.length}`);
+  for (const a of P) {
+    const h = bossHints(a);
+    assert(h.length >= 5 && h.every(x => x.icon && x.text && !/undefined|null/.test(x.text)), `${a.id} 힌트 ${JSON.stringify(h)}`);
+    const s = suspects(a, all, seeded(a.id.length));
+    assert(s.length === 4 && s.includes(a) && new Set(s.map(x => x.name_ko)).size === 4, `${a.id} 후보`);
+  }
+  console.log('riddle ok', P.length, bossHints(A.tyrannosaurus.book ? A.tyrannosaurus : all.find(a => a.id === 'tyrannosaurus')).map(x => x.text));
+}
+
+// ── 고대동물백과 3(2026-11-17): 새 8종이 백과·카드 둘 다 있고, 김요셉 선생님(사람)은 큰 공룡에게는 거의 지고 아주 작은 공룡에게는 거의 이긴다 ──
+{
+  const NEW = ['pachycephalosaurus', 'ampelosaurus', 'leedsichthys', 'xiphactinus', 'deinonychus', 'sinosauropteryx', 'columbian_mammoth', 'kim_yoseph'];
+  const names = new Set(books.map(b => b.name_ko));
+  for (const id of NEW) assert(A[id] && names.has(A[id].name_ko), `${id} 카드·백과`);
+  const teacher = A.kim_yoseph, vsRex = winProb(teacher, A.tyrannosaurus, 'grassland'), vsSino = winProb(teacher, A.sinosauropteryx, 'grassland');
+  assert(vsRex < 0.05, `선생님 vs 티라노 ${vsRex}`);
+  assert(vsSino > 0.8, `선생님 vs 시노사우롭테릭스 ${vsSino}`);
+  const { whatIf } = await import('./whatif.js'), bk = Object.fromEntries(books.map(b => [b.name_ko, b]));
+  assert(whatIf({ ...bk['김요셉 선생님'], ...teacher }, { ...bk['황제매머드'], ...A.columbian_mammoth }, x => x).lines.some(l => /살았어요/.test(l)), '선생님과 황제매머드는 사는 곳이 달라 못 만났다');
+  console.log('book3 ok', { vsRex, vsSino, vsDeino: winProb(teacher, A.deinonychus, 'grassland'), vsPachy: winProb(teacher, A.pachycephalosaurus, 'grassland') });
+}
+
+// 물가: 선생님·물가 공룡은 얕아서 걷고, 홍수가 나면 헤엄친다. 물속은 늘 헤엄
+{
+  const { mode: md } = await import('./battle.js');
+  assert.equal(md(A.kim_yoseph, 'waterside'), 'ground');
+  assert.equal(md(A.kim_yoseph, 'waterside', 'flood'), 'swim');
+  assert.equal(md(A.baryonyx, 'grassland', 'flood'), 'ground');
+  assert.equal(md(A.kim_yoseph, 'underwater'), 'swim');
+  assert.equal(md(A.mosasaurus, 'waterside'), 'swim');
+}
+assert.equal(mode(A.spinosaurus, 'waterside'), 'ground', '스피노사우루스도 물가에서는 걷는다');
+assert.equal(mode(A.spinosaurus, 'waterside', 'flood'), 'swim');
+assert.equal(mode(A.spinosaurus, 'underwater'), 'swim');
+
+// 공룡은 발차기 대신, 상대 키가 절반 이하면 밟기
+{
+  const { actionDeck } = await import('./story.js');
+  const moves = (a, st) => { const d = actionDeck(a, seeded(3), st); return Array.from({ length: 8 }, d).map(x => x.motion); };
+  for (const id of ['tyrannosaurus', 'therizinosaurus', 'pachycephalosaurus', 'deinonychus']) assert(!moves(A[id]).includes('kick'), `${id} 발차기 없음`);
+  assert(moves(A.tyrannosaurus, true).includes('stomp') && !moves(A.tyrannosaurus).includes('stomp'), '키 차이가 나면 밟기');
+  assert(!moves(A.woolly_mammoth, true).includes('stomp') || moves(A.woolly_mammoth).includes('stomp'), '공룡 아닌 동물은 밟기 추가 없음');
+  assert(moves(A.kim_yoseph).includes('kick'), '선생님은 발차기');
+  assert(!moves(A.brachiosaurus).includes('stomp') && moves(A.brachiosaurus, true).includes('stomp'), '앞발 내리찍기도 키 차이가 날 때만');
+  const { canStomp } = await import('./story.js');
+  assert(canStomp(A.kim_yoseph, 1.81, 1) && !canStomp(A.kim_yoseph, 1.81, 1.2), '선생님은 1m 이하를 밟는다');
+  assert(canStomp(A.tyrannosaurus, 4, 2) && !canStomp(A.tyrannosaurus, 4, 2.5) && !canStomp(A.tyrannosaurus, null, 1));
+}

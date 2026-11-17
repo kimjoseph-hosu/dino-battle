@@ -50,7 +50,7 @@ export function showModel(root, a) {
 }
 
 // 체형 틀 확인 화면 (#templates): 틀마다 대표 동물 한 마리, 3D(크게) + 기존 2D(작게)
-const ARCH_KO = { theropod: '수각류', bird: '새', sauropod: '용각류', ceratopsian: '뿔공룡', armored: '갑옷공룡', large_mammal: '큰 포유류', sprawler: '악어·도마뱀형', marine_reptile: '해양 파충류', fish: '물고기', pterosaur: '익룡', arthropod: '절지동물', snake: '뱀' };
+const ARCH_KO = { theropod: '수각류', bird: '새', sauropod: '용각류', ceratopsian: '뿔공룡', armored: '갑옷공룡', large_mammal: '큰 포유류', sprawler: '악어·도마뱀형', marine_reptile: '해양 파충류', fish: '물고기', pterosaur: '익룡', arthropod: '절지동물', snake: '뱀', human: '사람' };
 export function showTemplates(root) {
   const reps = location.hash.includes('&all') ? animals : animals.filter(a => REPS.has(a.id)); // #templates&all: 전체
   const count = arch => animals.filter(a => a.archetype === arch).length;

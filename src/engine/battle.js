@@ -22,10 +22,14 @@ export function parts(a, stage) {
 }
 const score = (a, stage) => sum(parts(a, stage));
 
-// 이 무대에서 어떻게 움직이나: fly 날기, swim 헤엄, ground 땅(또는 물 밖에 나온 물 동물)
-export function mode(a, stage) {
+// 물에 들어가 헤엄치며 싸우는 사람(선생님)과 물가에서 물고기를 잡던 공룡들
+// 물속에서는 헤엄치고, 물가는 얕아서 걷다가 홍수(wx = 'flood')로 물이 불면 헤엄친다(물 동물보다 먼저 본다: 스피노사우루스는 amphibious 지만 물가에서 걷는다)
+export const SWIMMERS = ['kim_yoseph', 'spinosaurus', 'baryonyx', 'suchomimus'];
+// 이 무대에서 어떻게 움직이나: fly 날기, swim 헤엄, ground 땅(또는 물 밖에 나온 물 동물). wx: 지금 남아 있는 날씨
+export function mode(a, stage, wx = null) {
   const water = stage === 'underwater' || stage === 'waterside';
   if (a.habitat === 'air') return stage === 'underwater' ? 'ground' : 'fly';
+  if (SWIMMERS.includes(a.id)) return stage === 'underwater' || (stage === 'waterside' && wx === 'flood') ? 'swim' : 'ground';
   if (['sea', 'freshwater', 'amphibious'].includes(a.habitat)) return water ? 'swim' : 'ground';
   return 'ground';
 }
@@ -40,7 +44,7 @@ export const tire = a => clamp(0.6 * massScore(a.mass_kg.avg) / 10 + 0.4 * (1 - 
 // wx: 남아 있는 날씨(사건 id). 날씨에 따라 더 맞히거나(hit) 덜 맞는다(guard) — events.js stay
 export const stay = (wx, a, stage) => (wx && EVENTS[wx].stay?.(a, stage)) || {};
 export function hitChance(att, def, stage, round = 0, wx = null) {
-  const B = BATTLE, ma = mode(att, stage), md = mode(def, stage);
+  const B = BATTLE, ma = mode(att, stage, wx), md = mode(def, stage, wx);
   let p = B.HIT_BASE + B.HIT_AGI * ((att.stats.agility + att.stats.senses) / 2 - def.stats.agility) - B.TIRE_HIT * round * tire(att);
   if (md === 'fly' && ma === 'ground') p -= B.HIT_VS_AIR; // 하늘에 있는 상대는 닿기 어렵다
   if (ma === 'fly' && md === 'ground') p += B.HIT_FROM_AIR; // 위에서 내리꽂는다
@@ -132,8 +136,8 @@ export function battle(a, b, stage, rng = Math.random, withP = true, opts = {}) 
   if (byEvent) events.push(`ev_${byEvent}`);
   else if (evBest && evGain[winner] - evGain[1 - winner] >= 10 && gain(evBest) > 0) events.push(`ev_${evBest.event.id}`);
   else if (wx && wxHelp[winner] - wxHelp[1 - winner] >= 2) events.push(`wx_${wx}`); // 날씨 덕분에 여러 번 맞히거나 피했다
-  else if (mode(W, stage) === 'fly' && mode(L, stage) === 'ground') events.push('flight');
-  else if (mode(W, stage) === 'swim' && mode(L, stage) === 'ground') events.push('swim');
+  else if (mode(W, stage, wx) === 'fly' && mode(L, stage, wx) === 'ground') events.push('flight');
+  else if (mode(W, stage, wx) === 'swim' && mode(L, stage, wx) === 'ground') events.push('swim');
   else if (dodged[winner] >= 2 && dodged[winner] > dodged[1 - winner]) events.push('dodge');
   const byScore = Object.keys(pw).map(k => [k, pw[k] - pl[k]]).filter(([k, d]) => d > 0 && !(k === 'agility' && events[0] === 'dodge')).sort((x, y) => y[1] - x[1]).map(([k]) => k);
   const reasons = [...events, ...byScore].slice(0, 2);

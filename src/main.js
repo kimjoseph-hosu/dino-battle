@@ -2,7 +2,7 @@
 import '@fontsource/black-han-sans';
 import '@fontsource/jua';
 import { animals, addAnimals } from './data.js';
-import { drawAnimal, drawHuman, shapeTest } from './art/index.js';
+import { drawAnimal, drawHuman, shapeTest, heightOf } from './art/index.js';
 import { battle, mode } from './engine/battle.js';
 import { reasonLines, ga, neun, makeScript, withAiLines, weightLike, sizeLike } from './engine/story.js';
 import { narrate, loadAiAnimals } from './ai.js';
@@ -22,6 +22,8 @@ import { makeBracket, nextMatch, roundName, shuffle } from './engine/bracket.js'
 import { showSize, showBracket, showMatchEnd, showChampion } from './ui/tournament.js';
 import { spinStage } from './ui/roulette.js';
 import { EVENTS } from './engine/events.js';
+import { DINO, NOT_DINO, bossPool } from './engine/riddle.js';
+import { showBoss } from './ui/boss.js';
 
 const app = document.getElementById('app');
 let stage = 'grassland'; // 마지막으로 고른 무대를 기억
@@ -45,7 +47,7 @@ function pick(chosen = [], need = 2) {
   // 아이 그림은 방금 올린 걸 찾기 쉽게 맨 앞, 나머지는 가나다 순
   const all = [...drawings, ...[...animals].sort(byName)];
   const count = k => all.filter(a => k === 'all' || tabsOf(a).includes(k)).length;
-  app.innerHTML = `<header class="title"><h1>상상 동물•공룡 배틀</h1><p>${tour ? `🏆 토너먼트에 나갈 동물 ${need}마리를 골라요` : '싸울 동물 두 마리를 골라요'}</p>${tour ? '' : '<button class="tour">🏆 토너먼트</button>'}</header>
+  app.innerHTML = `<header class="title"><h1>상상 동물•공룡 배틀</h1><p>${tour ? `🏆 토너먼트에 나갈 동물 ${need}마리를 골라요` : '싸울 동물 두 마리를 골라요'}</p>${tour ? '' : '<button class="tour">🏆 토너먼트</button><button class="boss">🕵️ 수수께끼 보스</button>'}</header>
     <div class="filters"><input class="search" type="search" placeholder="🔎 이름으로 찾기">
       ${Object.entries(TABS).map(([k, v]) => `<button class="tab${filter.tab === k ? ' on' : ''}" data-tab="${k}">${v} <small>${count(k)}</small></button>`).join('')}</div>
     <div class="pick"><button class="card add draw-add"><span>✏️</span><b>내 그림 추가</b><small>그림 사진을 올려요</small></button>
@@ -56,7 +58,7 @@ function pick(chosen = [], need = 2) {
       <b>${a.name_ko}</b>
       <span class="tags">${a.drawing ? '<i>✏️ 우리 반 그림</i>' : `<i>${a.era}</i>`}${a.source_note?.startsWith('AI') ? '<i>🤖 AI</i>' : ''}<i>${HABITAT[a.habitat]}</i></span>
       <small>${a.size_raw}</small></button>`).join('')}</div>
-    <footer class="tray">${tour ? '<button class="back">← 마릿수</button><div class="slot count"></div><button class="go" disabled>대진표 만들기 →</button>' : '<div class="slot s1"></div><strong>VS</strong><div class="slot s2"></div><button class="go" disabled>무대 고르기 →</button>'}</footer>`;
+    <footer class="tray">${tour ? '<button class="back">← 마릿수</button><div class="slot count"></div><button class="reset">🔄 초기화</button><button class="go" disabled>대진표 만들기 →</button>' : '<button class="reset">🔄 초기화</button><div class="slot s1"></div><strong>VS</strong><div class="slot s2"></div><button class="go" disabled>무대 고르기 →</button>'}</footer>`;
   const go = app.querySelector('.go');
   const refresh = () => {
     app.querySelectorAll('.card[data-id]').forEach(el => {
@@ -68,7 +70,11 @@ function pick(chosen = [], need = 2) {
     if (tour) app.querySelector('.count').textContent = `${chosen.length} / ${need}마리`;
     else [0, 1].forEach(i => (app.querySelector(`.s${i + 1}`).textContent = chosen[i]?.name_ko ?? '?'));
     go.disabled = chosen.length !== need;
+    reset.disabled = !chosen.length;
   };
+  // 초기화: 고른 동물을 모두 비운다
+  const reset = app.querySelector('.reset');
+  reset.onclick = () => { chosen = []; refresh(); };
   // 지금 보이는(탭·검색에 맞는) 동물 중에서 뽑는다. 보통은 두 마리 새로, 토너먼트는 빈자리만(모자라면 안 보이는 동물로)
   app.querySelector('.dice-add').onclick = () => {
     const seen = all.filter(a => !app.querySelector(`.card[data-id="${a.id}"]`).hidden), rest = xs => shuffle(xs.filter(a => !chosen.includes(a)));
@@ -92,7 +98,7 @@ function pick(chosen = [], need = 2) {
   });
   go.onclick = () => (tour ? startTour(chosen) : stagePick(...chosen));
   if (tour) app.querySelector('.tray .back').onclick = tournament;
-  else app.querySelector('.tour').onclick = tournament;
+  else { app.querySelector('.tour').onclick = tournament; app.querySelector('.boss').onclick = riddle; }
   // 사는 곳 탭 + 이름 검색(한글 이름, 별명, 영어 이름)
   const applyFilter = () => {
     const q = filter.q.trim().toLowerCase().replace(/\s/g, '');
@@ -122,7 +128,7 @@ const vote = (A, B) => {
 // AI에는 이름과 승부 결과만 보낸다. "(그림)"도 떼고 보낸다
 const plain = a => a.name_ko.replace(/\(그림\)$/, '');
 function prepare(A, B, motion) {
-  const F = [A, B], res = battle(A, B, stage, Math.random, true, { events }), modes = F.map(a => mode(a, stage)), script = makeScript(A, B, res, modes, motion, stage);
+  const F = [A, B], res = battle(A, B, stage, Math.random, true, { events }), modes = F.map(a => mode(a, stage)), script = makeScript(A, B, res, modes, motion, stage, F.every(heightOf) ? F.map(heightOf) : null);
   const [W, L] = [F[res.winner], F[1 - res.winner]];
   const ai = motion || plain(A) === plain(B) ? Promise.resolve(null) : narrate({
     stage: STAGES[stage].name, a: plain(A), b: plain(B), winner: plain(W), loser: plain(L), ko: res.ko, fled: res.fled,
@@ -143,6 +149,9 @@ async function play(A, B, match) {
   if (match.res.byEvent) script.outro = match.script.outro; // 사건으로 끝난 판은 AI가 모르는 결말이라 템플릿 문장
   await playBattle(app, A, B, match.res, stage, script, match.modes);
 }
+
+// ── 수수께끼 보스: 힌트로 정체 맞히기(ui/boss.js) → 보스와 싸울 동물 고르기(pick) → 보통 배틀 흐름
+const riddle = () => { const P = bossPool(animals); showBoss(app, P[Math.floor(Math.random() * P.length)], animals, { fight: boss => pick([boss]), again: riddle, back: () => pick() }); };
 
 // ── 토너먼트: 마릿수 → 동물 고르기(pick) → 대진표 → (무대 룰렛 → 배틀 → 한 줄 결과) 반복 → 우승. 투표는 시작 전 "누가 우승할까?" 한 번만
 let tour = null; // { rounds, guess }
@@ -203,7 +212,7 @@ function whatIfHtml(A, B) {
 function dexHtml(a) {
   const ok = v => v && v !== '알 수 없음';
   const row = (icon, k, v) => (ok(v) ? `<li><span>${icon}</span><b>${k}</b><em>${v}</em></li>` : '');
-  const now = a.era === '현재';
+  const now = /현재|지금/.test(a.era ?? ''); // 지금 사는 동물·사람: "살았던" 대신 "사는"
   return `<div class="dex"><h2>📒 ${a.name_ko} 도감</h2><ul>`
     + row('💬', '이름 뜻', a.name_meaning) + row('⏳', now ? '시대' : '살았던 때', a.era) + row('🌍', now ? '사는 곳' : '살았던 곳', a.place)
     + row(/육식/.test(a.diet ?? '') ? '🍖' : /초식/.test(a.diet ?? '') ? '🌿' : '🍽️', '먹이', a.diet)
@@ -215,15 +224,7 @@ function dexHtml(a) {
 
 // ── 공부 탭 꼭지들(백과에 자주 나오는 것) ──
 // 1) 공룡일까? 아이들이 공룡으로 많이 아는 동물 중 공룡이 아닌 것을 알려 준다
-const DINO = ['theropod', 'sauropod', 'ceratopsian', 'armored'];
-const NOT_DINO = {
-  glyptodon: '등딱지를 멘 포유류예요. 아르마딜로 친척이에요.', doedicurus: '등딱지를 멘 포유류예요. 아르마딜로 친척이에요.',
-  mosasaurus: '바다에 살던 커다란 도마뱀 친척이에요.', archelon: '아주 아주 큰 바다거북이에요.', basilosaurus: '고래예요. 아기에게 젖을 먹이는 포유류예요.',
-  megalodon: '아주 아주 큰 상어예요.', dunkleosteus: '갑옷을 입은 옛날 물고기예요.', pakicetus: '고래의 아주 먼 조상이에요.', ambulocetus: '걸어 다니던 고래 조상이에요.',
-  tiktaalik: '물고기가 땅으로 올라오던 때의 동물이에요.', megalania: '아주 큰 도마뱀이에요.', meganeura: '아주 큰 잠자리 친척이에요.',
-  dimetrodon: '등에 돛이 있지만 공룡보다 먼저 산 동물이에요. 포유류의 아주 먼 친척이에요.', gorgonops: '포유류의 아주 먼 친척이에요.', lystrosaurus: '포유류의 아주 먼 친척이에요.',
-};
-const NOT_DINO_BY = { pterosaur: '하늘을 날던 파충류, 익룡이에요.', marine_reptile: '바다에 살던 파충류예요.', fish: '물고기예요.', large_mammal: '털이 있고 젖을 먹이는 포유류예요.', sprawler: '악어 친척이에요.', snake: '아주 큰 뱀이에요.', arthropod: '곤충·게·새우와 같은 무리예요.' };
+const NOT_DINO_BY = { pterosaur: '하늘을 날던 파충류, 익룡이에요.', marine_reptile: '바다에 살던 파충류예요.', fish: '물고기예요.', large_mammal: '털이 있고 젖을 먹이는 포유류예요.', sprawler: '악어 친척이에요.', snake: '아주 큰 뱀이에요.', arthropod: '곤충·게·새우와 같은 무리예요.', human: '사람이에요! 사람은 공룡이 사라지고 아주 아주 오랜 뒤에 나타났어요.' };
 const PLESIO = ['nothosaurus', 'pliosaurus', 'liopleurodon', 'elasmosaurus'], ICHTHYO = ['shonisaurus', 'shastasaurus', 'ophthalmosaurus'];
 function kindHtml(a) {
   if (DINO.includes(a.archetype) && !NOT_DINO[a.id]) return '<p class="kind yes">🦖 진짜 공룡이에요!</p>';
@@ -252,7 +253,7 @@ function sizeScene(A, B) {
   return s + `<line x1="-0.5" y1="0" x2="${x}" y2="0" class="ground"/>`;
 }
 // 5) 몸 구석구석: 무기·몸 지키기를 그림의 그 부위에 화살표로. 부위 자리는 그림 모양(shapeTest)에서 찾는다
-const PART_AT = [[/이빨|턱|송곳니|부리|물/, 'nose'], [/엄니|코/, 'snout'], [/뿔|프릴|볏|목 ?방패|머리|박치기/, 'head'], [/발톱|발|낫|차기/, 'foot'], [/꼬리|곤봉|가시 꼬리/, 'tail'], [/골판|돛|등|가시|날개|지느러미/, 'back']];
+const PART_AT = [[/주먹/, 'nose'], [/이빨|턱|송곳니|부리|물/, 'nose'], [/엄니|코/, 'snout'], [/뿔|프릴|볏|목 ?방패|머리|박치기/, 'head'], [/발톱|발|낫|차기/, 'foot'], [/꼬리|곤봉|가시 꼬리/, 'tail'], [/골판|돛|등|가시|날개|지느러미/, 'back']];
 function partsFill(svg, a) {
   fitSvg(svg, drawAnimal(a));
   const test = shapeTest(a, svg), pts = [];
@@ -299,7 +300,7 @@ function result(A, B, res, votes) {
   const reason = i => `<li><span>${iconOf(res.reasons[i], stage)}</span>${lines[i]}</li>`;
   app.innerHTML = `<nav class="rtabs"><button class="rtab on" data-t="win">🏆 결과</button><button class="rtab" data-t="learn">📒 공룡 공부</button></nav>
   <div class="result rpane" data-p="win">
-    <div class="left"><div class="podium"><span class="ribbon">${res.ko ? 'K.O. 승리!' : '승리!'}</span>${bookPic(W)}<svg class="scene"></svg><b>${W.name_ko}</b></div></div>
+    <div class="left"><div class="podium"><span class="ribbon">${res.ko ? 'K.O. 승리!' : '승리!'}</span>${W.archetype === 'human' ? '' : bookPic(W)}<svg class="scene"></svg><b>${W.name_ko}</b></div></div>
     <div class="why">
       <h1>${ga(W.name_ko)} 이겼어요!</h1>
       <ul class="reasons top">${reason(0)}</ul>
@@ -308,7 +309,7 @@ function result(A, B, res, votes) {
       <button class="tolearn">📒 두 공룡 더 알아보기 →</button>
     </div></div>
   <div class="learn rpane" data-p="learn" hidden>
-    <div class="lpair">${[A, B].map(a => `<div class="lcard">${bookPic(a)}${kindHtml(a)}${dexHtml(a)}${friendsHtml(a, [A, B])}</div>`).join('')}</div>
+    <div class="lpair">${[A, B].map(a => `<div class="lcard">${a.archetype === 'human' ? `<svg class="scene charpic" data-id="${a.id}"></svg>` : bookPic(a)}${kindHtml(a)}${dexHtml(a)}${friendsHtml(a, [A, B])}</div>`).join('')}</div>
     <div class="lsec"><h2>🔍 몸 구석구석</h2><div class="lpair"><svg class="parts"></svg><svg class="parts"></svg></div></div>
     <div class="lsec"><h2>🧍 나와 크기 비교</h2><svg class="lsize"></svg></div>
     ${compareHtml(A, B)}
@@ -321,7 +322,7 @@ function result(A, B, res, votes) {
   fitSvg(app.querySelector('svg'), mini(W));
   // 공부 탭 그림은 탭을 처음 열 때 그린다(숨긴 채로는 그림 크기를 잴 수 없다)
   let drawn = false;
-  const drawLearn = () => { if (drawn) return; drawn = true; app.querySelectorAll('.parts').forEach((el, i) => partsFill(el, [A, B][i])); fitSvg(app.querySelector('.lsize'), sizeScene(A, B), 0.04); };
+  const drawLearn = () => { if (drawn) return; drawn = true; app.querySelectorAll('.charpic').forEach(el => fitSvg(el, mini([A, B].find(a => a.id === el.dataset.id)))); app.querySelectorAll('.parts').forEach((el, i) => partsFill(el, [A, B][i])); fitSvg(app.querySelector('.lsize'), sizeScene(A, B), 0.04); };
   const show = t => { app.querySelectorAll('.rtab').forEach(b => b.classList.toggle('on', b.dataset.t === t)); app.querySelectorAll('.rpane').forEach(p => (p.hidden = p.dataset.p !== t)); if (t === 'learn') drawLearn(); scrollTo(0, 0); };
   app.querySelectorAll('.rtab').forEach(b => (b.onclick = () => show(b.dataset.t)));
   app.querySelector('.tolearn').onclick = () => show('learn');
@@ -338,6 +339,7 @@ const modelId = location.hash.match(/^#model=(\w+)/)?.[1];
 if (location.hash.startsWith('#block')) showBlocks(app);
 else if (location.hash === '#gallery') showGallery(app);
 else if (location.hash === '#sounds') showSounds(app);
+else if (location.hash === '#boss') riddle();
 else if (location.hash.startsWith('#templates')) showTemplates(app);
 else if (modelId) showModel(app, animals.find(a => a.id === modelId));
 else if (location.hash.startsWith('#result=')) { // #result=tyrannosaurus,triceratops: 배틀 없이 결과 화면만(확인용)

@@ -5753,5 +5753,473 @@
   "confidence": "medium",
   "source_note": "크기·무게·이름 뜻·시대·사는 곳: 기가노토사우루스 백과(2026-11-03 추가) / 특성 점수·무기·그림 비율: Claude 판단 초안(2026-11-03), 가까운 친척 카르카로돈토사우루스와 백과 그림 근거. 선생님 검수 필요",
   "origin": "ai_estimated"
+ },
+ {
+  "id": "pachycephalosaurus",
+  "name_ko": "파키케팔로사우루스",
+  "name_en": "Pachycephalosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 4.0,
+   "avg": 4.5,
+   "max": 4.5
+  },
+  "mass_kg": {
+   "min": 350.0,
+   "avg": 400.0,
+   "max": 450.0
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 6,
+   "speed": 5,
+   "agility": 5,
+   "senses": 5,
+   "social": 5
+  },
+  "weapons": [
+   "두꺼운 머리 박치기"
+  ],
+  "armor": [
+   "두꺼운 머리뼈",
+   "머리 둘레 뼈 돌기"
+  ],
+  "fun_fact": "파키케팔로사우루스는 머리 꼭대기 뼈가 아주 두꺼웠어요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#a8622e",
+    "#e0c79a",
+    "#7a3e1c"
+   ],
+   "features": [
+    "pachy"
+   ],
+   "params": {
+    "h": 0.3,
+    "bd": 0.09,
+    "hl": 0.11,
+    "dp": 1.0,
+    "arm": 0.07,
+    "hand": "claw",
+    "tl": 0.18,
+    "neck": 1.1
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 3 p.1 / 특성 점수·무기: Claude 판단 초안(2026-11-17), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "ampelosaurus",
+  "name_ko": "암펠로사우루스",
+  "name_en": "Ampelosaurus",
+  "habitat": "land",
+  "length_m": {
+   "min": 15.0,
+   "avg": 15.0,
+   "max": 15.0
+  },
+  "mass_kg": {
+   "min": 7000.0,
+   "avg": 8000.0,
+   "max": 9000.0
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 8,
+   "speed": 2,
+   "agility": 1,
+   "senses": 4,
+   "social": 7
+  },
+  "weapons": [
+   "밟기",
+   "꼬리 휘두르기"
+  ],
+  "armor": [
+   "등과 꼬리의 뼈 갑옷 판"
+  ],
+  "fun_fact": "암펠로사우루스는 프랑스의 포도밭에서 처음 발견되었어요.",
+  "kin": "🐦 후손은 없지만, 새와 먼 친척이에요",
+  "archetype": "sauropod",
+  "art": {
+   "palette": [
+    "#7c7a6e",
+    "#c9c2ad",
+    "#8c7e66"
+   ],
+   "features": [
+    "bumps",
+    "plates"
+   ],
+   "params": {
+    "hip": 0.2,
+    "sh": 0.19,
+    "bd": 0.085,
+    "b0": 0.36,
+    "b1": 0.62,
+    "neck": [
+     0.93,
+     0.36
+    ],
+    "nr": 0.03,
+    "hl": 0.065,
+    "legR": 0.024,
+    "snout": "cama",
+    "sag": 0.2
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 3 p.2 / 특성 점수·무기: Claude 판단 초안(2026-11-17), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "leedsichthys",
+  "name_ko": "리드시크티스",
+  "name_en": "Leedsichthys",
+  "habitat": "sea",
+  "length_m": {
+   "min": 8.0,
+   "avg": 12.0,
+   "max": 16.0
+  },
+  "mass_kg": {
+   "min": 5000.0,
+   "avg": 10000.0,
+   "max": 20000.0
+  },
+  "stats": {
+   "attack": 1,
+   "defense": 4,
+   "speed": 3,
+   "agility": 1,
+   "senses": 4,
+   "social": 3
+  },
+  "weapons": [],
+  "armor": [
+   "아주 큰 몸"
+  ],
+  "fun_fact": "리드시크티스는 고래상어처럼 순한 물고기였어요.",
+  "kin": "🐟 후손은 없지만, 지금 물고기들과 먼 친척이에요",
+  "archetype": "fish",
+  "art": {
+   "palette": [
+    "#2f6f8a",
+    "#9cc7d0"
+   ],
+   "features": [
+    "dorsal",
+    "tail_fluke",
+    "gape"
+   ],
+   "params": {
+    "bd": 0.085,
+    "hl": 0.15,
+    "dp": 0.95,
+    "flukeUp": 1.1,
+    "flukeDown": 0.9
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 3 p.3 / 특성 점수·무기: Claude 판단 초안(2026-11-17), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "xiphactinus",
+  "name_ko": "크시팍티누스",
+  "name_en": "Xiphactinus",
+  "habitat": "sea",
+  "length_m": {
+   "min": 4.5,
+   "avg": 5.2,
+   "max": 6.0
+  },
+  "mass_kg": {
+   "min": 400.0,
+   "avg": 500.0,
+   "max": 600.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 3,
+   "speed": 9,
+   "agility": 6,
+   "senses": 6,
+   "social": 1
+  },
+  "weapons": [
+   "송곳니 같은 큰 이빨",
+   "튀어나온 아래턱"
+  ],
+  "armor": [],
+  "fun_fact": "크시팍티누스 배 속에서 큰 물고기를 통째로 삼킨 화석이 나왔어요.",
+  "kin": "🐟 후손은 없지만, 지금 물고기들과 먼 친척이에요",
+  "archetype": "fish",
+  "art": {
+   "palette": [
+    "#5d7086",
+    "#d8dde4",
+    "#c9a640"
+   ],
+   "features": [
+    "dorsal",
+    "tail_fluke",
+    "underbite"
+   ],
+   "params": {
+    "bd": 0.06,
+    "hl": 0.13,
+    "dp": 1.0,
+    "flukeUp": 1.3,
+    "flukeDown": 1.3
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 3 p.4 / 특성 점수·무기: Claude 판단 초안(2026-11-17), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "deinonychus",
+  "name_ko": "데이노니쿠스",
+  "name_en": "Deinonychus",
+  "habitat": "land",
+  "length_m": {
+   "min": 3.0,
+   "avg": 3.2,
+   "max": 3.4
+  },
+  "mass_kg": {
+   "min": 70.0,
+   "avg": 85.0,
+   "max": 100.0
+  },
+  "stats": {
+   "attack": 7,
+   "defense": 3,
+   "speed": 7,
+   "agility": 8,
+   "senses": 7,
+   "social": 7
+  },
+  "weapons": [
+   "낫 같은 큰 발톱",
+   "날카로운 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "데이노니쿠스는 뒷발에 낫 같은 큰 발톱이 있었어요.",
+  "kin": "🐦 새와 아주 가까운 친척이에요. 깃털도 있었대요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#b7ab8f",
+    "#ece4d0",
+    "#4a3a2a"
+   ],
+   "features": [
+    "sickle_claw",
+    "feathers"
+   ],
+   "params": {
+    "h": 0.27,
+    "bd": 0.065,
+    "hl": 0.13,
+    "dp": 0.55,
+    "arm": 0.17,
+    "hand": "wing",
+    "skull": "raptor",
+    "tl": 0.2,
+    "meta": 1.0,
+    "tailUp": 0.3,
+    "neck": 1.2,
+    "pattern": "speckle",
+    "mark": "#3a2e22"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 3 p.5 / 특성 점수·무기: Claude 판단 초안(2026-11-17), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "sinosauropteryx",
+  "name_ko": "시노사우롭테릭스",
+  "name_en": "Sinosauropteryx",
+  "habitat": "land",
+  "length_m": {
+   "min": 1.0,
+   "avg": 1.0,
+   "max": 1.0
+  },
+  "mass_kg": {
+   "min": 0.4,
+   "avg": 0.5,
+   "max": 0.6
+  },
+  "stats": {
+   "attack": 1,
+   "defense": 1,
+   "speed": 7,
+   "agility": 9,
+   "senses": 7,
+   "social": 2
+  },
+  "weapons": [
+   "작은 이빨"
+  ],
+  "armor": [],
+  "fun_fact": "시노사우롭테릭스는 처음으로 깃털 흔적이 발견된 공룡이에요.",
+  "kin": "🐦 새와 아주 가까운 친척이에요. 깃털도 있었대요",
+  "archetype": "theropod",
+  "art": {
+   "palette": [
+    "#a0623a",
+    "#e8d3b8",
+    "#f2ece0"
+   ],
+   "features": [
+    "feathers"
+   ],
+   "params": {
+    "h": 0.22,
+    "bd": 0.042,
+    "hl": 0.09,
+    "dp": 0.5,
+    "arm": 0.07,
+    "hand": "claw",
+    "skull": "raptor",
+    "tl": 0.2,
+    "neck": 1.4,
+    "meta": 1.3
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 3 p.6 / 특성 점수·무기: Claude 판단 초안(2026-11-17), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "columbian_mammoth",
+  "name_ko": "황제매머드",
+  "name_en": "Columbian mammoth",
+  "habitat": "land",
+  "length_m": {
+   "min": 5.0,
+   "avg": 5.5,
+   "max": 6.0
+  },
+  "mass_kg": {
+   "min": 9000.0,
+   "avg": 10000.0,
+   "max": 11000.0
+  },
+  "stats": {
+   "attack": 8,
+   "defense": 8,
+   "speed": 4,
+   "agility": 2,
+   "senses": 6,
+   "social": 8
+  },
+  "weapons": [
+   "길게 휜 엄니",
+   "긴 코"
+  ],
+  "armor": [
+   "두꺼운 가죽"
+  ],
+  "fun_fact": "황제매머드는 털매머드보다 몸이 훨씬 컸어요.",
+  "kin": "🐘 아시아코끼리와 가까운 친척이에요",
+  "archetype": "large_mammal",
+  "art": {
+   "palette": [
+    "#7d7468",
+    "#a99f90"
+   ],
+   "features": [
+    "trunk",
+    "tusks",
+    "hump"
+   ],
+   "params": {
+    "hip": 0.5,
+    "sh": 0.57,
+    "bd": 0.16,
+    "b0": 0.15,
+    "b1": 0.6,
+    "neck": [
+     0.72,
+     0.68
+    ],
+    "nr": 0.11,
+    "hl": 0.22,
+    "dp": 1.1,
+    "tail": [
+     0.08,
+     0.5
+    ],
+    "tr": 0.02,
+    "legR": 0.05,
+    "foot": "pillar",
+    "skull": "elephant"
+   }
+  },
+  "confidence": "medium",
+  "source_note": "크기·무게: 하버드반 고대동물백과 3 p.7 / 특성 점수·무기: Claude 판단 초안(2026-11-17), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
+ },
+ {
+  "id": "kim_yoseph",
+  "name_ko": "김요셉 선생님",
+  "name_en": "Teacher Kim",
+  "habitat": "land",
+  "length_m": {
+   "min": 1.81,
+   "avg": 1.81,
+   "max": 1.81
+  },
+  "mass_kg": {
+   "min": 90.0,
+   "avg": 90.0,
+   "max": 90.0
+  },
+  "stats": {
+   "attack": 5,
+   "defense": 4,
+   "speed": 6,
+   "agility": 7,
+   "senses": 6,
+   "social": 9
+  },
+  "weapons": [
+   "튼튼한 주먹과 다리",
+   "운동으로 키운 근육"
+  ],
+  "armor": [
+   "복싱",
+   "유도",
+   "태권도"
+  ],
+  "fun_fact": "김요셉 선생님은 공룡백과를 직접 만든 사람이에요.",
+  "kin": "🙂 우리와 똑같은 사람이에요",
+  "archetype": "human",
+  "art": {
+   "palette": [
+    "#e2b48c",
+    "#1f1f22",
+    "#1b1410"
+   ],
+   "features": [],
+   "params": {
+    "skin": "#e2b48c",
+    "shirt": "#1f1f22",
+    "pants": "#26262a",
+    "hair": "#1b1410",
+    "gloves": "#c8282c"
+   }
+  },
+  "confidence": "high",
+  "source_note": "크기·무게: 하버드반 고대동물백과 3 p.8 / 특성 점수·무기: Claude 판단 초안(2026-11-17), 몸 구조와 생활 방식 근거. 선생님 검수 필요",
+  "origin": "ai_estimated"
  }
 ]

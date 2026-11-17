@@ -35,7 +35,7 @@ assert(targetPose('hit', 0, rig).blink > 0.5, '맞으면 눈을 질끈 감는다
 assert(Math.max(...[0, 0.2, 0.4].map(t => Math.abs(targetPose('idle', t, rig, { moving: true, step: t * 9 }).roll))) > 0.02, '걸으면 몸이 좌우로 출렁인다');
 // 공격 종류마다 다른 부위 동작
 const icl = (...c) => Object.assign(c, { contains: x => c.includes(x) }); // 배열이라 [...cl] 가 된다
-assert.deepEqual(stateOf(icl('winding', 'm-toss')), { state: 'wind', o: { moving: false, whip: false, flying: false, motion: 'toss' } });
+assert.deepEqual(stateOf(icl('winding', 'm-toss')), { state: 'wind', o: { moving: false, whip: false, flying: false, swim: false, motion: 'toss' } });
 assert.equal(stateOf(icl('charging', 'biting', 'm-roll')).state, 'charge', '굴리기는 몸을 비튼다');
 assert.equal(stateOf(icl('charging', 'biting', 'm-bite')).state, 'bite');
 assert.equal(stateOf(icl('tired', 'ko')).state, 'ko');
@@ -46,3 +46,11 @@ assert(Math.abs(targetPose('charge', 0, rig, { motion: 'kick' }).ls[2]) > 0.8, '
 assert(targetPose('roar', 0, rig).jaw > 0.6 && targetPose('roar', 0, rig).hp > 0.25, '포효는 고개를 들고 입을 크게');
 assert.equal(targetPose('ko', 0, rig).blink, 1, 'K.O. 되면 눈을 감는다');
 console.log('motion3d ok');
+
+// 헤엄치는 땅 동물: 서 있는 몸(사람)은 물에서 엎드려 눕고 팔을 젓는다, 땅에서는 서 있다
+{
+  const up = { tail: 0, legs: [{ front: true, side: 1 }, { front: true, side: -1 }, { front: false, side: 1 }, { front: false, side: -1 }], upright: true };
+  assert(targetPose('idle', 1, up, { swim: true }).pitch < -1, '물에서 눕기');
+  assert(Math.abs(targetPose('idle', 1, up, {}).pitch) < 0.1, '땅에서는 서 있기');
+  assert(stateOf(icl('swimming')).o.swim);
+}

@@ -23,6 +23,8 @@ export const LOOK = {
   compsognathus: ['#7aa83e', '#e4eca8', 'stripes', '#34561a', undefined, { mask: '#34561a', tail: '#34561a' }],
   herrerasaurus: ['#7e3a2a', '#e0c0a0', 'tiger', '#2e140c', undefined, { dorsal: '#2e140c' }],
   coelophysis: ['#c0a03a', '#f0e4a8', 'stripes', '#5a4416', undefined, { tail: '#5a4416' }],
+  sinosauropteryx: ['#b0683a', '#f0dcc0', null, '#000000', undefined, { tail: '#f4efe4' }], // 백과: 꼬리에 갈색과 흰색 줄무늬
+  deinonychus: ['#a89878', '#ece4d0', 'speckle', '#3a2e22', undefined, { mask: '#3a2e22' }],
   lesothosaurus: ['#8ca462', '#e4ecc0', 'speckle', '#3e5228'],
   eoraptor: ['#a87040', '#ecd4a8', 'spots', '#4a2c14', undefined, { tail: '#4a2c14' }],
   plateosaurus: ['#6c8c5a', '#dce4c0', 'blotch', '#34482a'],

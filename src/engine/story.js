@@ -1,6 +1,7 @@
 // 문장 템플릿 자막. AI 해설(M6)이 실패하면 늘 이걸 쓴다.
 import { EVENTS } from './events.js';
 import { stay } from './battle.js';
+import { isDino } from './riddle.js';
 
 // 받침에 따라 이/가, 은/는, 을/를
 // 받침에 따라 이/가, 은/는, 을/를. "티라노사우루스(그림)"처럼 뒤에 붙은 괄호는 건너뛰고 본다
@@ -17,7 +18,7 @@ export const eul = w => josa(w, '을', '를');
 // 움직임: bite 물기, shake 물고 흔들기, ram 들이받기, toss 들어 던지기, stomp 앞발 내리찍기,
 //         pounce 덮치기, kick 발차기, slash 앞발 할퀴기, tail 몸을 돌려 꼬리치기, roll 몸 비틀며 물기
 const ACTIONS = {
-  theropod: [['힘껏 물었어요', '콰직!', 'bite'], ['꽉 물고 흔들었어요', '흔들흔들!', 'shake'], ['뛰어올라 발로 찼어요', '퍽!', 'kick'], ['몸을 돌려 꼬리로 쳤어요', '휘익!', 'tail'], ['머리로 들이받았어요', '쿵!', 'ram']],
+  theropod: [['힘껏 물었어요', '콰직!', 'bite'], ['꽉 물고 흔들었어요', '흔들흔들!', 'shake'], ['몸을 돌려 꼬리로 쳤어요', '휘익!', 'tail'], ['머리로 들이받았어요', '쿵!', 'ram']],
   ceratopsian: [['뿔로 들이받았어요', '쾅!', 'ram'], ['뿔로 들어 올려 던졌어요', '휙!', 'toss'], ['앞발을 들었다 내리찍었어요', '쿵쿵!', 'stomp'], ['몸을 돌려 꼬리로 쳤어요', '철썩!', 'tail']],
   sauropod: [['앞발을 들었다 쿵 내리찍었어요', '쿵!', 'stomp'], ['긴 꼬리를 채찍처럼 휘둘렀어요', '휘이익!', 'tail'], ['큰 몸으로 밀어냈어요', '쿠웅!', 'ram']],
   // 초식 포유류(매머드, 코뿔소, 코끼리…)는 물거나 할퀴지 않는다
@@ -33,14 +34,27 @@ const ACTIONS = {
   armored: [['꼬리를 휘둘러 쳤어요', '쾅!', 'tail'], ['단단한 몸으로 들이받았어요', '쿵!', 'ram'], ['앞발을 들었다 내리찍었어요', '쿵쿵!', 'stomp']],
   // 초식 동물은 물거나 할퀴지 않는다
   sprawler_herb: [['머리로 들이받았어요', '쿵!', 'ram'], ['꼬리를 휘둘렀어요', '철썩!', 'tail'], ['앞발로 쿵 밀었어요', '쿵쿵!', 'stomp']],
-  theropod_herb: [['긴 발톱으로 휘둘렀어요', '샤샥!', 'slash'], ['발로 힘껏 찼어요', '퍽!', 'kick'], ['몸을 돌려 꼬리로 쳤어요', '휘익!', 'tail'], ['머리로 밀어붙였어요', '쿵!', 'ram']],
+  theropod_herb: [['긴 발톱으로 휘둘렀어요', '샤샥!', 'slash'], ['몸을 돌려 꼬리로 쳤어요', '휘익!', 'tail'], ['머리로 밀어붙였어요', '쿵!', 'ram']],
   bird_herb: [['큰 부리로 콱 물었어요', '콱!', 'bite'], ['힘센 다리로 뻥 찼어요', '뻥!', 'kick'], ['몸으로 들이받았어요', '쿵!', 'ram']],
+  // 사람(김요셉 선생님): 복싱 주먹, 유도 업어치기, 어깨로 밀기, 붙잡아 넘어뜨리기
+  // 복싱(원투·훅·어퍼컷), 발차기, 유도(업어치기), 어깨로 몸통 박치기
+  human: [['원, 투! 주먹을 쭉쭉 뻗었어요', '퍽퍽!', 'punch'], ['옆으로 크게 휘둘러 훅을 날렸어요', '휙 퍽!', 'hook'], ['아래에서 위로 어퍼컷을 날렸어요', '빡!', 'upper'],
+    ['발을 높이 들어 힘껏 찼어요', '뻥!', 'kick'], ['태권도 돌려차기를 했어요', '팡!', 'roundkick'], ['번쩍 들어 업어치기 했어요', '휙!', 'toss'], ['어깨로 몸통 박치기를 했어요', '쿵!', 'ram']],
+  // 종마다 따로(틀 공격이 안 어울리는 동물)
+  pachycephalosaurus: [['두꺼운 머리로 박치기했어요', '쾅!', 'ram'], ['머리를 숙이고 달려와 부딪쳤어요', '쿵!', 'ram'], ['머리로 들이받아 넘겼어요', '휙!', 'toss']],
+  leedsichthys: [['큰 몸으로 들이받았어요', '쿵!', 'ram'], ['꼬리를 휘둘렀어요', '철썩!', 'tail'], ['입을 크게 벌리고 밀어붙였어요', '우웅!', 'ram']],
 };
 
 // 이번 판에 쓸 공격 순서(섞음). 같은 판에서 같은 공격이 연달아 나오지 않게 돌려 쓴다
-export function actionDeck(a, rng = Math.random) {
-  const key = /초식/.test(a.diet ?? '') && ACTIONS[`${a.archetype}_herb`] ? `${a.archetype}_herb` : a.archetype;
-  const list = (ACTIONS[key] ?? ACTIONS.large_mammal).map(([act, boom, motion]) => ({ act, boom, motion }));
+// 밟기(stomp 움직임: 앞발 내리찍기도)는 키 차이가 날 때만: 공룡은 상대 키가 내 키의 절반 이하, 사람은 상대 키가 1m 이하.
+// 공룡은 발차기 대신 밟기. canStomp(a, 내 키, 상대 키) — 키를 모르면(null) 밟기 없음
+export const STOMP = ['큰 발로 꾹 밟았어요', '쾅!', 'stomp'], HUMAN_STOMP = ['발로 꾹 밟았어요', '꾹!', 'stomp'];
+export const canStomp = (a, mine, theirs) => !!mine && !!theirs && (isDino(a) ? theirs * 2 <= mine : a.archetype === 'human' && theirs <= 1);
+export function actionDeck(a, rng = Math.random, stomp = false) {
+  const key = ACTIONS[a.id] ? a.id : /초식/.test(a.diet ?? '') && ACTIONS[`${a.archetype}_herb`] ? `${a.archetype}_herb` : a.archetype;
+  const base = (ACTIONS[key] ?? ACTIONS.large_mammal).filter(x => stomp || !isDino(a) || x[2] !== 'stomp');
+  const extra = !stomp ? [] : isDino(a) ? [STOMP] : a.archetype === 'human' ? [HUMAN_STOMP] : [];
+  const list = [...base, ...extra].map(([act, boom, motion]) => ({ act, boom, motion }));
   for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; }
   let n = 0;
   return () => list[n++ % list.length];
@@ -130,8 +144,11 @@ function wxLine(wx, att, def, hit, stage) {
   return sa.down ? `${e} ${neun(att.name_ko)} ${sa.down}!` : `${e} ${neun(def.name_ko)} ${sd.up ?? '날씨 덕분에 피했어요'}!`;
 }
 
-export function makeScript(A, B, res, modes, motion, stage) {
-  const F = [A, B], deck = F.map(a => (motion ? () => ({ act: motion, boom: '쾅!', motion }) : actionDeck(a)));
+// heights: 두 동물의 키(m, 그림에서 잰 것). 없으면 밟기 없음
+export function makeScript(A, B, res, modes, motion, stage, heights = null) {
+  // motion(확인용 #fight=…&m=hook): 그 움직임만. 자막은 그 움직임을 쓰는 공격 문장(내 공격 목록 먼저), 없으면 움직임 이름
+  const named = (a, m) => { const x = (ACTIONS[a.id] ?? ACTIONS[a.archetype] ?? []).find(e => e[2] === m) ?? Object.values(ACTIONS).flat().find(e => e[2] === m) ?? (m === 'stomp' && STOMP); return x ? { act: x[0], boom: x[1], motion: m } : { act: m, boom: '쾅!', motion: m }; };
+  const F = [A, B], deck = F.map((a, i) => (motion ? () => named(a, motion) : actionDeck(a, Math.random, !!heights && canStomp(a, heights[i], heights[1 - i]))));
   let n = 0;
   const rounds = res.rounds.map(r => ({
     winner: r.winner,

@@ -7,6 +7,8 @@ import { maskAt } from './photo.js';
 const want = new URLSearchParams(location.search).get('art') ?? 'block'; // 기본은 블록 3D. ?art=2d 로 2D
 export const ART = want === '3d' || want === 'block' || want === 'real' ? want : '2d'; // real: 매끈한 모델 + 사진 같은 빛(PLAN_REAL3D)
 export const drawHuman = d2.drawHuman;
+// 키(m). 2D 그림만 쓸 때는 null(밟기 공격이 안 나온다) — ponytail: 2D 키 재기는 필요해지면 그림 bbox 로
+export const heightOf = a => (ART !== '2d' && !a.drawing && d3.heightOf(a)) || null;
 export const drawAnimal = a => (ART !== '2d' && !a.drawing && d3.drawAnimal(a)) || d2.drawAnimal(a);
 // 배틀: 3D 동물은 사진을 살아 움직이는 3D로 바꾼다(2D는 CSS 애니메이션이 이미 움직인다)
 export const liveArt = (a, el) => ART !== '2d' && !a.drawing && d3.live(a, el);

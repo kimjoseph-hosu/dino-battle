@@ -272,6 +272,8 @@ export function impactFx(scene, look) {
         for (let k = 0; k < 9; k++) { const a = -0.9 + k * 0.22; add(glow, { p: new THREE.Vector3(at.x - dir * Math.cos(a) * s * 1.4, at.y + Math.sin(a) * s * 1.2, at.z + s * 0.3), sc: [s * 0.35, s * 0.08, s * 0.08], rz: a + Math.PI / 2, life: 0.35 + k * 0.03, color: new THREE.Color('#ffffff'), shrink: true }); }
       } else if (kind === 'bite') {
         for (const up of [1, -1]) for (let k = 0; k < 5; k++) add(glow, { p: new THREE.Vector3(at.x + (k - 2) * s * 0.28, at.y + up * s * 0.55, at.z + s * 0.3), v: new THREE.Vector3(0, -up * s * 3, 0), stop: at.y + up * s * 0.12, sc: [s * 0.14, s * 0.3, s * 0.14], life: 0.45, color: new THREE.Color('#fffbe8'), shrink: true });
+      } else if (kind === 'punch') {
+        for (let k = 0; k < 10; k++) { const a = (k / 10) * Math.PI * 2; add(glow, { p: new THREE.Vector3(at.x, at.y, at.z + s * 0.3), v: new THREE.Vector3(Math.cos(a) * s * 4, Math.sin(a) * s * 4, 0), sc: [s * 0.5, s * 0.09, s * 0.09], rz: a, life: 0.35, color: new THREE.Color('#fff1a0'), shrink: true }); }
       } else if (kind === 'kick') {
         for (let k = 0; k < 12; k++) add(solid, { p: new THREE.Vector3(at.x, s * 0.1, at.z), v: new THREE.Vector3((Math.random() - 0.5) * s * 3, s * (3 + Math.random() * 3), (Math.random() - 0.5) * s * 2), g: s * 12, sc: [s * 0.18, s * 0.18, s * 0.18], life: 0.8, color: new THREE.Color(look.ground[1]).multiplyScalar(0.8), shrink: true });
       }
@@ -294,7 +296,7 @@ export function impactFx(scene, look) {
     },
   };
 }
-const HIT_KIND = { stomp: 'ground', ram: 'ground', toss: 'ground', tail: 'tail', bite: 'bite', shake: 'bite', roll: 'bite', pounce: 'bite', kick: 'kick' };
+const HIT_KIND = { punch: 'punch', hook: 'punch', upper: 'punch', roundkick: 'punch', stomp: 'ground', ram: 'ground', toss: 'ground', tail: 'tail', bite: 'bite', shake: 'bite', roll: 'bite', pounce: 'bite', kick: 'kick' };
 
 // v 가 상대 u 의 얼굴을 보려면 고개를 얼마나 돌려야 하나: [도리(+ 몸 왼쪽=카메라 쪽), 끄덕(+ 위)] 라디안. 몸 좌표(코 +x, 위 +y)에서 잰다
 const lk = new THREE.Vector3(), lk2 = new THREE.Vector3(), lkM = new THREE.Matrix4();
@@ -497,7 +499,7 @@ export function arena3d(arena, f, stage) {
       const other = views.find(u => u !== v), want = ['idle', 'wind', 'charge', 'tired'].includes(state) && other ? lookAt(v, other) : [0, 0];
       v.lk = (v.lk ?? [0, 0]).map((a, i) => a + (want[i] - a) * Math.min(1, dt * 4));
       applyPose(v.rig, { ...v.P, hy: v.P.hy + v.lk[0], hp: v.P.hp + v.lk[1] });
-      if (steps && !v.info.swim && !o.flying && !v.F.y) { v.holder.updateMatrixWorld(true); steps.step(v, o.moving || state === 'charge'); }
+      if (steps && !v.info.swim && !o.swim && !o.flying && !v.F.y) { v.holder.updateMatrixWorld(true); steps.step(v, o.moving || state === 'charge'); }
     }
     // 카메라: 평소엔 2D 카메라를 따른 넓은 화면. 클로즈업 중엔 그때 있던 자리에서 목표(얼굴 또는 넓은 화면)로 천천히 옮겨 간다
     let camP = wideP, camQ = target;
@@ -536,7 +538,7 @@ export function arena3d(arena, f, stage) {
     v0.fx = fxEl.children.length;
     if (impact) { // 누가 무슨 공격으로 쳤나(공격자 .pos 에 m-종류 표시가 남아 있다)
       const att = views.find(u => [...u.F.pos.classList].some(c => c.startsWith('m-'))), m = att && [...att.F.pos.classList].find(c => c.startsWith('m-')).slice(2), kind = HIT_KIND[m];
-      if (kind && !(kind !== 'bite' && kind !== 'tail' && stage === 'underwater')) hits.spawn(kind, impact, Math.min(...views.map(u => u.F.L)) * 0.12, att.side);
+      if (kind && !(!['bite', 'tail', 'punch'].includes(kind) && stage === 'underwater')) hits.spawn(kind, impact, Math.min(...views.map(u => u.F.L)) * 0.12, att.side);
     }
     // K.O. 순간에는 무대 생물이 잠깐 거의 멈춘다(그 순간을 강조)
     const ko = arena.querySelector('.boom')?.classList.contains('ko');

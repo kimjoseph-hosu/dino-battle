@@ -5,7 +5,7 @@
 
 export const STATES = ['idle', 'wind', 'charge', 'bite', 'hit', 'tired', 'roar', 'ko'];
 
-export const restPose = rig => ({ y: 0, pitch: 0, roll: 0, blink: 0, hp: 0, hy: 0, jaw: 0, wf: 0, tp: Array(rig.tail).fill(0), ty: Array(rig.tail).fill(0), ls: rig.legs.map(() => 0), lb: rig.legs.map(() => 0) });
+export const restPose = rig => ({ y: 0, pitch: 0, roll: 0, yaw: 0, blink: 0, hp: 0, hy: 0, jaw: 0, wf: 0, tp: Array(rig.tail).fill(0), ty: Array(rig.tail).fill(0), ls: rig.legs.map(() => 0), lb: rig.legs.map(() => 0) });
 
 // 다리 박자: 네발은 대각선 걸음(왼앞+오른뒤), 두발·지느러미는 좌우 번갈아, 다리가 많으면 ph(앞에서 뒤로 물결)
 const phase = (l, rig) => l.ph ?? (l.side > 0 ? 0 : Math.PI) + (l.front && rig.legs.length > 2 ? Math.PI : 0);
@@ -50,9 +50,9 @@ const MOTIONS = {
       P.pitch = -0.06; P.hp = -0.35; P.jaw = 0.05;
       legsBy(P, rig, (l, i) => [l.side > 0 ? 0.35 * S(t * 11) : 0.1, 0.35], [-0.1, 0.25]);
       P.tp = P.tp.map(() => 0.06);
-    } else if (m === 'stomp') { // 일어서며 앞다리를 높이 들어 올린다
+    } else if (m === 'stomp') { // 일어서며 앞다리를 높이 들어 올린다. 두발은 한 발을 높이 든다
       P.hp = 0.22; P.jaw = 0.3;
-      legsBy(P, rig, [0.9, 0.9], [-0.15, 0.1]);
+      legsBy(P, rig, [0.9, 0.9], rig.legs.some(l => l.front) && !rig.upright ? [-0.15, 0.1] : l => (l.side > 0 ? [0.9, 1.1] : [-0.1, 0.1]));
       P.tp = P.tp.map(() => -0.08);
     } else if (m === 'pounce' || m === 'kick') { // 납작 웅크린다. 발차기는 한쪽 뒷다리를 뒤로 당긴다
       P.y = -0.01; P.hp = -0.06; P.jaw = m === 'pounce' ? 0.25 : 0.1;
@@ -99,8 +99,8 @@ const MOTIONS = {
     });
     const m = o.motion;
     if (m === 'ram' || m === 'toss') { P.hp = -0.35; P.jaw = 0.05; } // 뿔·이마를 앞으로 낮게(부딪힌 뒤 대기로 돌아가며 머리가 위로 쳐올려진다)
-    else if (m === 'stomp') { P.hp = -0.15; P.jaw = 0.35; legsBy(P, rig, [-0.3, 0], [0.2, 0.3]); } // 앞다리를 곧게 내리찍는다
-    else if (m === 'kick') { P.jaw = 0.2; legsBy(P, rig, rig.legs.length > 2 ? [0.1, 0.2] : null, (l) => (l.side > 0 ? [rig.legs.length > 2 ? -0.95 : 1.0, 0] : [-0.35, 0.3])); } // 두발은 한 발 앞으로, 네발은 뒷발로 뒤차기
+    else if (m === 'stomp') { P.hp = -0.15; P.jaw = 0.35; legsBy(P, rig, [-0.3, 0], rig.legs.some(l => l.front) && !rig.upright ? [0.2, 0.3] : l => (l.side > 0 ? [0.5, 0] : [-0.2, 0.2])); } // 앞다리를 곧게 내리찍는다. 두발은 든 발로 꾹
+    else if (m === 'kick') { const quad = rig.legs.length > 2 && !rig.upright; P.jaw = 0.2; legsBy(P, rig, quad ? [0.1, 0.2] : null, (l) => (l.side > 0 ? [quad ? -0.95 : rig.upright ? 1.5 : 1.0, 0] : [-0.35, 0.3])); } // 두발·사람은 한 발 앞으로 높이, 네발은 뒷발로 뒤차기
     else if (m === 'pounce') { P.jaw = 0.6; legsBy(P, rig, [0.9, 0.15], [-0.6, 0.1]); } // 앞발 뻗고 뒷발 뒤로 쭉
     else if (m === 'slash') { P.jaw = 0.3; legsBy(P, rig, (l) => [0.4 + 0.5 * S(t * 16 + (l.side > 0 ? 0 : 1.5)), 0.4], null); } // 앞발로 번갈아 할퀸다
     else if (m === 'roll') { P.roll = 0.6 * S(t * 9); P.jaw = 0.5; } // 물고 몸을 비틀어 굴린다
@@ -148,10 +148,52 @@ const MOTIONS = {
   },
 };
 
+// o.swim: 땅 동물이 물에서 헤엄칠 때(배틀 .swimming) — 헤엄 동물처럼 다리를 젓는다.
+// 서 있는 몸(rig.upright, 사람)은 엎드려 눕고, 대기·돌진 때 팔을 크게 돌려 젓고 다리는 물장구
 export function targetPose(state, t, rig, o = {}) {
+  if (o.swim && !rig.swim) rig = { ...rig, swim: true };
   const P = restPose(rig);
   (MOTIONS[state] ?? MOTIONS.idle)(P, t, rig, o);
+  if (rig.upright) humanArms(P, state, t, rig, o);
+  if (o.swim && rig.upright && state !== 'ko') {
+    P.pitch -= 1.35;
+    if (state === 'idle' || state === 'charge') {
+      const f = state === 'charge' ? 7 : 3.5;
+      rig.legs.forEach((l, i) => { [P.ls[i], P.lb[i]] = l.front ? [1.2 + 1.3 * S(t * f + (l.side > 0 ? 0 : Math.PI)), 2] : [0.35 * S(t * f * 2 + (l.side > 0 ? 0 : Math.PI)), 0.15]; });
+    }
+  }
   return P;
+}
+
+// 사람 팔(앞다리 자리): ls 어깨에서 앞(+)으로, lb 팔꿈치 펴기(0 복싱 자세 ~ 2.25 쭉 편 팔, block3d ELBOW)
+// 펀치는 양팔을 번갈아 어깨 높이로 쭉 뻗고(원투), 붙잡기·밀기는 두 팔을 앞으로, 이기면 두 팔 번쩍, 맞으면 팔이 뒤로 젖혀진다
+function humanArms(P, state, t, rig, o) {
+  const m = o.motion;
+  if (m === 'roundkick' && (state === 'wind' || state === 'charge')) { // 태권도 돌려차기: 무릎을 접어 들었다가(wind) 몸을 돌리며 다리를 높이 쭉
+    const kick = state === 'charge';
+    rig.legs.forEach((l, i) => { if (!l.front) [P.ls[i], P.lb[i]] = l.side > 0 ? (kick ? [1.75, 0.15] : [1.3, 1.8]) : [-0.15, 0.15]; });
+    P.yaw = kick ? 0.8 : 0.35;
+    P.pitch += kick ? 0.3 : 0.08;
+  }
+  if (m === 'ram' && (state === 'wind' || state === 'charge')) P.pitch -= state === 'charge' ? 0.35 : 0.2; // 몸통 박치기: 상체를 앞으로 숙여 어깨부터
+  rig.legs.forEach((l, i) => {
+    if (!l.front) return;
+    const s = l.side > 0 ? 0 : Math.PI;
+    let ls = 0.06 * S(t * 2.4 + s), lb = 0; // 대기: 주먹을 턱 앞에 들고 들썩
+    const lead = l.side > 0; // 앞손(카메라 쪽)
+    if (state === 'charge' && m === 'punch') { const e = Math.max(0, S(t * 13 + s)); ls = 1.22 * e; lb = 2.25 * e; } // 원투: 번갈아 쭉
+    else if (state === 'charge' && m === 'hook') { if (lead) { const e = 0.5 + 0.5 * S(t * 10); ls = 0.3 + 1.1 * e; lb = 0.6; } } // 훅: 팔을 직각으로 굽힌 채 크게 휘두름
+    else if (state === 'charge' && m === 'upper') { if (!lead) { const e = 0.5 + 0.5 * S(t * 9); ls = -0.3 + 2.5 * e; lb = 0.3; } } // 어퍼컷: 뒷손이 아래에서 위로
+    else if (state === 'charge' && (m === 'kick' || m === 'ram' || m === 'roundkick')) [ls, lb] = m === 'ram' ? [-0.3, 0.3] : [0, 0]; // 발차기는 주먹 들고, 박치기는 팔을 몸에 붙임
+    else if (state === 'charge') [ls, lb] = [1.0, 2.0]; // 붙잡기(업어치기 등): 두 팔을 앞으로
+    else if (state === 'wind') [ls, lb] = m === 'punch' || m === 'hook' ? [-0.35, 0] : m === 'upper' ? [-0.5, 0.4] : m === 'toss' || m === 'pounce' ? [0.5, 1.0] : [-0.2, 0.6];
+    else if (state === 'roar') [ls, lb] = [2.7 + 0.08 * S(t * 8 + s), 0.2];
+    else if (state === 'hit') [ls, lb] = [-0.5, 1.4];
+    else if (state === 'tired') [ls, lb] = [-0.15, 1.9];
+    else if (state === 'ko') [ls, lb] = [0.2, 2.0];
+    P.ls[i] = ls;
+    P.lb[i] = lb;
+  });
 }
 
 // 지금 자세 cur 를 목표 to 쪽으로 부드럽게(dt초, 동작이 바뀔 때 툭 끊기지 않게)
@@ -167,7 +209,7 @@ export function blend(cur, to, dt, rate = 12) {
 // 배틀 화면의 표시(.pos 의 class)로 지금 동작 고르기. K.O. > 맞음 > 포효 > 물기 > 힘 모으기 > 돌진 > 지침 > 대기
 export function stateOf(cl) {
   const motion = typeof cl[Symbol.iterator] === 'function' ? [...cl].find(c => c.startsWith('m-'))?.slice(2) : undefined;
-  const o = { moving: cl.contains('walking'), whip: cl.contains('whip'), flying: cl.contains('flying'), motion };
+  const o = { moving: cl.contains('walking'), whip: cl.contains('whip'), flying: cl.contains('flying'), swim: cl.contains('swimming'), motion };
   const state = cl.contains('ko') ? 'ko' : cl.contains('hit') ? 'hit' : cl.contains('roar') ? 'roar' : cl.contains('biting') && !['pounce', 'roll', 'shake'].includes(motion) ? 'bite' : cl.contains('winding') ? 'wind'
     : cl.contains('charging') || o.whip ? 'charge' : cl.contains('tired') ? 'tired' : 'idle';
   return { state, o };

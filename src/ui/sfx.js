@@ -173,6 +173,7 @@ export function matOf(a) {
 export function voiceOf(a) {
   const F = a.art?.features ?? [], k = a.archetype, s = a.art?.params?.skull;
   if (a.drawing) return 'roar';
+  if (k === 'human') return 'shout';
   if (F.includes('trunk')) return 'trumpet';
   if (k === 'large_mammal') return s === 'cat' || F.includes('sabre') ? 'snarl' : s === 'dog' ? 'howl' : s === 'bear' ? 'growl' : 'bellow';
   if (k === 'bird') return 'shriek';
@@ -210,6 +211,14 @@ const VOICES = {
     moo((full ? 1.4 : 0.6) * d, 0.2, 1.2);
     if (full) moo(0.45 * d, 0.3 + 1.5 * d, 0.8);
     return full ? 0.3 + 1.95 * d : 0.2 + 0.6 * d;
+  },
+  // 사람: "으랏차!" 기합(남자 목소리 "아" 모음). 길게 부르면 한 번 더 "얍!"
+  shout: (p, d) => {
+    const full = d > 0.6, ya = (L, delay, peak) => beast({ f: 125 * p, pts: [[0, 0.9], [0.15, 1.3], [0.7, 1.15], [1, 0.85]], vol: [[0, 0], [0.06, 1], [0.6, 0.8], [1, 0]], dur: L, peak, delay,
+      fm: [[[700, 820, 780], 3, 1], [[1150, 1250, 1200], 4, 0.55], [[2500, 2600, 2550], 5, 0.18]], voiced: 0.9, rough: 0.25, gr: 12, breath: 0.35, dist: 1.4, cut: 3200, wet: 0.25 });
+    ya((full ? 0.7 : 0.35) * d, 0, 1);
+    if (full) ya(0.3 * d, 0.85 * d, 0.9);
+    return full ? 1.2 * d : 0.4 * d;
   },
   // 코끼리: 우르르(낮은 울림) → 뿌우우우-(떨리며 높아졌다 끝에 꺾임) → 숨
   trumpet: (p, d) => {
@@ -325,6 +334,10 @@ export const sfx = {
       tail: () => hiss('bandpass', 250, 2200, 0.45, 0.35, 0, 2),
       roll: () => hiss('bandpass', 400, 1800, 0.35, 0.3, 0, 3),
       slash: () => hiss('bandpass', 1200, 3200, 0.18, 0.25, 0, 2),
+      punch: () => hiss('bandpass', 900, 3000, 0.12, 0.3, 0, 2), // 주먹이 바람을 가르는 슉
+      hook: () => hiss('bandpass', 600, 2600, 0.2, 0.32, 0, 2),
+      roundkick: () => hiss('bandpass', 400, 2800, 0.3, 0.35, 0, 2), // 다리가 크게 도는 휘익
+      upper: () => hiss('bandpass', 500, 3400, 0.16, 0.32, 0, 2),
       pounce: () => { hiss('bandpass', 300, 2000, 0.25, 0.3, 0, 2); tone('sine', 200 * p, 420 * p, 0.12, 0.15); },
       kick: () => hiss('bandpass', 500, 2400, 0.2, 0.28, 0, 2),
       ram: () => [0, 0.12].forEach(dl => hiss('bandpass', 1100, 600, 0.09, 0.25, dl, 3)),
@@ -347,6 +360,10 @@ export const sfx = {
       pounce: () => { tone('sine', 150 * p, 45 * p, 0.35, 0.85 * k); hiss('lowpass', 2000, 300, 0.25, 0.5 * k); },
       kick: () => { hiss('highpass', 2200, 900, 0.07, 0.6 * k); tone('sine', 260 * p, 90 * p, 0.14, 0.7 * k); },
       slash: () => [0, 0.06, 0.12].forEach(dl => hiss('bandpass', 4500, 2500, 0.08, 0.35 * k, dl, 4)),
+      punch: () => { hiss('highpass', 2500, 1000, 0.05, 0.8 * k); tone('sine', 220 * p, 70 * p, 0.16, 0.9 * k); }, // 퍽: 짧고 단단하게
+      roundkick: () => { hiss('highpass', 2400, 900, 0.07, 0.9 * k); tone('sine', 240 * p, 70 * p, 0.18, 0.95 * k); },
+      hook: () => { hiss('highpass', 2200, 900, 0.06, 0.85 * k); tone('sine', 200 * p, 60 * p, 0.2, 0.95 * k); },
+      upper: () => { hiss('highpass', 2800, 1200, 0.05, 0.85 * k); tone('sine', 180 * p, 330 * p, 0.12, 0.9 * k); }, // 빡: 위로 튀는 소리
       tail: () => { hiss('highpass', 5000, 3000, 0.035, 0.8 * k); tone('sine', 160 * p, 50 * p, 0.3, 0.7 * k, 0.02); },
     }[motion] ?? (() => { tone('sine', 150 * p, 38 * p, 0.3, 0.9 * k); hiss('lowpass', 2500, 250, 0.22, 0.6 * k); }))();
     // 재질: 갑옷은 쇳소리 같은 '깡'(어긋난 배음 두 개), 털은 푹신한 낮은 '푹', 맨살은 짧은 '찰싹'

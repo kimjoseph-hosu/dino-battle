@@ -1,6 +1,6 @@
 // 자연 사건(무대 사건 카드 + 운석): 라운드 사이에 일어나서 동물 특성에 따라 힘이 줄거나(−) 늘어난다(+).
 // 승부를 정하는 계산이라 엔진에 둔다. 문장은 아이 눈높이로(숫자 없이)
-import { massScore, tire } from './battle.js';
+import { massScore, tire, SWIMMERS } from './battle.js';
 
 const isWater = a => ['sea', 'freshwater', 'amphibious'].includes(a.habitat);
 const isAir = a => a.habitat === 'air';
@@ -23,11 +23,13 @@ export const EVENTS = {
   },
   flood: {
     emoji: '🌊', name: '홍수', say: '물이 콸콸 넘쳐요!', when: '홍수가 났을 때', stages: ['grassland', 'jungle', 'waterside'],
-    hit: a => isWater(a) ? [12, '물이 많아져서 신나요']
+    hit: (a, stage) => stage === 'waterside' && SWIMMERS.includes(a.id) ? [-3, '물이 불어나자 헤엄치기 시작했어요']
+      : isWater(a) ? [12, '물이 많아져서 신나요']
       : isAir(a) ? [-2, '높이 날아서 피했어요']
       : massScore(a.mass_kg.avg) >= 7.7 ? [-6, '몸이 커서 물살을 버텼어요'] : [-(20 - massScore(a.mass_kg.avg)), '물살에 휩쓸릴 뻔했어요'],
     // 물 동물은 빠르고 세진다, 작은 땅 동물은 물에 발이 빠져 느려진다
-    stay: a => isWater(a) ? { hit: 0.15, guard: 0.12, fast: 3, power: 1.3, up: '물속을 쌩쌩 헤엄쳐요', note: '물속에서 빠르고 힘이 세져요' }
+    stay: (a, stage) => stage === 'waterside' && SWIMMERS.includes(a.id) ? { note: '헤엄치며 싸워요' }
+      : isWater(a) ? { hit: 0.15, guard: 0.12, fast: 3, power: 1.3, up: '물속을 쌩쌩 헤엄쳐요', note: '물속에서 빠르고 힘이 세져요' }
       : !isAir(a) && massScore(a.mass_kg.avg) < 7.7 ? { hit: -0.18, fast: -3, power: 0.85, down: '물살 때문에 휘청했어요', note: '물에 발이 빠져서 느려요' } : {},
   },
   heat: {
