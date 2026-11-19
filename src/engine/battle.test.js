@@ -186,3 +186,41 @@ assert.equal(mode(A.spinosaurus, 'underwater'), 'swim');
   assert(canStomp(A.kim_yoseph, 1.81, 1) && !canStomp(A.kim_yoseph, 1.81, 1.2), '선생님은 1m 이하를 밟는다');
   assert(canStomp(A.tyrannosaurus, 4, 2) && !canStomp(A.tyrannosaurus, 4, 2.5) && !canStomp(A.tyrannosaurus, null, 1));
 }
+
+// ── 🧭 공룡 탐험대: 판마다 문제 다섯(마지막은 그림자 보스), 정답은 늘 보기 안에, 보기는 서로 다름, 같은 동물은 다시 안 나온다 ──
+{
+  const { adventure, makeQuestion, TYPES } = await import('./quiz.js');
+  const bk = Object.fromEntries(books.map(b => [b.name_ko.split('(')[0], b])), all = cards.map(c => ({ ...bk[c.name_ko], ...c }));
+  for (let s = 1; s <= 200; s++) {
+    const qs = adventure(all, seeded(s));
+    assert.equal(qs.length, 5, `탐험 ${s}: 문제 ${qs.length}`);
+    assert.equal(qs.at(-1).type, 'shadow');
+    assert.equal(new Set(qs.slice(0, 4).map(q => q.type)).size, 4, '앞 넷은 서로 다른 문제');
+    const seen = [];
+    for (const q of qs) {
+      const animals = q.type === 'dino' ? [q.animal] : q.choices;
+      assert(animals.every(a => a && a.book), `${q.type} 보기`);
+      if (q.answer?.id) assert(q.choices.includes(q.answer), `${q.type} 정답이 보기에`);
+      assert.equal(new Set(animals.map(a => a.name_ko)).size, animals.length, `${q.type} 보기 겹침`);
+      if (q.stage === 'underwater') assert(animals.every(a => ['sea', 'freshwater', 'amphibious'].includes(a.habitat)), '물속은 물 동물');
+      seen.push(...animals.map(a => a.id));
+    }
+    assert.equal(new Set(seen).size, seen.length, `탐험 ${s}: 같은 동물이 두 번`);
+  }
+  // 울음소리 보기는 몸 틀이 서로 달라 소리가 다르다, 크기 문제는 정답이 더 길다
+  for (let s = 1; s <= 50; s++) {
+    const q = makeQuestion('sound', all, 'grassland', seeded(s));
+    assert.equal(new Set(q.choices.map(a => a.archetype)).size, 3);
+    const b = makeQuestion('bigger', all, 'jungle', seeded(s));
+    assert(b.choices.every(c => c === b.answer || b.answer.length_m.avg >= 1.6 * c.length_m.avg));
+  }
+  console.log('quiz ok', TYPES.join(' '), adventure(all, seeded(9)).map(q => `${q.type}:${(q.answer?.name_ko ?? q.animal?.name_ko ?? q.choices.map(c => c.name_ko).join('/'))}`).join(' | '));
+}
+{
+  const { makeQuestion } = await import('./quiz.js');
+  const bk = Object.fromEntries(books.map(b => [b.name_ko.split('(')[0], b])), all = cards.map(c => ({ ...bk[c.name_ko], ...c }));
+  for (let s = 1; s <= 50; s++) for (const st of ['grassland', 'underwater']) {
+    const [a, b] = makeQuestion('winner', all, st, seeded(s)).choices;
+    assert(Math.max(a.length_m.avg / b.length_m.avg, b.length_m.avg / a.length_m.avg) <= 3, '누가 이길까: 크기가 비슷한 둘');
+  }
+}

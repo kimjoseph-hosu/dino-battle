@@ -12,6 +12,15 @@ export const NOT_DINO = {
 };
 export const isDino = a => DINO.includes(a.archetype) && !NOT_DINO[a.id];
 
+// 공룡일까? 한 줄(공부 탭·탐험대 퀴즈): { yes 진짜 공룡, bird 새, text }
+const NOT_DINO_BY = { pterosaur: '하늘을 날던 파충류, 익룡이에요.', marine_reptile: '바다에 살던 파충류예요.', fish: '물고기예요.', large_mammal: '털이 있고 젖을 먹이는 포유류예요.', sprawler: '악어 친척이에요.', snake: '아주 큰 뱀이에요.', arthropod: '곤충·게·새우와 같은 무리예요.', human: '사람이에요! 사람은 공룡이 사라지고 아주 아주 오랜 뒤에 나타났어요.' };
+const PLESIO = ['nothosaurus', 'pliosaurus', 'liopleurodon', 'elasmosaurus'], ICHTHYO = ['shonisaurus', 'shastasaurus', 'ophthalmosaurus'];
+export function kindLine(a) {
+  if (isDino(a)) return { yes: true, text: '🦖 진짜 공룡이에요!' };
+  if (a.archetype === 'bird') return { bird: true, text: '🐦 새예요. 새는 공룡의 후손이라 “살아 있는 공룡”이라고도 해요!' };
+  return { text: `공룡이 아니에요! ${NOT_DINO[a.id] ?? (PLESIO.includes(a.id) ? '바다에 살던 파충류, 수장룡 무리예요.' : ICHTHYO.includes(a.id) ? '바다에 살던 파충류, 어룡이에요. 물고기처럼 생겼지만 공기로 숨을 쉬었어요.' : NOT_DINO_BY[a.archetype] ?? '공룡과 다른 동물이에요.')}` };
+}
+
 const jong = w => { w = w.replace(/[^가-힣]+$/, ''); const c = w.charCodeAt(w.length - 1) - 0xac00; return c >= 0 && c < 11172 && c % 28 > 0; };
 const iye = w => w + (jong(w) ? '이에요' : '예요');
 const HOME = { land: ['🦶', '나는 땅 위를 걸어 다녀요'], sea: ['🌊', '나는 바다에서 헤엄쳐요'], freshwater: ['🏞️', '나는 강에서 헤엄쳐요'], air: ['🪽', '나는 하늘을 날아요'], amphibious: ['🐊', '나는 물가에 살아요. 물에도 들어가요'] };

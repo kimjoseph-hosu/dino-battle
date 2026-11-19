@@ -539,21 +539,39 @@ nav .next { font-family: var(--title); background: linear-gradient(#ff7a3d, #c23
 .weather .flash { position: absolute; inset: 0; background: #fff8e0; opacity: 0; animation: flash .8s ease-out var(--fall) forwards; }
 @keyframes flash { 0% { opacity: .95; } 100% { opacity: 0; } }
 
-/* 수수께끼 보스(ui/boss.js): 왼쪽 위 버튼, 그림자는 --k(0 → 1)만큼 또렷해지고 정체가 드러나면(.out) 제 색 */
+/* 🧭 공룡 탐험대(ui/quiz.js): 위 알 줄, 왼쪽 3D 무대, 오른쪽 문제·힌트·큰 보기 카드 */
 .title .boss { position: absolute; top: 6px; left: 0; font: 400 30px var(--title); background: linear-gradient(#9b7bff, #5a3bc2); box-shadow: 0 6px 0 #2e1a6b; }
-.riddle { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; align-items: center; max-width: 1300px; margin: 0 auto; }
-.shadow { --k: 0; position: relative; background: radial-gradient(ellipse at 50% 60%, #3a4a3e, #111812); border-radius: 24px; padding: 20px; min-height: 300px; display: grid; place-items: center; }
-.shadow svg { max-height: 340px; filter: brightness(0) blur(calc((1 - var(--k)) * 14px + 1px)); transition: filter 1s; }
-.shadow .q { position: absolute; font: 400 120px var(--title); color: var(--gold); opacity: calc(1 - var(--k)); text-shadow: 0 6px 0 #5a2a0c; transition: opacity 1s; pointer-events: none; }
-.shadow.out svg { filter: none; transition: filter 1.6s; }
-.shadow.out .q { opacity: 0; }
-.hints { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 32px; }
-.hints li { background: var(--panel); border-radius: 16px; padding: 10px 18px; animation: screenIn .4s ease-out backwards; }
-.hints li span { margin-right: 10px; }
-.suspects { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 1300px; margin: 18px auto 0; }
-.suspects button { display: grid; gap: 4px; padding: 12px; background: var(--panel); }
-.suspects svg { height: 120px; }
-.suspects em { font-style: normal; color: var(--p1); min-height: 1.4em; }
-.suspects .no { opacity: .35; }
-.suspects .yes { outline: 6px solid var(--gold); opacity: 1; }
-@media (max-width: 800px) { .riddle { grid-template-columns: 1fr; } .suspects { grid-template-columns: repeat(2, 1fr); } .title .boss, .title .tour { position: static; margin: 6px; } }
+.quiz { max-width: 1500px; margin: 0 auto; padding: 0 16px 110px; }
+.qhead { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.qhead h1 { font: 400 46px var(--title); margin: 8px 0; color: var(--gold); }
+.qhead .where { font-size: 30px; }
+.eggs { margin-left: auto; display: flex; gap: 10px; }
+.egg { position: relative; width: 74px; height: 74px; display: grid; place-items: center; font-size: 46px; border-radius: 50%; background: #fff1; filter: grayscale(1) opacity(.45); }
+.egg.now { filter: none; outline: 4px solid var(--gold); animation: eggWobble 1.2s ease-in-out infinite; }
+.egg.got { filter: none; background: radial-gradient(circle, #fff6c8, #e8c04a); font-size: 0; }
+.egg.got svg { width: 64px; height: 50px; }
+.egg.pop { animation: eggPop .7s ease-out; }
+@keyframes eggWobble { 0%, 100% { rotate: -8deg; } 50% { rotate: 8deg; } }
+@keyframes eggPop { 0% { scale: .3; } 60% { scale: 1.3; } 100% { scale: 1; } }
+.qbody { display: grid; grid-template-columns: 1.35fr 1fr; gap: 22px; align-items: start; }
+.qstage { position: relative; aspect-ratio: 16 / 10; border-radius: 24px; overflow: hidden; background: #1b241d; box-shadow: 0 10px 30px #0008; }
+.qstage canvas { width: 100%; height: 100%; display: block; }
+.qcover { position: absolute; inset: 0; display: grid; place-items: center; background: radial-gradient(circle, #2f3d33, #121a14); transition: opacity 1.2s; }
+.qcover:empty { display: none; }
+.qcover span { font-size: 160px; animation: eggWobble 1.4s ease-in-out infinite; }
+.qcover.off { opacity: 0; pointer-events: none; }
+.qprompt { font: 400 44px/1.25 var(--title); margin: 0 0 12px; }
+.qhints { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.qhints .chip { background: var(--panel); border-radius: 14px; padding: 4px 12px; font-size: 24px; animation: screenIn .4s ease-out backwards; }
+.qcards { display: grid; gap: 14px; }
+.qcards.c2 { grid-template-columns: repeat(2, 1fr); } .qcards.c3 { grid-template-columns: repeat(3, 1fr); } .qcards.c4 { grid-template-columns: repeat(2, 1fr); }
+.qcards.team { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); max-width: 1300px; margin: 30px auto; }
+.qc, .qyn { position: relative; display: grid; gap: 4px; justify-items: center; padding: 14px 10px; background: var(--panel); font-size: 30px; }
+.qc svg { width: 100%; height: 100px; }
+.qyn { font-size: 90px; } .qyn b { font-size: 34px; }
+.qc kbd, .qyn kbd { position: absolute; top: 8px; left: 10px; font: 400 22px var(--title); opacity: .6; }
+.qc em, .qyn em { font-style: normal; font-size: 24px; color: var(--p1); min-height: 1.2em; }
+.qc.no, .qyn.no { opacity: .35; }
+.qc.yes { outline: 6px solid var(--gold); opacity: 1; }
+.quiz nav { display: flex; gap: 14px; justify-content: center; margin-top: 18px; }
+@media (max-width: 900px) { .qbody { grid-template-columns: 1fr; } .eggs { margin-left: 0; } .title .boss, .title .tour { position: static; margin: 6px; } }

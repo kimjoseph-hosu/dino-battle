@@ -22,8 +22,8 @@ import { makeBracket, nextMatch, roundName, shuffle } from './engine/bracket.js'
 import { showSize, showBracket, showMatchEnd, showChampion } from './ui/tournament.js';
 import { spinStage } from './ui/roulette.js';
 import { EVENTS } from './engine/events.js';
-import { DINO, NOT_DINO, bossPool } from './engine/riddle.js';
-import { showBoss } from './ui/boss.js';
+import { kindLine } from './engine/riddle.js';
+import { showQuiz } from './ui/quiz.js';
 
 const app = document.getElementById('app');
 let stage = 'grassland'; // 마지막으로 고른 무대를 기억
@@ -47,7 +47,7 @@ function pick(chosen = [], need = 2) {
   // 아이 그림은 방금 올린 걸 찾기 쉽게 맨 앞, 나머지는 가나다 순
   const all = [...drawings, ...[...animals].sort(byName)];
   const count = k => all.filter(a => k === 'all' || tabsOf(a).includes(k)).length;
-  app.innerHTML = `<header class="title"><h1>상상 동물•공룡 배틀</h1><p>${tour ? `🏆 토너먼트에 나갈 동물 ${need}마리를 골라요` : '싸울 동물 두 마리를 골라요'}</p>${tour ? '' : '<button class="tour">🏆 토너먼트</button><button class="boss">🕵️ 수수께끼 보스</button>'}</header>
+  app.innerHTML = `<header class="title"><h1>상상 동물•공룡 배틀</h1><p>${tour ? `🏆 토너먼트에 나갈 동물 ${need}마리를 골라요` : '싸울 동물 두 마리를 골라요'}</p>${tour ? '' : '<button class="tour">🏆 토너먼트</button><button class="boss">🧭 공룡 탐험대</button>'}</header>
     <div class="filters"><input class="search" type="search" placeholder="🔎 이름으로 찾기">
       ${Object.entries(TABS).map(([k, v]) => `<button class="tab${filter.tab === k ? ' on' : ''}" data-tab="${k}">${v} <small>${count(k)}</small></button>`).join('')}</div>
     <div class="pick"><button class="card add draw-add"><span>✏️</span><b>내 그림 추가</b><small>그림 사진을 올려요</small></button>
@@ -98,7 +98,7 @@ function pick(chosen = [], need = 2) {
   });
   go.onclick = () => (tour ? startTour(chosen) : stagePick(...chosen));
   if (tour) app.querySelector('.tray .back').onclick = tournament;
-  else { app.querySelector('.tour').onclick = tournament; app.querySelector('.boss').onclick = riddle; }
+  else { app.querySelector('.tour').onclick = tournament; app.querySelector('.boss').onclick = () => quiz(); }
   // 사는 곳 탭 + 이름 검색(한글 이름, 별명, 영어 이름)
   const applyFilter = () => {
     const q = filter.q.trim().toLowerCase().replace(/\s/g, '');
@@ -150,8 +150,14 @@ async function play(A, B, match) {
   await playBattle(app, A, B, match.res, stage, script, match.modes);
 }
 
-// ── 수수께끼 보스: 힌트로 정체 맞히기(ui/boss.js) → 보스와 싸울 동물 고르기(pick) → 보통 배틀 흐름
-const riddle = () => { const P = bossPool(animals); showBoss(app, P[Math.floor(Math.random() * P.length)], animals, { fight: boss => pick([boss]), again: riddle, back: () => pick() }); };
+// ── 🧭 공룡 탐험대(ui/quiz.js): 무대 다섯 곳 퀴즈 → 그림자 보스 → 탐험에서 만난 동물로 보스 배틀(보통 결과 화면)
+// duel: "누가 이길까" 문제의 진짜 배틀(결과 화면 없이 이긴 쪽 번호만 돌려준다)
+const quiz = first => showQuiz(app, animals, {
+  first,
+  duel: async (A, B, s) => { stage = s; const match = prepare(A, B); await play(A, B, match); return match.res.winner; },
+  bossFight: (A, boss, s) => { stage = s; fight(A, boss, null); },
+  home: () => pick(),
+});
 
 // ── 토너먼트: 마릿수 → 동물 고르기(pick) → 대진표 → (무대 룰렛 → 배틀 → 한 줄 결과) 반복 → 우승. 투표는 시작 전 "누가 우승할까?" 한 번만
 let tour = null; // { rounds, guess }
@@ -224,13 +230,9 @@ function dexHtml(a) {
 
 // ── 공부 탭 꼭지들(백과에 자주 나오는 것) ──
 // 1) 공룡일까? 아이들이 공룡으로 많이 아는 동물 중 공룡이 아닌 것을 알려 준다
-const NOT_DINO_BY = { pterosaur: '하늘을 날던 파충류, 익룡이에요.', marine_reptile: '바다에 살던 파충류예요.', fish: '물고기예요.', large_mammal: '털이 있고 젖을 먹이는 포유류예요.', sprawler: '악어 친척이에요.', snake: '아주 큰 뱀이에요.', arthropod: '곤충·게·새우와 같은 무리예요.', human: '사람이에요! 사람은 공룡이 사라지고 아주 아주 오랜 뒤에 나타났어요.' };
-const PLESIO = ['nothosaurus', 'pliosaurus', 'liopleurodon', 'elasmosaurus'], ICHTHYO = ['shonisaurus', 'shastasaurus', 'ophthalmosaurus'];
 function kindHtml(a) {
-  if (DINO.includes(a.archetype) && !NOT_DINO[a.id]) return '<p class="kind yes">🦖 진짜 공룡이에요!</p>';
-  if (a.archetype === 'bird') return '<p class="kind bird">🐦 새예요. 새는 공룡의 후손이라 “살아 있는 공룡”이라고도 해요!</p>';
-  const t = NOT_DINO[a.id] ?? (PLESIO.includes(a.id) ? '바다에 살던 파충류, 수장룡 무리예요.' : ICHTHYO.includes(a.id) ? '바다에 살던 파충류, 어룡이에요. 물고기처럼 생겼지만 공기로 숨을 쉬었어요.' : NOT_DINO_BY[a.archetype] ?? '공룡과 다른 동물이에요.');
-  return `<p class="kind no">❗ 공룡이 아니에요! ${t}</p>`;
+  const k = kindLine(a);
+  return k.yes ? `<p class="kind yes">${k.text}</p>` : k.bird ? `<p class="kind bird">${k.text}</p>` : `<p class="kind no">❗ ${k.text}</p>`;
 }
 // 2) 같은 때·같은 곳에 살던 이웃(데이터에서 자동으로). 백과 그림이 있는 동물 먼저
 function friendsHtml(a, skip) {
@@ -339,7 +341,7 @@ const modelId = location.hash.match(/^#model=(\w+)/)?.[1];
 if (location.hash.startsWith('#block')) showBlocks(app);
 else if (location.hash === '#gallery') showGallery(app);
 else if (location.hash === '#sounds') showSounds(app);
-else if (location.hash === '#boss') riddle();
+else if (location.hash === '#boss' || location.hash.startsWith('#quiz')) quiz(location.hash.match(/^#quiz=(\w+)/)?.[1]); // #quiz=winner: 첫 문제 종류(확인용)
 else if (location.hash.startsWith('#templates')) showTemplates(app);
 else if (modelId) showModel(app, animals.find(a => a.id === modelId));
 else if (location.hash.startsWith('#result=')) { // #result=tyrannosaurus,triceratops: 배틀 없이 결과 화면만(확인용)

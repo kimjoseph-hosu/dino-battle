@@ -33,8 +33,10 @@ function skyEnv(renderer, look, sunDir) {
   return tex;
 }
 
-const V = 10; // 배틀 세계에서 큰 쪽 몸길이(battle.js 의 S). 무대 장식 크기는 이것에 맞춘다
-const LOOKS = {
+export const V = 10; // 배틀 세계에서 큰 쪽 몸길이(battle.js 의 S). 무대 장식 크기는 이것에 맞춘다
+// 땅에 흩어진 점(꽃·흙·조약돌) 색
+export const GROUND_DOTS = { grassland: ['#f3d34a', '#ffffff', '#8a8478'], jungle: ['#2a4a1e', '#5a4a30'], waterside: ['#f0e4c0', '#9a8a6a'], underwater: ['#e0d4b0', '#9aa8a0'] };
+export const LOOKS = {
   grassland: { top: '#5ea6da', horizon: '#dcefef', ground: ['#94c75c', '#a6d26a'], fog: 1, hills: ['#9fbfb6', '#7fa88a'] },
   jungle: { top: '#4b8a72', horizon: '#c8ddb2', ground: ['#4d8732', '#5a983b'], fog: 0.75, hills: ['#86ad8a', '#4f8455'] },
   waterside: { top: '#69b2df', horizon: '#e6f2ec', ground: ['#e2cf98', '#d5bf86'], fog: 1, hills: ['#a9c3c3', '#86a89a'] },
@@ -44,7 +46,7 @@ const LOOKS = {
 const GEO = new THREE.BoxGeometry(1, 1, 1);
 const mat = c => new THREE.MeshStandardMaterial({ color: c, flatShading: true, roughness: 0.95 });
 
-function seeded(n) {
+export function seeded(n) {
   let s = n >>> 0;
   return () => (s = (Math.imul(s, 1664525) + 1013904223) >>> 0) / 4294967296;
 }
@@ -62,7 +64,7 @@ function boxes(list, color) {
   m.userData.list = list;
   return m;
 }
-function gradient(top, bottom) {
+export function gradient(top, bottom) {
   const c = Object.assign(document.createElement('canvas'), { width: 2, height: 256 }), g = c.getContext('2d'), gr = g.createLinearGradient(0, 0, 0, 256);
   gr.addColorStop(0, top);
   gr.addColorStop(1, bottom);
@@ -73,7 +75,7 @@ function gradient(top, bottom) {
   return t;
 }
 // 땅: 두 색 줄무늬 + 밝고 어두운 얼룩 + 점점이 픽셀(마인크래프트처럼 또렷하게). dots: 작은 꽃·조약돌 픽셀 색들
-function groundTex([a, b], rnd, dots = []) {
+export function groundTex([a, b], rnd, dots = []) {
   const N = 32, c = Object.assign(document.createElement('canvas'), { width: N, height: N }), g = c.getContext('2d'), A = new THREE.Color(a), B = new THREE.Color(b), t0 = new THREE.Color();
   const blobs = Array.from({ length: 6 }, () => [rnd() * N, rnd() * N, 3 + rnd() * 5, rnd() < 0.5 ? 0.88 : 1.1]);
   for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
@@ -208,7 +210,7 @@ function kelp(rnd, n) {
 // 산호: 덩어리 산호 + 가지 산호(줄기에서 가지가 위로 갈라진다)
 const coral = rnd => ['#e0776b', '#f0a95a', '#c873b0', '#f2e0a0'].map(c => boxes(Array.from({ length: 14 }, () => { const [x, z] = spot(rnd, -5 * V, -1.2 * V, 10 * V, 2.5 * V), s = (0.1 + rnd() * 0.2) * V; return [x, s / 2, z, s * 0.7, s, s * 0.7, rnd()]; }).flatMap((b, i) => i % 2 ? [b] : [b, [b[0] - b[3] * 0.5, b[4] * 1.3, b[2], b[3] * 0.25, b[4] * 0.9, b[3] * 0.25], [b[0] + b[3] * 0.45, b[4] * 1.2, b[2], b[3] * 0.25, b[4] * 0.7, b[3] * 0.25]]), c));
 
-function decor(stage, rnd) {
+export function decor(stage, rnd) {
   if (stage === 'jungle') return [...trees(rnd, 70, { big: 1.4, leaf: ['#2f6f2a', '#3f8433', '#265c22'] }), ferns(rnd, 60), ...bushes(rnd, 50, ['#2e6b28', '#3d8030'], 1.4), tufts(rnd, 500, '#3b7428', 0.12), ...rocks(rnd, 15, '#77786a', '#4a7a32'), ...terraces(rnd, ['#3f7a2e', '#356a28'])];
   if (stage === 'waterside') {
     const water = new THREE.Mesh(new THREE.PlaneGeometry(60 * V, 30 * V), new THREE.MeshStandardMaterial({ color: '#5cb8e6', transparent: true, opacity: 0.45, roughness: 0.2 }));
@@ -394,7 +396,7 @@ export function arena3d(arena, f, stage) {
   sun.shadow.bias = -0.0005;
   sun.shadow.normalBias = 0.02 * V; // 맞닿은 상자 경계의 그림자 줄 막기
   scene.add(sun, sun.target);
-  const ground = new THREE.Mesh(new THREE.PlaneGeometry(80 * V, 80 * V), new THREE.MeshStandardMaterial({ map: groundTex(look.ground, rnd, { grassland: ['#f3d34a', '#ffffff', '#8a8478'], jungle: ['#2a4a1e', '#5a4a30'], waterside: ['#f0e4c0', '#9a8a6a'], underwater: ['#e0d4b0', '#9aa8a0'] }[stage]), roughness: 1 }));
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(80 * V, 80 * V), new THREE.MeshStandardMaterial({ map: groundTex(look.ground, rnd, GROUND_DOTS[stage]), roughness: 1 }));
   ground.rotation.x = -Math.PI / 2;
   ground.receiveShadow = true;
   const sky = skyCurtain(look, stage, rnd);
