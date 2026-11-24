@@ -64,3 +64,6 @@ export const LIFE = {
   jungle: { LEAF: 50, FIREFLY: 24, VINE: 6, MIST: 6 },
   grassland: { BUTTERFLY: 4, SEED: 24, PTERO: 5 },
 };
+
+// 📔 공룡 일기장을 모을 구글 시트 Apps Script 웹 앱 주소(server/diary.gs). 비우면 기기마다 따로 저장
+export const DIARY_URL = 'https://script.google.com/macros/s/AKfycbyjikj5EhXW7O_X2_T8Esppa4wInTcHvpZat6n41h4cxcABP370e7fec4fhMrXTzlk/exec';

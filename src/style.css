@@ -575,3 +575,17 @@ nav .next { font-family: var(--title); background: linear-gradient(#ff7a3d, #c23
 .qc.yes { outline: 6px solid var(--gold); opacity: 1; }
 .quiz nav { display: flex; gap: 14px; justify-content: center; margin-top: 18px; }
 @media (max-width: 900px) { .qbody { grid-template-columns: 1fr; } .eggs { margin-left: 0; } .title .boss, .title .tour { position: static; margin: 6px; } }
+
+/* 📔 공룡 일기장: 종이 한 장 */
+.diary { max-width: 900px; margin: 0 auto 20px; padding: 24px 28px; border-radius: 18px; background: #fbf3dc; color: #3a2a18; box-shadow: 0 8px 0 #0006; text-align: center; }
+.diary .dhead { display: flex; justify-content: space-between; font-size: 30px; border-bottom: 3px dashed #c9b48a; padding-bottom: 8px; }
+.diary .dhead b { font: 400 34px var(--title); }
+.diary .dpair { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 18px 0; }
+.diary .dpair strong { font: 400 40px var(--title); color: #a0522d; }
+.diary figure { margin: 0; flex: 1; max-width: 340px; padding: 8px; border-radius: 14px; background: #fff8; }
+.diary figure.win { outline: 5px solid #f2b705; }
+.diary figure img, .diary figure svg { width: 100%; height: 200px; object-fit: contain; }
+.diary figure > span { display: block; font-size: 120px; }
+.diary figcaption { font: 400 30px var(--title); }
+.diary h2 { font: 400 44px var(--title); margin: 6px 0; }
+.diary p { font-size: 26px; }

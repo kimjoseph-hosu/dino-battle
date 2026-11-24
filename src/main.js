@@ -24,6 +24,7 @@ import { spinStage } from './ui/roulette.js';
 import { EVENTS } from './engine/events.js';
 import { kindLine } from './engine/riddle.js';
 import { showQuiz } from './ui/quiz.js';
+import { saveDiary, showDiary } from './ui/diary.js';
 
 const app = document.getElementById('app');
 let stage = 'grassland'; // 마지막으로 고른 무대를 기억
@@ -53,6 +54,7 @@ function pick(chosen = [], need = 2) {
     <div class="pick"><button class="card add draw-add"><span>✏️</span><b>내 그림 추가</b><small>그림 사진을 올려요</small></button>
       <button class="card add dice-add"><span>🎲</span><b>${tour ? '나머지 채우기' : '아무거나!'}</b><small>${tour ? '빈자리를 뽑아 채워요' : '두 마리를 뽑아요'}</small></button>
       <button class="card add find-add"><span>🔎</span><b>다른 동물 찾기</b><small>AI가 찾아 줘요</small></button>
+      ${tour ? '' : '<button class="card add diary-add"><span>📔</span><b>공룡 일기장</b><small>지난 배틀을 봐요</small></button>'}
       ${all.map(a => `<button class="card${a.drawing ? ' mine' : ''}" data-id="${a.id}" data-tabs="${tabsOf(a).join(' ')}" data-names="${[a.name_ko, a.alias, a.name_en].filter(Boolean).join(' ').toLowerCase()}">
       <svg class="scene"></svg><em></em>
       <b>${a.name_ko}</b>
@@ -83,6 +85,7 @@ function pick(chosen = [], need = 2) {
     refresh();
     app.querySelector(`.card[data-id="${chosen[0].id}"]`).scrollIntoView({ block: 'center', behavior: 'smooth' });
   };
+  if (!tour) app.querySelector('.diary-add').onclick = () => showDiary(app, [...drawings, ...animals], { home: () => pick(chosen) });
   app.querySelector('.find-add').onclick = () => showLookup(app, { done: a => pick([...chosen, a].slice(-need), need), cancel: () => pick(chosen, need) });
   app.querySelector('.draw-add').onclick = () => showDrawing(app, {
     save: d => { drawings.unshift(d); pick([...chosen, d].slice(-need), need); },
@@ -141,6 +144,7 @@ function prepare(A, B, motion) {
 // votes: [A에 손 든 수, B에 손 든 수] 또는 null(건너뜀)
 async function fight(A, B, votes, match = prepare(A, B)) {
   await play(A, B, match);
+  diary(A, B, match.res);
   result(A, B, match.res, votes);
 }
 async function play(A, B, match) {
@@ -148,6 +152,15 @@ async function play(A, B, match) {
   const script = withAiLines(match.script, ai);
   if (match.res.byEvent) script.outro = match.script.outro; // 사건으로 끝난 판은 AI가 모르는 결말이라 템플릿 문장
   await playBattle(app, A, B, match.res, stage, script, match.modes);
+}
+
+// 📔 공룡 일기장에 한 장(보통 배틀·탐험대 보스·토너먼트 경기). 날씨 = 이 판에 일어난 자연 사건
+function diary(A, B, res) {
+  const [W, L] = res.winner === 0 ? [A, B] : [B, A];
+  saveDiary({
+    date: new Date().toISOString(), stage, weather: [...new Set(res.rounds.map(r => r.event && EVENTS[r.event.id]?.emoji).filter(Boolean))].join(''),
+    a: A.name_ko, b: B.name_ko, winner: W.name_ko, ko: !!res.ko, reason: reasonLines(W, L, res.reasons, stage)[0], aId: A.id, bId: B.id, wId: W.id,
+  });
 }
 
 // ── 🧭 공룡 탐험대(ui/quiz.js): 무대 다섯 곳 퀴즈 → 그림자 보스 → 탐험에서 만난 동물로 보스 배틀(보통 결과 화면)
@@ -172,6 +185,7 @@ async function tourMatch() {
   stage = await spinStage(app, A, B, `⚔️ ${roundName(tour.rounds, r)}`);
   const match = prepare(A, B);
   await play(A, B, match);
+  diary(A, B, match.res);
   const [W, L] = match.res.winner === 0 ? [A, B] : [B, A];
   tour.rounds[r + 1][i] = W;
   const k = match.res.reasons[0];
@@ -355,6 +369,7 @@ else if (location.hash.startsWith('#result=')) { // #result=tyrannosaurus,tricer
 
 // 키보드: Enter = 다음/시작, Esc = 뒤로 (교사가 키보드로 넘길 수 있게)
 document.addEventListener('keydown', e => {
+  if ((e.key === 'ArrowRight' || e.key === 'ArrowLeft') && app.querySelector('.dnext')) return app.querySelector(e.key === 'ArrowRight' ? '.dnext' : '.dprev').click(); // 일기장 넘기기
   if ((e.key === 'ArrowRight' || e.key === 'ArrowLeft') && app.querySelector('.rtabs')) return app.querySelector(`.rtab[data-t="${e.key === 'ArrowRight' ? 'learn' : 'win'}"]`).click(); // 결과 탭 넘기기
   const btn = app.querySelector(e.key === 'Enter' ? '.next:not(:disabled), .go:not(:disabled), .again' : e.key === 'Escape' ? '.back, .other' : null);
   if (btn) { e.preventDefault(); btn.click(); }
